@@ -51,6 +51,10 @@
 
         public virtual Client Recipent { get; set; }
 
+        public int CurrentOfficeId { get; set; }
+
+        public virtual Office CurrentOffice { get; set; }
+
         public virtual ICollection<Protocol> Protocols { get; set; }
     }
 

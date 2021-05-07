@@ -24,19 +24,19 @@
         {
         }
 
-        public DbSet<Setting> Settings { get; set; }
-
         public DbSet<City> Cities { get; set; }
-
-        public DbSet<Office> Offices { get; set; }
 
         public DbSet<Client> Clients { get; set; }
 
+        public DbSet<Office> Offices { get; set; }
+
         public DbSet<Parcel> Parcels { get; set; }
+
+        public DbSet<Protocol> Protocols { get; set; }
 
         public DbSet<ProtocolParcel> ProtocolParcels { get; set; }
 
-        public DbSet<Protocol> Protocols { get; set; }
+        public DbSet<Setting> Settings { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
 

@@ -33,6 +33,7 @@
 
         public virtual ICollection<ApplicationUser> Employees { get; set; }
 
+        [InverseProperty("CurrentOffice")]
         public virtual ICollection<Parcel> Parcels { get; set; }
     }
 }

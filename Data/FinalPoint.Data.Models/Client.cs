@@ -20,10 +20,10 @@
 
         public string Address { get; set; }
 
-        [InverseProperty("SenderId")]
+        [InverseProperty("Sender")]
         public virtual ICollection<Parcel> SentParcels { get; set; }
 
-        [InverseProperty("RecipentId")]
+        [InverseProperty("Recipent")]
         public virtual ICollection<Parcel> ReceivedParcels { get; set; }
     }
 }

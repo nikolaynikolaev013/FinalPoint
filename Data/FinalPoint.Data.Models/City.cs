@@ -8,7 +8,7 @@
     {
         public City()
         {
-            this.Offices = new HashSet<Office>();
+           this.Offices = new HashSet<Office>();
         }
 
         public string Name { get; set; }
