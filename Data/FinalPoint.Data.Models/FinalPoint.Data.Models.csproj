@@ -23,4 +23,7 @@
     <ProjectReference Include="..\FinalPoint.Data.Common\FinalPoint.Data.Common.csproj" />
   </ItemGroup>
   
+  <ItemGroup>
+    <Folder Include="Enums\" />
+  </ItemGroup>
 </Project>
