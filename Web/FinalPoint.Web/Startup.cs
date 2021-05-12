@@ -102,7 +102,18 @@
 
             app.UseEndpoints(
                 endpoints =>
-                    {
+                {
+                        endpoints.MapControllerRoute(
+                            "Add", "Add", new { controller = "AddDispose", action = "AddParcel" });
+                        endpoints.MapControllerRoute(
+                            "Dispose", "Dispose", new { controller = "AddDispose", action = "DisposeParcel" });
+
+                        endpoints.MapControllerRoute(
+                                "Load", "Load/{line?}", new { controller = "LoadUnload", action = "Load" });
+
+                        endpoints.MapControllerRoute(
+                            "Unload", "Unload/{line?}", new { controller = "LoadUnload", action = "Unload" });
+
                         endpoints.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
                         endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
                         endpoints.MapRazorPages();

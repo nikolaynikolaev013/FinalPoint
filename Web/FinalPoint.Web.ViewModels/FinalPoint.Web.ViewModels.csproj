@@ -23,4 +23,11 @@
     <ProjectReference Include="..\..\Services\FinalPoint.Services.Mapping\FinalPoint.Services.Mapping.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="LoadUnload\" />
+    <Folder Include="DTOs\" />
+    <Folder Include="GroupUngroup\" />
+    <Folder Include="Shared\" />
+    <Folder Include="AddDispose\" />
+  </ItemGroup>
 </Project>

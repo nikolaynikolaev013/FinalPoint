@@ -1,0 +1,19 @@
+﻿@model ParcelINsertPartialViewModel
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control border-right-0" placeholder="Моля въведете/сканирайте номер на пратка." aria-label="Моля въведете/сканирайте номер на пратка." aria-describedby="scan-input">
+
+            <span class="input-group-append bg-white border-left-0">
+                <span class="input-group-text bg-transparent">
+                    <i class="fas fa-barcode fa-lg"></i>
+                </span>
+            </span>
+
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button">@Model.ButtonText</button>
+            </div>
+        </div>
+    </div>
+</div>

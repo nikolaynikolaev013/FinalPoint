@@ -1,9 +1,101 @@
-﻿@using FinalPoint.Common
-@{
-    this.ViewData["Title"] = "Home Page";
-}
+﻿@model IndexViewModel
+@{ ViewData["Title"] = "Начало"; }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to @GlobalConstants.SystemName!</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="text-center text-secondary mb-4">Добре дошли, @Model.FullName</h1>
+
+            </br>
+
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-5">
+                    <a asp-controller="AddDispose" asp-action="AddParcel">
+                        <div class="card border-left-info shadow mb-3" style="width: 18rem;">
+                            <div class="card-body">
+                                <h4 class="card-title text-secondary">Приемане на пратка</h4>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-md-5">
+                    <a asp-controller="AddDispose" asp-action="DisposeParcel">
+                        <div class="card border-left-info shadow mb-3" style="width: 18rem;">
+                            <div class="card-body">
+                                <h4 class="card-title text-secondary">Издаване на пратка</h4>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-5">
+                    <a asp-controller="Load">
+                        <div class="card border-left-info shadow mb-3" style="width: 18rem;">
+                            <div class="card-body">
+                                <h4 class="card-title text-secondary">Товарене</h4>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-md-5">
+                    <a asp-controller="Unload">
+                        <div class="card border-left-info shadow mb-3" style="width: 18rem;">
+                            <div class="card-body">
+                                <h4 class="card-title text-secondary">Разтоварване</h4>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-5">
+                    <a href="#">
+                        <div class="card border-left-info shadow mb-3" style="width: 18rem;">
+                            <div class="card-body">
+                                <h4 class="card-title text-secondary">Групиране</h4>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-md-5">
+                    <a href="#">
+                        <div class="card border-left-info shadow mb-3" style="width: 18rem;">
+                            <div class="card-body">
+                                <h4 class="card-title text-secondary">Разгрупиране</h4>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-5">
+                    <a href="#">
+                        <div class="card border-left-info shadow mb-3" style="width: 18rem;">
+                            <div class="card-body">
+                                <h4 class="card-title text-secondary">Проверка на пратка</h4>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-md-5">
+                    <a href="#">
+                        <div class="card border-left-info shadow mb-3" style="width: 18rem;">
+                            <div class="card-body">
+                                <h4 class="card-title text-secondary">Администрация</h4>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>

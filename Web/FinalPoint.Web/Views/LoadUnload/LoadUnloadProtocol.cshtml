@@ -1,0 +1,35 @@
+﻿@model LoadUnloadProtocolViewModel
+@{
+
+    ViewData["Title"] = Model.Type;
+}
+
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8">
+            <p>
+                Протокол №: <span class="text-warning">@Model.Id</span> |
+                @(Model.Type == ProtocolType.Loading ? $"{Model.Type} към:" : $"{Model.Type} от:") <span class="text-warning">
+                    @Model.Line
+                </span> |
+                Дата: @Model.Date.ToString("dd/MM/yyyy")
+            </p>
+        </div>
+
+        <div class="col-md-4">
+            <div class="row">
+                <h5>1/@Model.Parcels.Count пратки</h5>
+            </div>
+            <div class="row">
+                <h5>0/0 транспортни опаковки</h5>
+            </div>
+        </div>
+    </div>
+
+
+    <partial name="_ParcelInsertPartial" model="Model.ParcelInsertViewModel">
+
+    <partial name="_ParcelTablePartial" model="Model.Parcels">
+</div>

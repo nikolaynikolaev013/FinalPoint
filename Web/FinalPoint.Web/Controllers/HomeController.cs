@@ -1,16 +1,26 @@
 ﻿namespace FinalPoint.Web.Controllers
 {
     using System.Diagnostics;
-
     using FinalPoint.Web.ViewModels;
-
+    using FinalPoint.Web.ViewModels.GroupUngroup;
     using Microsoft.AspNetCore.Mvc;
 
     public class HomeController : BaseController
     {
         public IActionResult Index()
         {
-            return this.View();
+            IndexViewModel model = new IndexViewModel();
+            model.FullName = "Nikolay Nikolaev";
+            return this.View(model);
+        }
+
+        
+
+        public IActionResult Group(string line)
+        {
+            GroupUngroupViewModel model = new GroupUngroupViewModel();
+
+            return this.View("GroupUngroup", model);
         }
 
         public IActionResult Privacy()

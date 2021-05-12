@@ -36,4 +36,8 @@
     <ProjectReference Include="..\FinalPoint.Web.Infrastructure\FinalPoint.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\FinalPoint.Web.ViewModels\FinalPoint.Web.ViewModels.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\LoadUnload\" />
+    <Folder Include="Views\AddDispose\" />
+  </ItemGroup>
 </Project>

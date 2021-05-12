@@ -1,0 +1,26 @@
+﻿@model LoadUnloadIndexViewModel
+@{
+
+    ViewData["Title"] = Model.Type;
+}
+
+<div class="container-fluid">
+    <div class="row mt-4">
+        <div class="col-md-2 p-0">
+            <h5 class="text-center text-secondary mt-1">@(Model.Type == ProtocolType.Loading ? $"{Model.Type} към:" : $"{Model.Type} от:")</h5>
+        </div>
+        <div class="col-md-10">
+            <div class="input-group">
+                <select class="custom-select" id="inputGroupSelect02">
+                    @foreach (var line in Model.Lines)
+                    {
+                        <option value="@line">@line</option>
+                    }
+                </select>
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button">Нов протокол</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
