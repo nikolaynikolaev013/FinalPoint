@@ -4,14 +4,16 @@ using FinalPoint.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FinalPoint.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210512153443_AddedOfficeCity")]
+    partial class AddedOfficeCity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -164,7 +166,6 @@ namespace FinalPoint.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -191,21 +192,18 @@ namespace FinalPoint.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -223,7 +221,6 @@ namespace FinalPoint.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("CityId")
@@ -242,13 +239,12 @@ namespace FinalPoint.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("OfficeType")
                         .HasColumnType("int");
 
-                    b.Property<int?>("OwnerId")
+                    b.Property<int>("OwnerId")
                         .HasColumnType("int");
 
                     b.Property<string>("OwnerId1")
@@ -257,7 +253,7 @@ namespace FinalPoint.Data.Migrations
                     b.Property<int>("PostCode")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ResponsibleSortingCenterId")
+                    b.Property<int>("ResponsibleSortingCenterId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -289,14 +285,13 @@ namespace FinalPoint.Data.Migrations
                     b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("DeliveringEmployeeId")
+                    b.Property<int>("DeliveringEmployeeId")
                         .HasColumnType("int");
 
                     b.Property<string>("DeliveringEmployeeId1")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("Height")
@@ -615,7 +610,9 @@ namespace FinalPoint.Data.Migrations
 
                     b.HasOne("FinalPoint.Data.Models.Office", "ResponsibleSortingCenter")
                         .WithMany()
-                        .HasForeignKey("ResponsibleSortingCenterId");
+                        .HasForeignKey("ResponsibleSortingCenterId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("City");
 

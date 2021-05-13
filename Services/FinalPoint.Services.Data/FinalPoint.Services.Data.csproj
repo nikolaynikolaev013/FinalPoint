@@ -22,6 +22,11 @@
     <ProjectReference Include="..\..\Data\FinalPoint.Data.Common\FinalPoint.Data.Common.csproj" />
     <ProjectReference Include="..\..\Data\FinalPoint.Data.Models\FinalPoint.Data.Models.csproj" />
     <ProjectReference Include="..\FinalPoint.Services.Mapping\FinalPoint.Services.Mapping.csproj" />
+    <ProjectReference Include="..\..\Web\FinalPoint.Web.ViewModels\FinalPoint.Web.ViewModels.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Administration\" />
+    <Folder Include="Misc\" />
+  </ItemGroup>
 </Project>

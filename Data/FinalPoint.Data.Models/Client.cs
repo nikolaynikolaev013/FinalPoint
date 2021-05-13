@@ -1,6 +1,7 @@
 ﻿namespace FinalPoint.Data.Models
 {
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using FinalPoint.Data.Common.Models;
 
@@ -12,10 +13,13 @@
             this.ReceivedParcels = new HashSet<Parcel>();
         }
 
+        [Required]
         public string FirstName { get; set; }
 
+        [Required]
         public string LastName { get; set; }
 
+        [Required]
         public string PhoneNumber { get; set; }
 
         public string Address { get; set; }

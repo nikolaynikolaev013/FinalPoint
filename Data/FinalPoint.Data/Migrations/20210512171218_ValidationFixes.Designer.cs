@@ -4,14 +4,16 @@ using FinalPoint.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FinalPoint.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210512171218_ValidationFixes")]
+    partial class ValidationFixes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -226,7 +228,8 @@ namespace FinalPoint.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CityId")
+                    b.Property<int?>("CityId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedOn")
@@ -254,10 +257,12 @@ namespace FinalPoint.Data.Migrations
                     b.Property<string>("OwnerId1")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("PostCode")
+                    b.Property<int?>("PostCode")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<int?>("ResponsibleSortingCenterId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -299,13 +304,15 @@ namespace FinalPoint.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Height")
+                    b.Property<double?>("Height")
+                        .IsRequired()
                         .HasColumnType("float");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<double>("Length")
+                    b.Property<double?>("Length")
+                        .IsRequired()
                         .HasColumnType("float");
 
                     b.Property<DateTime?>("ModifiedOn")
@@ -329,10 +336,12 @@ namespace FinalPoint.Data.Migrations
                     b.Property<int>("SendingOfficeId")
                         .HasColumnType("int");
 
-                    b.Property<double>("Weight")
+                    b.Property<double?>("Weight")
+                        .IsRequired()
                         .HasColumnType("float");
 
-                    b.Property<double>("Width")
+                    b.Property<double?>("Width")
+                        .IsRequired()
                         .HasColumnType("float");
 
                     b.HasKey("Id");
@@ -363,7 +372,8 @@ namespace FinalPoint.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CreatedByEmployeeId")
+                    b.Property<int?>("CreatedByEmployeeId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedByEmployeeId1")
@@ -615,7 +625,9 @@ namespace FinalPoint.Data.Migrations
 
                     b.HasOne("FinalPoint.Data.Models.Office", "ResponsibleSortingCenter")
                         .WithMany()
-                        .HasForeignKey("ResponsibleSortingCenterId");
+                        .HasForeignKey("ResponsibleSortingCenterId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("City");
 

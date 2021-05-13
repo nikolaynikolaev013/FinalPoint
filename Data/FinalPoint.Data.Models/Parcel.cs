@@ -1,6 +1,7 @@
 ﻿namespace FinalPoint.Data.Models
 {
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using FinalPoint.Data.Common.Models;
 
@@ -11,6 +12,7 @@
             this.Protocols = new HashSet<Protocol>();
         }
 
+        [Required]
         public string Description { get; set; }
 
         [ForeignKey(nameof(ApplicationUser))]
@@ -19,7 +21,7 @@
         public virtual ApplicationUser SendingEmployee { get; set; }
 
         [ForeignKey(nameof(ApplicationUser))]
-        public int DeliveringEmployeeId { get; set; }
+        public int? DeliveringEmployeeId { get; set; }
 
         public virtual ApplicationUser DeliveringEmployee { get; set; }
 
@@ -51,6 +53,7 @@
 
         public virtual Client Recipent { get; set; }
 
+        [ForeignKey(nameof(Office))]
         public int CurrentOfficeId { get; set; }
 
         public virtual Office CurrentOffice { get; set; }

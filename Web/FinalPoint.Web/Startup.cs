@@ -9,6 +9,8 @@
     using FinalPoint.Data.Repositories;
     using FinalPoint.Data.Seeding;
     using FinalPoint.Services.Data;
+    using FinalPoint.Services.Data.Administration;
+    using FinalPoint.Services.Data.Misc;
     using FinalPoint.Services.Mapping;
     using FinalPoint.Services.Messaging;
     using FinalPoint.Web.ViewModels;
@@ -65,6 +67,8 @@
             // Application services
             services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<ISettingsService, SettingsService>();
+            services.AddTransient<IGetBasicData, GetBasicData>();
+            services.AddTransient<IOfficeService, OfficeService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -39,5 +39,6 @@
   <ItemGroup>
     <Folder Include="Views\LoadUnload\" />
     <Folder Include="Views\AddDispose\" />
+    <Folder Include="Views\Administration\" />
   </ItemGroup>
 </Project>

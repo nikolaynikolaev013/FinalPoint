@@ -24,7 +24,6 @@
         public DateTime TimeEdited { get; set; }
 
         [ForeignKey(nameof(Office))]
-
         public int OfficeStorageFromId { get; set; }
 
         public virtual Office OfficeStorageFrom { get; set; }

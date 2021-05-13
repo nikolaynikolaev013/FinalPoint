@@ -5,7 +5,7 @@ namespace FinalPoint.Web.Controllers
 
     using Microsoft.AspNetCore.Mvc;
 
-    public class AddDispose : Controller
+    public class AddDisposeController : Controller
     {
         // GET: /<controller>/
         public IActionResult AddParcel()
