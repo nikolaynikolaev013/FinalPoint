@@ -14,7 +14,7 @@
     using FinalPoint.Services.Mapping;
     using FinalPoint.Services.Messaging;
     using FinalPoint.Web.ViewModels;
-
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -42,7 +42,8 @@
             services.AddDefaultIdentity<ApplicationUser>(options =>
             {
                 options.Password.RequiredUniqueChars = 0;
-                options.User.AllowedUserNameCharacters = "0123456789";
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
             })
                 .AddRoles<ApplicationRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -60,6 +61,13 @@
                     }).AddRazorRuntimeCompilation();
             services.AddRazorPages();
             services.AddDatabaseDeveloperPageExceptionFilter();
+
+            services.AddAuthorization(options =>
+            {
+                options.FallbackPolicy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+            });
 
             services.AddSingleton(this.configuration);
 

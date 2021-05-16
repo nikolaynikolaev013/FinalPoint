@@ -29,5 +29,6 @@
     <Folder Include="GroupUngroup\" />
     <Folder Include="Shared\" />
     <Folder Include="AddDispose\" />
+    <Folder Include="CustomAttributes\" />
   </ItemGroup>
 </Project>

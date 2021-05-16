@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinalPoint.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210512171218_ValidationFixes")]
-    partial class ValidationFixes
+    [Migration("20210516112043_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -77,6 +77,9 @@ namespace FinalPoint.Data.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
 
@@ -87,14 +90,32 @@ namespace FinalPoint.Data.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("nvarchar(max)")
+                        .HasComputedColumnSql("[FirstName] + ' ' + [MiddleName] + ' ' + [LastName]");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("MiddleName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
@@ -107,11 +128,11 @@ namespace FinalPoint.Data.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<int?>("OfficeId")
-                        .HasColumnType("int");
-
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PersonalId")
+                        .HasColumnType("int");
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
@@ -129,6 +150,9 @@ namespace FinalPoint.Data.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<int?>("WorkOfficeId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("IsDeleted");
@@ -141,7 +165,7 @@ namespace FinalPoint.Data.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.HasIndex("OfficeId");
+                    b.HasIndex("WorkOfficeId");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -168,6 +192,9 @@ namespace FinalPoint.Data.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Postcode")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -228,8 +255,7 @@ namespace FinalPoint.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CityId")
-                        .IsRequired()
+                    b.Property<int>("CityId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedOn")
@@ -257,12 +283,10 @@ namespace FinalPoint.Data.Migrations
                     b.Property<string>("OwnerId1")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("PostCode")
-                        .IsRequired()
+                    b.Property<int>("PostCode")
                         .HasColumnType("int");
 
                     b.Property<int?>("ResponsibleSortingCenterId")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -304,15 +328,13 @@ namespace FinalPoint.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double?>("Height")
-                        .IsRequired()
+                    b.Property<double>("Height")
                         .HasColumnType("float");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<double?>("Length")
-                        .IsRequired()
+                    b.Property<double>("Length")
                         .HasColumnType("float");
 
                     b.Property<DateTime?>("ModifiedOn")
@@ -336,12 +358,10 @@ namespace FinalPoint.Data.Migrations
                     b.Property<int>("SendingOfficeId")
                         .HasColumnType("int");
 
-                    b.Property<double?>("Weight")
-                        .IsRequired()
+                    b.Property<double>("Weight")
                         .HasColumnType("float");
 
-                    b.Property<double?>("Width")
-                        .IsRequired()
+                    b.Property<double>("Width")
                         .HasColumnType("float");
 
                     b.HasKey("Id");
@@ -372,8 +392,7 @@ namespace FinalPoint.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CreatedByEmployeeId")
-                        .IsRequired()
+                    b.Property<int>("CreatedByEmployeeId")
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedByEmployeeId1")
@@ -606,9 +625,11 @@ namespace FinalPoint.Data.Migrations
 
             modelBuilder.Entity("FinalPoint.Data.Models.ApplicationUser", b =>
                 {
-                    b.HasOne("FinalPoint.Data.Models.Office", null)
+                    b.HasOne("FinalPoint.Data.Models.Office", "WorkOffice")
                         .WithMany("Employees")
-                        .HasForeignKey("OfficeId");
+                        .HasForeignKey("WorkOfficeId");
+
+                    b.Navigation("WorkOffice");
                 });
 
             modelBuilder.Entity("FinalPoint.Data.Models.Office", b =>
@@ -620,14 +641,12 @@ namespace FinalPoint.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("FinalPoint.Data.Models.ApplicationUser", "Owner")
-                        .WithMany()
+                        .WithMany("OwnOffices")
                         .HasForeignKey("OwnerId1");
 
                     b.HasOne("FinalPoint.Data.Models.Office", "ResponsibleSortingCenter")
                         .WithMany()
-                        .HasForeignKey("ResponsibleSortingCenterId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("ResponsibleSortingCenterId");
 
                     b.Navigation("City");
 
@@ -671,7 +690,7 @@ namespace FinalPoint.Data.Migrations
                         .HasForeignKey("SendingEmployeeId1");
 
                     b.HasOne("FinalPoint.Data.Models.Office", "SendingOffice")
-                        .WithMany()
+                        .WithMany("SentParcels")
                         .HasForeignKey("SendingOfficeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -798,6 +817,8 @@ namespace FinalPoint.Data.Migrations
 
                     b.Navigation("Logins");
 
+                    b.Navigation("OwnOffices");
+
                     b.Navigation("Roles");
                 });
 
@@ -818,6 +839,8 @@ namespace FinalPoint.Data.Migrations
                     b.Navigation("Employees");
 
                     b.Navigation("Parcels");
+
+                    b.Navigation("SentParcels");
                 });
 
             modelBuilder.Entity("FinalPoint.Data.Models.Parcel", b =>

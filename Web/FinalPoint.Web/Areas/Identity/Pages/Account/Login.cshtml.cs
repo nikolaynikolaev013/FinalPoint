@@ -5,6 +5,7 @@ namespace FinalPoint.Web.Areas.Identity.Pages.Account
     using System.Linq;
     using System.Threading.Tasks;
     using FinalPoint.Data.Models;
+    using FinalPoint.Web.ViewModels.CustomAttributes;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
@@ -40,15 +41,17 @@ namespace FinalPoint.Web.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
-            [EmailAddress]
-            public string Email { get; set; }
+            [CustomRequired]
+            [PersonalId]
+            [Display(Name = "Персонален код")]
+            public string PerosnalId { get; set; }
 
-            [Required]
+            [CustomRequired]
             [DataType(DataType.Password)]
+            [Display(Name = "Парола")]
             public string Password { get; set; }
 
-            [Display(Name = "Remember me?")]
+            [Display(Name = "Запомни ме?")]
             public bool RememberMe { get; set; }
         }
 
@@ -79,7 +82,7 @@ namespace FinalPoint.Web.Areas.Identity.Pages.Account
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                var result = await _signInManager.PasswordSignInAsync(Input.PerosnalId, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");

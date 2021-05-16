@@ -7,7 +7,8 @@ namespace FinalPoint.Services.Data.Misc
     {
         IEnumerable<KeyValuePair<string, string>> GetAllSortingCentersAsKeyValuePairs();
 
-
         IEnumerable<KeyValuePair<string, string>> GetAllCitiesAsKeyValuePairs();
+
+        IEnumerable<KeyValuePair<string, string>> GeAllOfficesAsKeyValuePairs();
     }
 }

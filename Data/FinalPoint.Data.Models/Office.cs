@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+
     using FinalPoint.Data.Common.Models;
     using FinalPoint.Data.Models.Enums;
 
@@ -12,6 +13,7 @@
         {
             this.Employees = new HashSet<ApplicationUser>();
             this.Parcels = new HashSet<Parcel>();
+            this.SentParcels = new HashSet<Parcel>();
         }
 
         public int PostCode { get; set; }
@@ -39,9 +41,13 @@
 
         public virtual Office ResponsibleSortingCenter { get; set; }
 
+        [InverseProperty("WorkOffice")]
         public virtual ICollection<ApplicationUser> Employees { get; set; }
 
         [InverseProperty("CurrentOffice")]
         public virtual ICollection<Parcel> Parcels { get; set; }
+
+        [InverseProperty("SendingOffice")]
+        public virtual ICollection<Parcel> SentParcels{ get; set; }
     }
 }

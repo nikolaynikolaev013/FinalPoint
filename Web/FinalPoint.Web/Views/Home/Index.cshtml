@@ -1,10 +1,13 @@
-﻿@model IndexViewModel
+﻿@using FinalPoint.Common
+@using FinalPoint.Data.Models
+@using Microsoft.AspNetCore.Identity
 @{ ViewData["Title"] = "Начало"; }
+@inject UserManager<ApplicationUser> UserManager
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
-            <h1 class="text-center text-secondary mb-4">Добре дошли, @Model.FullName</h1>
+            <h1 class="text-center text-secondary mb-4">Добре дошли, @this.UserManager.GetUserAsync(User)?.Result?.FullName</h1>
 
             <div class="row offset-md-2">
                 <div class="col-md-5">

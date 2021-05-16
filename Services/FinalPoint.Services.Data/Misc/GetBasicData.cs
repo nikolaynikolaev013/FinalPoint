@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using FinalPoint.Data.Common.Repositories;
-using FinalPoint.Data.Models;
-
-namespace FinalPoint.Services.Data.Misc
+﻿namespace FinalPoint.Services.Data.Misc
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using FinalPoint.Data.Common.Repositories;
+    using FinalPoint.Data.Models;
+    using FinalPoint.Data.Models.Enums;
+
     public class GetBasicData : IGetBasicData
     {
         private readonly IDeletableEntityRepository<Office> officesRep;
@@ -17,6 +18,17 @@ namespace FinalPoint.Services.Data.Misc
         {
             this.officesRep = officesRep;
             this.citiesRep = citiesRep;
+        }
+
+        public IEnumerable<KeyValuePair<string, string>> GeAllOfficesAsKeyValuePairs()
+        {
+            return this.officesRep
+                   .All()
+                   .Select(x => new
+                   {
+                       x.Id,
+                       x.Name,
+                   }).ToList().Select(x => new KeyValuePair<string, string>(x.Id.ToString(), x.Name));
         }
 
         public IEnumerable<KeyValuePair<string, string>> GetAllCitiesAsKeyValuePairs()
@@ -32,7 +44,7 @@ namespace FinalPoint.Services.Data.Misc
         {
             return this.officesRep
                 .All()
-                .Where(x=>x.OfficeType == FinalPoint.Data.Models.Enums.OfficeType.SortingCenter)
+                .Where(x=>x.OfficeType == OfficeType.SortingCenter)
                 .Select(x => new
             {
                 x.Id,
