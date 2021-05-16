@@ -1,3 +1,45 @@
-﻿@page
+﻿@using FinalPoint.Data.Models.Enums
+@model AddClientInputModel
 @{
+    var allClients = Model.AllClients?.Select(x => new SelectListItem(x.Value, x.Key));
+    var typeToInt = (int)Model.Type;
 }
+
+<div class="card-body" id="currClient@(typeToInt)">
+    <div class="form-group">
+        <label asp-for="ClientId">@Model.Type</label>
+        <a onclick="addNewClient(@typeToInt)" class="text-info">(Създаване на нов потребител)</a>
+        <select asp-for="ClientId" asp-items="allClients" class="form-control">
+        </select>
+        <span asp-validation-for="ClientId" class="text-danger"></span>
+    </div>
+</div>
+
+<div id="addClient@(typeToInt)" hidden>
+    <div class="card-body" id="currClient">
+        <h6>@Model.Type <a onclick="addNewClient(@typeToInt)" class="text-secondary">(Избиране от вече създаден клиент)</a></h6>
+        <div class="form-group">
+            <label asp-for="FirstName" class="text-info"></label>
+            <input asp-for="FirstName" class="form-control" />
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="LastName" class="text-info"></label>
+            <input asp-for="LastName" class="form-control" />
+            <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="PhoneNumber" class="text-info"></label>
+            <input asp-for="PhoneNumber" class="form-control" />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Address" class="text-info"></label>
+            <input asp-for="Address" class="form-control" />
+            <span asp-validation-for="Address" class="text-danger"></span>
+        </div>
+    </div>
+</div>

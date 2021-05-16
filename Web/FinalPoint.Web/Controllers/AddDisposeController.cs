@@ -2,6 +2,7 @@
 
 namespace FinalPoint.Web.Controllers
 {
+    using System.Threading.Tasks;
     using FinalPoint.Services.Data.Administration;
     using FinalPoint.Web.ViewModels.AddDispose;
     using Microsoft.AspNetCore.Mvc;
@@ -18,13 +19,32 @@ namespace FinalPoint.Web.Controllers
             this.clientService = clientService;
         }
 
-        // GET: /<controller>/
         public IActionResult AddParcel()
         {
             AddParcelInputModel model = new AddParcelInputModel();
-            model.AllClients = this.clientService.GetAllClientsAsKeyValuePairs();
+            var allClients = this.clientService.GetAllClientsAsKeyValuePairs();
+
+            model.SenderInputModel.AllClients = allClients;
+            model.RecipentInputModel.AllClients = allClients;
+
             model.AllOffices = this.officeService.GeAllOfficesAsKeyValuePairs();
             return this.View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddParcel(AddParcelInputModel input)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                var allClients = this.clientService.GetAllClientsAsKeyValuePairs();
+
+                input.SenderInputModel.AllClients = allClients;
+                input.RecipentInputModel.AllClients = allClients;
+
+                input.AllOffices = this.officeService.GeAllOfficesAsKeyValuePairs();
+                return this.View(input);
+            }
+            return this.View();
         }
 
         public IActionResult DisposeParcel()

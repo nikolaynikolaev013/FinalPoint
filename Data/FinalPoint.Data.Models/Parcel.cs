@@ -10,6 +10,7 @@
         public Parcel()
         {
             this.Protocols = new HashSet<Protocol>();
+            this.HasCashOnDelivery = false;
         }
 
         [Required]
@@ -32,6 +33,10 @@
         public double Length { get; set; }
 
         public double Weight { get; set; }
+
+        public bool HasCashOnDelivery { get; set; }
+
+        public double? CashOnDeliveryPrice { get; set; }
 
         [ForeignKey(nameof(Office))]
         public int SendingOfficeId { get; set; }

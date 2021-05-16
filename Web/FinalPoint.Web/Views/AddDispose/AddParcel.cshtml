@@ -1,7 +1,6 @@
 ﻿@model AddParcelInputModel
 @{
     ViewData["Title"] = "Приемане на пратка";
-    var allClients = Model.AllClients?.Select(x => new SelectListItem(x.Value, x.Key));
     var allOffices = Model.AllOffices?.Select(x => new SelectListItem(x.Value, x.Key));
 }
 
@@ -31,7 +30,7 @@
                                     <label asp-for="Width"></label>
                                 </div>
                                 <div class="row">
-                                    <input asp-for="Width" class="form-control" />
+                                    <input asp-for="Width" type="number" onchange="calculatePrice()" class="form-control" />
                                     <span asp-validation-for="Width" class="text-danger"></span>
                                 </div>
                             </div>
@@ -41,7 +40,7 @@
                                     <label asp-for="Height"></label>
                                 </div>
                                 <div class="row">
-                                    <input asp-for="Height" class="form-control" />
+                                    <input asp-for="Height" type="number" onchange="calculatePrice()" class="form-control" />
                                     <span asp-validation-for="Height" class="text-danger"></span>
                                 </div>
                             </div>
@@ -51,7 +50,7 @@
                                     <label asp-for="Length"></label>
                                 </div>
                                 <div class="row">
-                                    <input asp-for="Length" class="form-control" />
+                                    <input asp-for="Length" type="number" onchange="calculatePrice()" class="form-control" />
                                     <span asp-validation-for="Length" class="text-danger"></span>
                                 </div>
                             </div>
@@ -61,7 +60,7 @@
                     <div class="form-group">
                         <div class="row offset-md-3">
                             <label asp-for="Weight" class="col-md-2 p-0"></label>
-                            <input asp-for="Weight" class="form-control col-md-4" />
+                            <input asp-for="Weight" type="number" onchange="calculatePrice()" class="form-control col-md-4" />
                             <div class="col-md-2">кг.</div>
                         </div>
                         <span asp-validation-for="Weight" class="text-danger"></span>
@@ -69,18 +68,38 @@
 
                     <div class="form-group">
                         <div class="checkbox">
-                            <label asp-for="HasCashOnDelivery">
-                                <input asp-for="HasCashOnDelivery" />
-                            </label>
+                            <label asp-for="HasCashOnDelivery"></label>
+                            <input asp-for="HasCashOnDelivery" onchange="calculatePrice()" />
+                        </div>
+                    </div>
+
+                    <div id="cashOnDeliveryPriceBlock" class="form-group" hidden>
+                        <div class="row">
+                            <label asp-for="CashOnDeliveryPrice" class="col-md-5"></label>
+                            <input asp-for="CashOnDeliveryPrice" type="number" onchange="calculatePrice()" class="col-md-4" class="form-control" />
+                            <span class="col-md-2">лв.</span>
+                        </div>
+                        <span asp-validation-for="CashOnDeliveryPrice" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="checkbox">
+                            <label asp-for="IsFragile"></label>
+                            <input asp-for="IsFragile" onchange="calculatePrice()" />
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label asp-for="CashOnDeliveryPrice"></label>
-                        <input asp-for="CashOnDeliveryPrice" class="form-control" />
-                        <span asp-validation-for="CashOnDeliveryPrice" class="text-danger"></span>
+                        <div class="checkbox">
+                            <label asp-for="DontPaletize"></label>
+                            <input asp-for="DontPaletize" onchange="calculatePrice()" />
+                        </div>
                     </div>
 
+                    <div>
+                        <h5 class="text-info">Крайна цена за доставка: <span id="deliveryPrice">0.00</span>лв.</h5>
+                        <h5 class="text-danger">Общо събери: <span id="fullPrice">0.00</span>лв.</h5>
+                    </div>
                 </div>
             </div>
         </div>
@@ -91,24 +110,10 @@
                     <h6 class="m-0 font-weight-bold text-info">Подател и получател</h6>
                 </div>
                 <!-- Card Body -->
-                <div class="card-body">
-                    <div class="form-group">
-                        <label asp-for="SenderId"></label>
-                        <select asp-for="SenderId" asp-items="allClients" class="form-control">
-                        </select>
-                        <span asp-validation-for="SenderId" class="text-danger"></span>
-                    </div>
-                </div>
+                <partial name="_AddClientPartial" model="Model.SenderInputModel" />
                 <hr class="m-3" />
 
-                <div class="card-body pb-0">
-                    <div class="form-group">
-                        <label asp-for="RecipentId"></label>
-                        <select asp-for="RecipentId" asp-items="allClients" class="form-control">
-                        </select>
-                        <span asp-validation-for="RecipentId" class="text-danger"></span>
-                    </div>
-                </div>
+                <partial name="_AddClientPartial" model="Model.RecipentInputModel" />
 
                 <div class="card-body pt-0">
                     <div class="form-group">
@@ -124,3 +129,90 @@
         <button type="submit" class="btn btn-success col-md-6 offset-md-3 form-control">Приемане</button>
     </div>
 </form>
+
+@section Scripts {
+    <script>let isFragileCheckBox = document.querySelector("#IsFragile");
+        let dontPaletizeCheckBox = document.querySelector("#DontPaletize");
+        let cashOnDeliveryCheckBox = document.querySelector("#HasCashOnDelivery");
+        let cashOnDeliveryPriceEl = document.querySelector("#cashOnDeliveryPriceBlock")
+        let cashOnDeliveryPriceInput = document.querySelector("#CashOnDeliveryPrice");
+
+        let widthEl = document.querySelector("#Width");
+        let heightEl = document.querySelector("#Height");
+        let lengthEl = document.querySelector("#Length");
+
+        let weightEl = document.querySelector("#Weight");
+
+
+        let deliveryPriceEl = document.querySelector("#deliveryPrice");
+        let fullPriceEl = document.querySelector("#fullPrice");
+
+        cashOnDeliveryCheckBox.addEventListener("click", () => {
+
+            if (cashOnDeliveryCheckBox.checked) {
+                cashOnDeliveryPriceEl.hidden = false;
+            }
+            else {
+                cashOnDeliveryPriceEl.hidden = true;
+                cashOnDeliveryPriceInput.textContent = 0.0;
+            }
+
+            calculatePrice();
+
+        })
+
+        calculatePrice();
+
+        function calculatePrice() {
+            let widthValue = widthEl.value == 0 ? 1.0 : widthEl.value;
+            let heightValue = heightEl.value == 0 ? 1.0 : heightEl.value;
+            let lengthValue = lengthEl.value == 0 ? 1.0 : lengthEl.value;
+            let weight = weightEl.Value == 0 ? 1.0 : weightEl.value;
+
+            let volumeWeight = (widthValue * heightValue * lengthValue);
+
+            let cashOnDeliveryValue = cashOnDeliveryPriceInput.value;
+
+            let finalPrice = 5.20;
+
+            if (volumeWeight > weight) {
+                finalPrice += volumeWeight * 0.4;
+            } else {
+                finalPrice += weight * 0.4;
+            }
+
+            if (cashOnDeliveryCheckBox.checked
+                && cashOnDeliveryValue > 0) {
+                cashOnDeliveryValue = parseFloat(cashOnDeliveryValue);
+                finalPrice += cashOnDeliveryValue / 20;
+            } else {
+                cashOnDeliveryValue = 0;
+            }
+
+            if (isFragileCheckBox.checked) {
+                finalPrice *= 1.05;
+            }
+
+            if (dontPaletizeCheckBox.checked) {
+                finalPrice *= 1.10;
+            }
+
+            deliveryPriceEl.textContent = finalPrice.toFixed(2);
+
+            fullPriceEl.textContent = (finalPrice + cashOnDeliveryValue).toFixed(2);
+
+        }
+
+        function addNewClient(type) {
+            let currClient = document.querySelector("#currClient" + type.toString());
+            let addClient = document.querySelector("#addClient" + type.toString());
+
+            if (!currClient.hidden) {
+                currClient.hidden = true;
+                addClient.hidden = false;
+            } else {
+                currClient.hidden = false;
+                addClient.hidden = true;
+            }
+        }</script>
+}

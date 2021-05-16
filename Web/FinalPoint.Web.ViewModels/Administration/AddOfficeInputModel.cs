@@ -9,7 +9,7 @@
     public class AddOfficeInputModel
     {
         [CustomRequired]
-        [RegularExpression("[0-9]{4,}", ErrorMessage = "Полето трябва да съдържа поне 4 цифри")]
+        [MinLength(4, ErrorMessage = "Полето трябва да съдържа поне 4 цифри")]
         [Display(Name = "Пощенски код", Prompt = "Въведете пощенския код")]
         public int PostCode { get; set; }
 
