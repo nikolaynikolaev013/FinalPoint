@@ -10,37 +10,93 @@
 <div class="row">
     <form method="post" class="col-md-6 offset-md-3">
         <div class="form-group">
+            <label asp-for="PostCode"></label>
             <input asp-for="PostCode" class="form-control" />
             <span asp-validation-for="PostCode" class="text-danger"></span>
         </div>
 
         <div class="form-group">
+            <label asp-for="Name"></label>
             <input asp-for="Name" class="form-control" />
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>
 
         <div class="form-group">
+            <label asp-for="OfficeType"></label>
             <select asp-for="OfficeType" asp-items="@Html.GetEnumSelectList<OfficeType>()" class="form-control">
             </select>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" id="currCity">
+            <label asp-for="CityId"></label>
+            <a onclick="addNewCity()" class="text-info">(Създаване на нов град)</a>
             <select asp-for="CityId" asp-items="citiesItems" class="form-control">
             </select>
             <span asp-validation-for="CityId" class="text-danger"></span>
         </div>
 
+        <div id="addCity" hidden>
+            <div class="form-group">
+                <label asp-for="CityInputModel.Name" class="text-info"></label>
+                <a onclick="addNewCity()" class="text-secondary">(Избиране от вече създаден град)</a>
+                <input asp-for="CityInputModel.Name" class="form-control" />
+                <span asp-validation-for="CityInputModel.Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CityInputModel.Postcode" class="text-info"></label>
+                <input asp-for="CityInputModel.Postcode" class="form-control" />
+                <span asp-validation-for="CityInputModel.Postcode" class="text-danger"></span>
+            </div>
+        </div>
+
         <div class="form-group">
+            <label asp-for="Address"></label>
             <input asp-for="Address" class="form-control" />
             <span asp-validation-for="Address" class="text-danger"></span>
         </div>
 
         <div class="form-group">
+            <label asp-for="ResponsibleSortingCenter"></label>
             <select asp-for="ResponsibleSortingCenter" asp-items="sortingCentersItems" class="form-control">
             </select>
             <span asp-validation-for="ResponsibleSortingCenter" class="text-danger"></span>
         </div>
 
-            <input type="submit" class="btn btn-success col-md-8 offset-md-2" class="form-control" />
+            <input type="submit" class="btn btn-success col-md-8 offset-md-2 form-control" />
     </form>
 </div>
+
+
+@section Scripts{
+
+<script>
+    let isAddingNewCity = false;
+    let currCityEl = document.querySelector("#currCity");
+    let addCityEl = document.querySelector("#addCity");
+
+    function addNewCity() {
+        isAddingNewCity = !isAddingNewCity;
+
+        if (isAddingNewCity) {
+
+            currCityEl.hidden = true;
+            addCityEl.hidden = false;
+
+            @*addCityEl.className += " animate__animated animate__backInRight";
+            addCityEl.hidden = false;
+
+            currCityEl.className += " animate__animated animate__backOutLeft";*@
+        } else {
+            @*addCityEl.className += " animate__animated animate__backOutRight";
+            //addCityEl.querySelector("#addCity").hidden = false;
+
+            currCityEl.className += " animate__animated animate__backInLeft";*@
+
+            currCityEl.hidden = false;
+            addCityEl.hidden = true;
+        }
+    }
+</script>
+    
+}

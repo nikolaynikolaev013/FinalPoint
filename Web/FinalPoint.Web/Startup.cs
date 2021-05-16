@@ -39,7 +39,11 @@
             services.AddDbContext<ApplicationDbContext>(
                 options => options.UseSqlServer(this.configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddDefaultIdentity<ApplicationUser>(IdentityOptionsProvider.GetIdentityOptions)
+            services.AddDefaultIdentity<ApplicationUser>(options =>
+            {
+                options.Password.RequiredUniqueChars = 0;
+                options.User.AllowedUserNameCharacters = "0123456789";
+            })
                 .AddRoles<ApplicationRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.Configure<CookiePolicyOptions>(
@@ -69,6 +73,7 @@
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<IGetBasicData, GetBasicData>();
             services.AddTransient<IOfficeService, OfficeService>();
+            services.AddTransient<ICityService, CityService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

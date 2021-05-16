@@ -3,8 +3,10 @@
     using System.Diagnostics;
     using FinalPoint.Web.ViewModels;
     using FinalPoint.Web.ViewModels.GroupUngroup;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
+    //[Authorize]
     public class HomeController : BaseController
     {
         public IActionResult Index()
@@ -13,8 +15,6 @@
             model.FullName = "Nikolay Nikolaev";
             return this.View(model);
         }
-
-        
 
         public IActionResult Group(string line)
         {

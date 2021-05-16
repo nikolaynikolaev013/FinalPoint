@@ -8,25 +8,27 @@
     public class AddOfficeInputModel
     {
 
-        [Display(Prompt = "Пощенски код")]
         [RegularExpression("[0-9]{4,}", ErrorMessage = "Полето трябва да съдържа поне 4 цифри")]
+        [Display(Name = "Пощенски код", Prompt = "Въведете пощенския код")]
         public int PostCode { get; set; }
 
-        [Display(Prompt = "Име на офиса")]
+        [Display(Name = "Име на офиса:", Prompt = "Въведете име на офиса")]
         public string Name { get; set; }
 
-        [Display(Prompt = "Офис или РЦ")]
+        [Display(Name = "Офис или РЦ")]
         [EnumDataType(typeof(OfficeType))]
         public OfficeType OfficeType { get; set; }
 
-        [Display(Prompt = "Град")]
+        [Display(Name = "Град")]
         public int CityId { get; set; }
 
-        [Display(Prompt = "Адрес")]
+        public AddCityInputModel CityInputModel { get; set; }
+
+        [Required]
+        [Display(Name = "Адрес:", Prompt = "Адрес")]
         public string Address { get; set; }
 
-        [Display(Prompt = "Пощенски код на обслужващо РЦ (ако е приложимо)")]
-        //[RegularExpression("[0-9]{4,}", ErrorMessage = "Полето трябва да съдържа поне 4 цифри")]
+        [Display(Name = "Обслужващо РЦ (ако е приложимо)")]
         public int? ResponsibleSortingCenter { get; set; }
 
         public IEnumerable<KeyValuePair<string, string>> CitiesItems { get; set; }

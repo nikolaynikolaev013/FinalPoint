@@ -14,6 +14,8 @@
         [Required]
         public string Name { get; set; }
 
+        public int Postcode { get; set; }
+
         public virtual ICollection<Office> Offices { get; set; }
     }
 }

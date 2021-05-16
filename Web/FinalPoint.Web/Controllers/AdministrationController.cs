@@ -12,13 +12,16 @@ namespace FinalPoint.Web.Controllers
     {
         private readonly IGetBasicData basicDataRep;
         private readonly IOfficeService officeService;
+        private readonly ICityService cityService;
 
         public AdministrationController(
             IGetBasicData basicDataRep,
-            IOfficeService officeService)
+            IOfficeService officeService,
+            ICityService cityService)
         {
             this.basicDataRep = basicDataRep;
             this.officeService = officeService;
+            this.cityService = cityService;
         }
 
         // GET: /<controller>/
@@ -46,7 +49,7 @@ namespace FinalPoint.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddOffice( AddOfficeInputModel input)
+        public async Task<IActionResult> AddOffice(AddOfficeInputModel input)
         {
             if (!this.ModelState.IsValid)
             {
@@ -55,8 +58,15 @@ namespace FinalPoint.Web.Controllers
                 return this.View(input);
             }
 
+            if (input.CityInputModel.Name != null
+                && input.CityInputModel.Postcode != null)
+            {
+                var newCityId = await this.cityService.CreateNewCity(input.CityInputModel);
+                input.CityId = newCityId;
+            }
+
             await this.officeService.CreateAsync(input);
-            return this.RedirectToRoute(new { Controller = "Administration", Action="Index"});
+            return this.RedirectToRoute(new { Controller = "Administration", Action = "Index" });
         }
 
         public IActionResult RemoveOffice()
