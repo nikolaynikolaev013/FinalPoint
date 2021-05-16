@@ -2,10 +2,11 @@
 @{
     var citiesItems = Model.CitiesItems?.Select(x => new SelectListItem(x.Value, x.Key));
     var sortingCentersItems = Model.SortingCentersItems?.Select(x => new SelectListItem(x.Value, x.Key));
-    var allUseraItems = Model.AllUsers?.Select(x => new SelectListItem(x.Value, x.Key));
+    var allUsersItems = Model.AllUsers?.Select(x => new SelectListItem(x.Value, x.Key));
+    ViewData["Title"] = "Създаване на нов офис";
 }
 
-<h1 class="text-center text-secondary mb-4">Създаване на нов офис</h1>
+<h1 class="text-center text-secondary mb-4">@ViewData["Title"]</h1>
 <hr />
 
 
@@ -67,7 +68,7 @@
 
         <div class="form-group">
             <label asp-for="OwnerId"></label>
-            <select asp-for="OwnerId" asp-items="allUseraItems" class="form-control">
+            <select asp-for="OwnerId" asp-items="allUsersItems" class="form-control">
             </select>
             <span asp-validation-for="OwnerId" class="text-danger"></span>
         </div>

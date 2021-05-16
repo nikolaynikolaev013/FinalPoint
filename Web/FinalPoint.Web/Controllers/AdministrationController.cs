@@ -11,12 +11,12 @@ namespace FinalPoint.Web.Controllers
     {
         private readonly IOfficeService officeService;
         private readonly ICityService cityService;
-        private readonly IUserServices userService;
+        private readonly IUserService userService;
 
         public AdministrationController(
             IOfficeService officeService,
             ICityService cityService,
-            IUserServices userService)
+            IUserService userService)
         {
             this.officeService = officeService;
             this.cityService = cityService;

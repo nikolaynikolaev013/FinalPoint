@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\FinalPoint.Data.Models\FinalPoint.Data.Models.csproj" />
     <ProjectReference Include="..\..\Services\FinalPoint.Services.Mapping\FinalPoint.Services.Mapping.csproj" />
+    <ProjectReference Include="..\..\Services\FinalPoint.Services\FinalPoint.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>

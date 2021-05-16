@@ -3,8 +3,10 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    public interface IUserServices
+    public interface IUserService
     {
         IEnumerable<KeyValuePair<string, string>> GetAllUsersAsKeyValuePair();
+
+        Task<IEnumerable<int>> GetAllPersonalIds();
     }
 }

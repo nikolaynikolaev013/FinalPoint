@@ -1,64 +1,126 @@
-﻿@page
+﻿@model AddParcelInputModel
 @{
+    ViewData["Title"] = "Приемане на пратка";
+    var allClients = Model.AllClients?.Select(x => new SelectListItem(x.Value, x.Key));
+    var allOffices = Model.AllOffices?.Select(x => new SelectListItem(x.Value, x.Key));
 }
 
-<div class="row mb-3">
-    <h1>Приемане на пратка</h1>
-</div>
+<h1 class="text-center text-secondary mb-4">@ViewData["Title"]</h1>
+<hr class="mb-5" />
 
-<div class="row">
-    <div class="col-md-6 offset-md-3">
-        <div class="card shadow mb-4">
-            <!-- Card Header -->
-            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-info">Информация за пратката</h6>
-                <div class="dropdown no-arrow">
+<form method="post">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card shadow mb-4">
+                <!-- Card Header -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-info">Информация за пратката</h6>
                 </div>
-            </div>
-            <!-- Card Body -->
-            <div class="card-body">
-                <div class="chart-area">
-                    <div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-                    <canvas id="myAreaChart" style="display: block; height: 320px; width: 622px;" width="1244" height="640" class="chartjs-render-monitor"></canvas>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div class="form-group">
+                        <label asp-for="Description"></label>
+                        <textarea asp-for="Description" class="form-control" rows="5" /></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row pl-3">
+                            <div class="pl-3 pr-3 pb-2 rounded border border col-md-3">
+                                <div class="row">
+                                    <label asp-for="Width"></label>
+                                </div>
+                                <div class="row">
+                                    <input asp-for="Width" class="form-control" />
+                                    <span asp-validation-for="Width" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="pl-2 pr-2 p-2 m-3"> x </div>
+                            <div class="pl-3 pr-3 pb-2 rounded border border col-md-3">
+                                <div class="row">
+                                    <label asp-for="Height"></label>
+                                </div>
+                                <div class="row">
+                                    <input asp-for="Height" class="form-control" />
+                                    <span asp-validation-for="Height" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="pl-2 pr-2 p-2 m-3"> x </div>
+                            <div class="pl-3 pr-3 pb-2 rounded border border col-md-3">
+                                <div class="row">
+                                    <label asp-for="Length"></label>
+                                </div>
+                                <div class="row">
+                                    <input asp-for="Length" class="form-control" />
+                                    <span asp-validation-for="Length" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row offset-md-3">
+                            <label asp-for="Weight" class="col-md-2 p-0"></label>
+                            <input asp-for="Weight" class="form-control col-md-4" />
+                            <div class="col-md-2">кг.</div>
+                        </div>
+                        <span asp-validation-for="Weight" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="checkbox">
+                            <label asp-for="HasCashOnDelivery">
+                                <input asp-for="HasCashOnDelivery" />
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="CashOnDeliveryPrice"></label>
+                        <input asp-for="CashOnDeliveryPrice" class="form-control" />
+                        <span asp-validation-for="CashOnDeliveryPrice" class="text-danger"></span>
+                    </div>
+
                 </div>
             </div>
         </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-6">
-        <div class="card shadow mb-4">
-            <!-- Card Header -->
-            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-info">Получател</h6>
-                <div class="dropdown no-arrow">
+        <div class="col-md-6">
+            <div class="card shadow mb-4">
+                <!-- Card Header -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-info">Подател и получател</h6>
                 </div>
-            </div>
-            <!-- Card Body -->
-            <div class="card-body">
-                <form method="post">
-                    
-                </form>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div class="form-group">
+                        <label asp-for="SenderId"></label>
+                        <select asp-for="SenderId" asp-items="allClients" class="form-control">
+                        </select>
+                        <span asp-validation-for="SenderId" class="text-danger"></span>
+                    </div>
+                </div>
+                <hr class="m-3" />
+
+                <div class="card-body pb-0">
+                    <div class="form-group">
+                        <label asp-for="RecipentId"></label>
+                        <select asp-for="RecipentId" asp-items="allClients" class="form-control">
+                        </select>
+                        <span asp-validation-for="RecipentId" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="card-body pt-0">
+                    <div class="form-group">
+                        <label asp-for="ReceivingOfficeId"></label>
+                        <select asp-for="ReceivingOfficeId" asp-items="allOffices" class="form-control">
+                        </select>
+                        <span asp-validation-for="ReceivingOfficeId" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-md-6">
-        <div class="card shadow mb-4">
-            <!-- Card Header -->
-            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-info">Подател</h6>
-                <div class="dropdown no-arrow">
-                </div>
-            </div>
-            <!-- Card Body -->
-            <div class="card-body">
-                <div class="chart-area">
-                    <div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-                    <canvas id="myAreaChart" style="display: block; height: 320px; width: 622px;" width="1244" height="640" class="chartjs-render-monitor"></canvas>
-                </div>
-            </div>
-        </div>
+        <button type="submit" class="btn btn-success col-md-6 offset-md-3 form-control">Приемане</button>
     </div>
-</div>
+</form>

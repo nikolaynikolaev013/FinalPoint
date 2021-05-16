@@ -1,19 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using FinalPoint.Data.Common.Repositories;
-using FinalPoint.Data.Models;
-
-namespace FinalPoint.Services.Data.Administration
+﻿namespace FinalPoint.Services.Data.Administration
 {
-    public class UserServices : IUserServices
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using FinalPoint.Data.Common.Repositories;
+    using FinalPoint.Data.Models;
+
+    public class UserService : IUserService
     {
         private readonly IDeletableEntityRepository<ApplicationUser> usersRep;
 
-        public UserServices(IDeletableEntityRepository<ApplicationUser> usersRep)
+        public UserService(IDeletableEntityRepository<ApplicationUser> usersRep)
         {
             this.usersRep = usersRep;
+        }
+
+        public async Task<IEnumerable<int>> GetAllPersonalIds()
+        {
+            return usersRep
+                .All()
+                .Select(x => x.PersonalId)
+                .ToList();
         }
 
         public IEnumerable<KeyValuePair<string, string>> GetAllUsersAsKeyValuePair()
