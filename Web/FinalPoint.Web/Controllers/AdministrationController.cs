@@ -4,24 +4,23 @@ namespace FinalPoint.Web.Controllers
 {
     using System.Threading.Tasks;
     using FinalPoint.Services.Data.Administration;
-    using FinalPoint.Services.Data.Misc;
     using FinalPoint.Web.ViewModels.Administration;
     using Microsoft.AspNetCore.Mvc;
 
     public class AdministrationController : Controller
     {
-        private readonly IGetBasicData basicDataRep;
         private readonly IOfficeService officeService;
         private readonly ICityService cityService;
+        private readonly IUserServices userService;
 
         public AdministrationController(
-            IGetBasicData basicDataRep,
             IOfficeService officeService,
-            ICityService cityService)
+            ICityService cityService,
+            IUserServices userService)
         {
-            this.basicDataRep = basicDataRep;
             this.officeService = officeService;
             this.cityService = cityService;
+            this.userService = userService;
         }
 
         // GET: /<controller>/
@@ -43,8 +42,9 @@ namespace FinalPoint.Web.Controllers
         public IActionResult AddOffice()
         {
             AddOfficeInputModel model = new AddOfficeInputModel();
-            model.CitiesItems = this.basicDataRep.GetAllCitiesAsKeyValuePairs();
-            model.SortingCentersItems = this.basicDataRep.GetAllSortingCentersAsKeyValuePairs();
+            model.CitiesItems = this.cityService.GetAllCitiesAsKeyValuePairs();
+            model.SortingCentersItems = this.officeService.GetAllSortingCentersAsKeyValuePairs();
+            model.AllUsers = this.userService.GetAllUsersAsKeyValuePair();
             return this.View(model);
         }
 
@@ -53,8 +53,9 @@ namespace FinalPoint.Web.Controllers
         {
             if (!this.ModelState.IsValid)
             {
-                input.CitiesItems = this.basicDataRep.GetAllCitiesAsKeyValuePairs();
-                input.SortingCentersItems = this.basicDataRep.GetAllSortingCentersAsKeyValuePairs();
+                input.CitiesItems = this.cityService.GetAllCitiesAsKeyValuePairs();
+                input.SortingCentersItems = this.officeService.GetAllSortingCentersAsKeyValuePairs();
+                input.AllUsers = this.userService.GetAllUsersAsKeyValuePair();
                 return this.View(input);
             }
 

@@ -74,6 +74,7 @@
             public int PersonalId { get; set; }
 
             [Required]
+            [Display(Name = "Офис/РЦ в което работи")]
             public int OfficeId { get; set; }
 
             [CustomRequired]

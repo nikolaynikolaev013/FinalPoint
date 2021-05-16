@@ -1,12 +1,11 @@
 @page
-@using FinalPoint.Services.Data.Misc
+@using FinalPoint.Services.Data.Administration
 
 @model RegisterModel
-@{ ViewData["Title"] = "Добавяне на служител"; }
-@inject IGetBasicData GetBasicData
+@inject IOfficeService OfficeServices
 @{
-    ViewData["Title"] = "Register";
-    var allOffices = GetBasicData.GeAllOfficesAsKeyValuePairs().Select(x => new SelectListItem(x.Value, x.Key));
+    ViewData["Title"] = "Добавяне на служител";
+    var allOffices = OfficeServices.GeAllOfficesAsKeyValuePairs().Select(x => new SelectListItem(x.Value, x.Key));
     }
 
 

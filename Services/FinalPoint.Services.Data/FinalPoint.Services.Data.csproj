@@ -27,6 +27,5 @@
 
   <ItemGroup>
     <Folder Include="Administration\" />
-    <Folder Include="Misc\" />
   </ItemGroup>
 </Project>

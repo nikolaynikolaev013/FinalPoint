@@ -1,5 +1,7 @@
 ﻿namespace FinalPoint.Services.Data.Administration
 {
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using FinalPoint.Data.Common.Repositories;
@@ -24,6 +26,15 @@
             await this.citiesRep.AddAsync(newCity);
             await this.citiesRep.SaveChangesAsync();
             return newCity.Id;
+        }
+
+        public IEnumerable<KeyValuePair<string, string>> GetAllCitiesAsKeyValuePairs()
+        {
+            return this.citiesRep.All().Select(x => new
+            {
+                x.Id,
+                x.Name,
+            }).ToList().Select(x => new KeyValuePair<string, string>(x.Id.ToString(), x.Name));
         }
     }
 }

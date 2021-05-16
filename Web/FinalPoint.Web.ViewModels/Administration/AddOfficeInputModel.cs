@@ -35,9 +35,14 @@
         [Display(Name = "Обслужващо РЦ (ако е приложимо)")]
         public int? ResponsibleSortingCenter { get; set; }
 
+        [CustomRequired]
+        [Display(Name = "Собственик")]
+        public int OwnerId { get; set; }
+
         public IEnumerable<KeyValuePair<string, string>> CitiesItems { get; set; }
 
         public IEnumerable<KeyValuePair<string, string>> SortingCentersItems { get; set; }
 
+        public IEnumerable<KeyValuePair<string, string>> AllUsers { get; set; }
     }
 }
