@@ -3,20 +3,29 @@
 namespace FinalPoint.Web.Controllers
 {
     using System.Threading.Tasks;
+    using FinalPoint.Data.Models;
     using FinalPoint.Services.Data.Administration;
     using FinalPoint.Web.ViewModels.AddDispose;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
     public class AddDisposeController : Controller
     {
         private readonly IOfficeService officeService;
         private readonly IClientService clientService;
+        private readonly IParcelService parcelService;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public AddDisposeController(IOfficeService officeService,
-            IClientService clientService)
+        public AddDisposeController(
+            IOfficeService officeService,
+            IClientService clientService,
+            IParcelService parcelService,
+            UserManager<ApplicationUser> userManager)
         {
             this.officeService = officeService;
             this.clientService = clientService;
+            this.parcelService = parcelService;
+            this.userManager = userManager;
         }
 
         public IActionResult AddParcel()
@@ -34,17 +43,28 @@ namespace FinalPoint.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> AddParcel(AddParcelInputModel input)
         {
-            if (!this.ModelState.IsValid)
+            var allClients = this.clientService.GetAllClientsAsKeyValuePairs();
+
+            input.SenderInputModel.AllClients = allClients;
+            input.RecipentInputModel.AllClients = allClients;
+
+            input.AllOffices = this.officeService.GeAllOfficesAsKeyValuePairs();
+
+            if (this.ModelState.IsValid)
             {
-                var allClients = this.clientService.GetAllClientsAsKeyValuePairs();
+                var user = await this.userManager.GetUserAsync(this.User);
+                input.DeliveryPrice = 10;
+                input.ChargeType = Data.Models.Enums.ParcelChargeType.Dimensions;
+                input.SendingOfficeId = (int)user.WorkOfficeId;
+                input.CurrentOfficeId = input.SendingOfficeId;
+                input.SendingEmployeeId = user.PersonalId;
 
-                input.SenderInputModel.AllClients = allClients;
-                input.RecipentInputModel.AllClients = allClients;
+                await this.parcelService.CreateAsync(input);
 
-                input.AllOffices = this.officeService.GeAllOfficesAsKeyValuePairs();
-                return this.View(input);
+                this.ViewBag.isSuccess = true;
             }
-            return this.View();
+
+            return this.View(input);
         }
 
         public IActionResult DisposeParcel()

@@ -30,7 +30,7 @@
 
         public IEnumerable<KeyValuePair<string, string>> GetAllCitiesAsKeyValuePairs()
         {
-            return this.citiesRep.All().Select(x => new
+            return this.citiesRep.AllAsNoTracking().Select(x => new
             {
                 x.Id,
                 x.Name,

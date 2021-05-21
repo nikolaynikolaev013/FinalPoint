@@ -17,15 +17,12 @@
 
         public int ClientId { get; set; }
 
-        [CustomRequired]
         [Display(Name = "Малко име", Prompt = "Въведете малкото име на клиента")]
         public string FirstName { get; set; }
 
-        [CustomRequired]
         [Display(Name = "Фамилно име", Prompt = "Въведете фамилното име на клиента")]
         public string LastName { get; set; }
 
-        [CustomRequired]
         [Phone]
         [Display(Name = "Телефонен номер", Prompt = "Въведете телефонния номер на клиента")]
         public string PhoneNumber { get; set; }

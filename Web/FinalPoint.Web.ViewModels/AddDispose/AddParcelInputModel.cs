@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-
+    using FinalPoint.Data.Models.Enums;
     using FinalPoint.Web.ViewModels.CustomAttributes;
 
     public class AddParcelInputModel
@@ -13,6 +13,9 @@
             this.SenderInputModel = new AddClientInputModel(Data.Models.Enums.ClientType.Подател);
             this.RecipentInputModel = new AddClientInputModel(Data.Models.Enums.ClientType.Получател);
             this.Weight = 1;
+            this.Width = 0.20;
+            this.Height = 0.10;
+            this.Length = 0.20;
         }
 
         [CustomRequired]
@@ -21,17 +24,17 @@
 
         [CustomRequired]
         [Display(Name = "Ширина")]
-        [Range(0, double.MaxValue)]
+        [Range(0, 30)]
         public double Width { get; set; }
 
         [CustomRequired]
         [Display(Name = "Височина")]
-        [Range(0, double.MaxValue)]
+        [Range(0, 30)]
         public double Height { get; set; }
 
         [CustomRequired]
         [Display(Name = "Дължина")]
-        [Range(0, double.MaxValue)]
+        [Range(0, 30)]
         public double Length { get; set; }
 
         [CustomRequired]
@@ -54,9 +57,14 @@
         [Display(Name = "Не палетизирай?")]
         public bool DontPaletize { get; set; }
 
+        public ParcelChargeType ChargeType { get; set; }
+
+        public decimal DeliveryPrice { get; set; }
+
+        public int SendingEmployeeId { get; set; }
+
         public int SendingOfficeId { get; set; }
 
-        [CustomRequired]
         [Display(Name = "Офис на получател", Prompt = "Въведете офиса на получателя")]
         public int ReceivingOfficeId { get; set; }
 
@@ -65,7 +73,6 @@
         public AddClientInputModel RecipentInputModel { get; set; }
 
         public int CurrentOfficeId { get; set; }
-
 
         public IEnumerable<KeyValuePair<string, string>> AllOffices { get; set; }
     }

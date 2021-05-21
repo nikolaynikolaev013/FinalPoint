@@ -18,7 +18,7 @@
         public async Task<IEnumerable<int>> GetAllPersonalIds()
         {
             return usersRep
-                .All()
+                .AllAsNoTracking()
                 .Select(x => x.PersonalId)
                 .ToList();
         }
@@ -26,7 +26,7 @@
         public IEnumerable<KeyValuePair<string, string>> GetAllUsersAsKeyValuePair()
         {
             return this.usersRep
-                .All()
+                .AllAsNoTracking()
                 .OrderBy(x=>x.PersonalId)
                 .Select(x => new
                 {

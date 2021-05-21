@@ -4,6 +4,7 @@
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using FinalPoint.Data.Common.Models;
+    using FinalPoint.Data.Models.Enums;
 
     public class Parcel : BaseDeletableModel<int>
     {
@@ -11,6 +12,8 @@
         {
             this.Protocols = new HashSet<Protocol>();
             this.HasCashOnDelivery = false;
+            this.IsFragile = false;
+            this.DontPaletize = false;
         }
 
         [Required]
@@ -37,6 +40,14 @@
         public bool HasCashOnDelivery { get; set; }
 
         public double? CashOnDeliveryPrice { get; set; }
+
+        public bool IsFragile { get; set; }
+
+        public bool DontPaletize { get; set; }
+
+        public ParcelChargeType ChargeType { get; set; }
+
+        public decimal DeliveryPrice { get; set; }
 
         [ForeignKey(nameof(Office))]
         public int SendingOfficeId { get; set; }

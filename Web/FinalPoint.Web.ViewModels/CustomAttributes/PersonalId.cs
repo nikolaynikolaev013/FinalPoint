@@ -12,16 +12,5 @@
         {
             this.ErrorMessage = "Моля въведете валиден персонален код.";
         }
-
-        public override bool IsValid(object value)
-        {
-            // TODO
-            if (base.IsValid(true))
-            {
-                return true;
-            }
-
-            return false;
-        }
     }
 }

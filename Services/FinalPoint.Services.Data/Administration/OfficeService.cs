@@ -22,7 +22,6 @@
             newOffice.PostCode = model.PostCode;
             newOffice.Name = model.Name;
             newOffice.OfficeType = model.OfficeType;
-            //TODO OwnerId
             newOffice.CityId = model.CityId;
             newOffice.Address = model.Address;
             newOffice.ResponsibleSortingCenterId = model.ResponsibleSortingCenter;
@@ -35,7 +34,7 @@
         public IEnumerable<KeyValuePair<string, string>> GeAllOfficesAsKeyValuePairs()
         {
             return this.officeRep
-                   .All()
+                   .AllAsNoTracking()
                    .Select(x => new
                    {
                        x.Id,
@@ -47,7 +46,7 @@
         public IEnumerable<KeyValuePair<string, string>> GetAllSortingCentersAsKeyValuePairs()
         {
             return this.officeRep
-                .All()
+                .AllAsNoTracking()
                 .Where(x => x.OfficeType == OfficeType.SortingCenter)
                 .Select(x => new
                 {

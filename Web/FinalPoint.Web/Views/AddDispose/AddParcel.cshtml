@@ -1,11 +1,24 @@
-﻿@model AddParcelInputModel
+﻿@using FinalPoint.Data.Models
+@using Microsoft.AspNetCore.Identity
+@model AddParcelInputModel
+@inject UserManager<ApplicationUser> UserManager
 @{
     ViewData["Title"] = "Приемане на пратка";
     var allOffices = Model.AllOffices?.Select(x => new SelectListItem(x.Value, x.Key));
+    var allClients = Model.SenderInputModel.AllClients?.Select(x => new SelectListItem(x.Value, x.Key));
 }
 
 <h1 class="text-center text-secondary mb-4">@ViewData["Title"]</h1>
 <hr class="mb-5" />
+
+@if (ViewBag.isSuccess != null)
+{
+    <div class="alert alert-success" role="alert">
+        Пратката Ви беше приета успешно!
+    </div>
+
+}
+<div asp-validation-summary="All" class="text-danger"></div>
 
 <form method="post">
     <div class="row">
@@ -19,7 +32,7 @@
                 <div class="card-body">
                     <div class="form-group">
                         <label asp-for="Description"></label>
-                        <textarea asp-for="Description" class="form-control" rows="5" /></textarea>
+                        <textarea asp-for="Description" class="form-control" rows="5" formnovalidate /></textarea>
                         <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
 
@@ -30,7 +43,7 @@
                                     <label asp-for="Width"></label>
                                 </div>
                                 <div class="row">
-                                    <input asp-for="Width" type="number" onchange="calculatePrice()" class="form-control" />
+                                    <input asp-for="Width" type="number" step="any" onchange="calculatePrice()" class="form-control" />
                                     <span asp-validation-for="Width" class="text-danger"></span>
                                 </div>
                             </div>
@@ -40,7 +53,7 @@
                                     <label asp-for="Height"></label>
                                 </div>
                                 <div class="row">
-                                    <input asp-for="Height" type="number" onchange="calculatePrice()" class="form-control" />
+                                    <input asp-for="Height" type="number" step="any" onchange="calculatePrice()" class="form-control" />
                                     <span asp-validation-for="Height" class="text-danger"></span>
                                 </div>
                             </div>
@@ -50,7 +63,7 @@
                                     <label asp-for="Length"></label>
                                 </div>
                                 <div class="row">
-                                    <input asp-for="Length" type="number" onchange="calculatePrice()" class="form-control" />
+                                    <input asp-for="Length" type="number" step="any" onchange="calculatePrice()" class="form-control" />
                                     <span asp-validation-for="Length" class="text-danger"></span>
                                 </div>
                             </div>
@@ -61,6 +74,7 @@
                         <div class="row offset-md-3">
                             <label asp-for="Weight" class="col-md-2 p-0"></label>
                             <input asp-for="Weight" type="number" onchange="calculatePrice()" class="form-control col-md-4" />
+                            <span asp-validation-for="Weight" class="text-danger"></span>
                             <div class="col-md-2">кг.</div>
                         </div>
                         <span asp-validation-for="Weight" class="text-danger"></span>
@@ -70,13 +84,15 @@
                         <div class="checkbox">
                             <label asp-for="HasCashOnDelivery"></label>
                             <input asp-for="HasCashOnDelivery" onchange="calculatePrice()" />
+                            <span asp-validation-for="HasCashOnDelivery" class="text-danger"></span>
                         </div>
                     </div>
 
                     <div id="cashOnDeliveryPriceBlock" class="form-group" hidden>
                         <div class="row">
-                            <label asp-for="CashOnDeliveryPrice" class="col-md-5"></label>
+                            <label asp-for="CashOnDeliveryPrice" class="col-md-6"></label>
                             <input asp-for="CashOnDeliveryPrice" type="number" onchange="calculatePrice()" class="col-md-4" class="form-control" />
+                            <span asp-validation-for="CashOnDeliveryPrice" class="text-danger"></span>
                             <span class="col-md-2">лв.</span>
                         </div>
                         <span asp-validation-for="CashOnDeliveryPrice" class="text-danger"></span>
@@ -86,6 +102,7 @@
                         <div class="checkbox">
                             <label asp-for="IsFragile"></label>
                             <input asp-for="IsFragile" onchange="calculatePrice()" />
+                            <span asp-validation-for="IsFragile" class="text-danger"></span>
                         </div>
                     </div>
 
@@ -93,6 +110,7 @@
                         <div class="checkbox">
                             <label asp-for="DontPaletize"></label>
                             <input asp-for="DontPaletize" onchange="calculatePrice()" />
+                            <span asp-validation-for="DontPaletize" class="text-danger"></span>
                         </div>
                     </div>
 
@@ -110,15 +128,90 @@
                     <h6 class="m-0 font-weight-bold text-info">Подател и получател</h6>
                 </div>
                 <!-- Card Body -->
-                <partial name="_AddClientPartial" model="Model.SenderInputModel" />
-                <hr class="m-3" />
+                <div class="card-body" id="currClient10">
+                    <div class="form-group">
+                        <label asp-for="SenderInputModel.ClientId">@Model.SenderInputModel.Type</label>
+                        <a onclick="addNewClient(10)" class="text-info">(Създаване на нов потребител)</a>
+                        <select asp-for="SenderInputModel.ClientId" asp-items="allClients" class="form-control">
+                        </select>
+                        <span asp-validation-for="SenderInputModel.ClientId" class="text-danger"></span>
+                    </div>
+                </div>
 
-                <partial name="_AddClientPartial" model="Model.RecipentInputModel" />
+                <div id="addClient10" hidden>
+                    <div class="card-body" id="currClient">
+                        <h6>@Model.SenderInputModel.Type <a onclick="addNewClient(10)" class="text-secondary">(Избиране от вече създаден клиент)</a></h6>
+                        <div class="form-group">
+                            <label asp-for="SenderInputModel.FirstName" class="text-info"></label>
+                            <input asp-for="SenderInputModel.FirstName" class="form-control" />
+                            <span asp-validation-for="SenderInputModel.FirstName" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="SenderInputModel.LastName" class="text-info"></label>
+                            <input asp-for="SenderInputModel.LastName" class="form-control" />
+                            <span asp-validation-for="SenderInputModel.LastName" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="SenderInputModel.PhoneNumber" class="text-info"></label>
+                            <input asp-for="SenderInputModel.PhoneNumber" class="form-control" />
+                            <span asp-validation-for="SenderInputModel.PhoneNumber" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="SenderInputModel.Address" class="text-info"></label>
+                            <input asp-for="SenderInputModel.Address" class="form-control" />
+                            <span asp-validation-for="SenderInputModel.Address" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="m-3" />
+                <div class="card-body" id="currClient20">
+                    <div class="form-group">
+                        <label asp-for="RecipentInputModel.ClientId">@Model.RecipentInputModel.Type</label>
+                        <a onclick="addNewClient(20)" class="text-info">(Създаване на нов потребител)</a>
+                        <select asp-for="RecipentInputModel.ClientId" asp-items="allClients" class="form-control">
+                        </select>
+                        <span asp-validation-for="SenderInputModel.ClientId" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div id="addClient20" hidden>
+                    <div class="card-body" id="currClient">
+                        <h6>@Model.RecipentInputModel.Type <a onclick="addNewClient(20)" class="text-secondary">(Избиране от вече създаден клиент)</a></h6>
+                        <div class="form-group">
+                            <label asp-for="RecipentInputModel.FirstName" class="text-info"></label>
+                            <input asp-for="RecipentInputModel.FirstName" class="form-control" />
+                            <span asp-validation-for="RecipentInputModel.FirstName" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="RecipentInputModel.LastName" class="text-info"></label>
+                            <input asp-for="RecipentInputModel.LastName" class="form-control" />
+                            <span asp-validation-for="RecipentInputModel.LastName" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="RecipentInputModel.PhoneNumber" class="text-info"></label>
+                            <input asp-for="RecipentInputModel.PhoneNumber" class="form-control" />
+                            <span asp-validation-for="RecipentInputModel.PhoneNumber" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="RecipentInputModel.Address" class="text-info"></label>
+                            <input asp-for="RecipentInputModel.Address" class="form-control" />
+                            <span asp-validation-for="RecipentInputModel.Address" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="card-body pt-0">
                     <div class="form-group">
                         <label asp-for="ReceivingOfficeId"></label>
                         <select asp-for="ReceivingOfficeId" asp-items="allOffices" class="form-control">
+                            <span asp-validation-for="ReceivingOfficeId" class="text-danger"></span>
                         </select>
                         <span asp-validation-for="ReceivingOfficeId" class="text-danger"></span>
                     </div>
