@@ -26,14 +26,14 @@
 
         <div class="form-group">
             <label asp-for="OfficeType"></label>
-            <select asp-for="OfficeType" asp-items="@Html.GetEnumSelectList<OfficeType>()" class="form-control">
+            <select asp-for="OfficeType" asp-items="@Html.GetEnumSelectList<OfficeType>()"  data-live-search="true" class="selectpicker form-control">
             </select>
         </div>
 
         <div class="form-group" id="currCity">
             <label asp-for="CityId"></label>
             <a onclick="addNewCity()" class="text-info">(Създаване на нов град)</a>
-            <select asp-for="CityId" asp-items="citiesItems" class="form-control">
+            <select asp-for="CityId" asp-items="citiesItems"  data-live-search="true" class="selectpicker form-control">
             </select>
             <span asp-validation-for="CityId" class="text-danger"></span>
         </div>
@@ -61,14 +61,14 @@
 
         <div class="form-group">
             <label asp-for="ResponsibleSortingCenter"></label>
-            <select asp-for="ResponsibleSortingCenter" asp-items="sortingCentersItems" class="form-control">
+            <select asp-for="ResponsibleSortingCenter" asp-items="sortingCentersItems"  data-live-search="true" class="selectpicker form-control">
             </select>
             <span asp-validation-for="ResponsibleSortingCenter" class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <label asp-for="OwnerId"></label>
-            <select asp-for="OwnerId" asp-items="allUsersItems" class="form-control">
+            <select asp-for="OwnerId" asp-items="allUsersItems"  data-live-search="true" class="selectpicker form-control">
             </select>
             <span asp-validation-for="OwnerId" class="text-danger"></span>
         </div>
