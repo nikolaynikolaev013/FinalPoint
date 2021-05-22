@@ -3,8 +3,11 @@
 namespace FinalPoint.Web.Controllers
 {
     using System.Threading.Tasks;
+
+    using FinalPoint.Data.Models;
     using FinalPoint.Services.Data.Administration;
     using FinalPoint.Web.ViewModels.Administration;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
     public class AdministrationController : Controller
@@ -12,15 +15,18 @@ namespace FinalPoint.Web.Controllers
         private readonly IOfficeService officeService;
         private readonly ICityService cityService;
         private readonly IUserService userService;
+        private readonly UserManager<ApplicationUser> userManager;
 
         public AdministrationController(
             IOfficeService officeService,
             ICityService cityService,
-            IUserService userService)
+            IUserService userService,
+            UserManager<ApplicationUser> userManager)
         {
             this.officeService = officeService;
             this.cityService = cityService;
             this.userService = userService;
+            this.userManager = userManager;
         }
 
         // GET: /<controller>/
@@ -29,50 +35,85 @@ namespace FinalPoint.Web.Controllers
             return this.View();
         }
 
-        public IActionResult HireEmployee()
-        {
-            return this.View();
-        }
-
         public IActionResult FireEmployee()
         {
-            return this.View();
+            FireEmployeeInputModel model = new FireEmployeeInputModel();
+            model.AvailableEmployeesToDelete = this.userService.GetAllUsersWithoutCurrentAsKeyValuePair(this.User);
+            return this.View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> FireEmployee(FireEmployeeInputModel input)
+        {
+            input.AvailableEmployeesToDelete = this.userService.GetAllUsersWithoutCurrentAsKeyValuePair(this.User);
+
+            if (this.ModelState.IsValid)
+            {
+                var removedUser = await this.userService.RemoveUser(input.EmployeeToFire);
+                input.ResultMessage = $"Служител - {removedUser.FirstName} {removedUser.MiddleName} {removedUser.LastName} - {removedUser.PersonalId} - беше уволнен успешно.";
+            }
+
+            return this.View(input);
         }
 
         public IActionResult AddOffice()
         {
             AddOfficeInputModel model = new AddOfficeInputModel();
-            model.CitiesItems = this.cityService.GetAllCitiesAsKeyValuePairs();
-            model.SortingCentersItems = this.officeService.GetAllSortingCentersAsKeyValuePairs();
-            model.AllUsers = this.userService.GetAllUsersAsKeyValuePair();
+            this.LoadAddOfficeData(model);
             return this.View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> AddOffice(AddOfficeInputModel input)
         {
-            if (!this.ModelState.IsValid)
+            this.LoadAddOfficeData(input);
+
+            if (this.ModelState.IsValid)
             {
-                input.CitiesItems = this.cityService.GetAllCitiesAsKeyValuePairs();
-                input.SortingCentersItems = this.officeService.GetAllSortingCentersAsKeyValuePairs();
-                input.AllUsers = this.userService.GetAllUsersAsKeyValuePair();
+                await this.officeService.CreateAsync(input);
+
+                this.ModelState.Clear();
+                input.ResultMessage = $"Офис {input.Name} беше регистриран успешно!";
+                input.PostCode = 0;
+                input.Name = string.Empty;
+                input.Address = string.Empty;
                 return this.View(input);
             }
 
-            if (input.CityInputModel.Name != null
-                && input.CityInputModel.Postcode != null)
-            {
-                var newCityId = await this.cityService.CreateNewCity(input.CityInputModel);
-                input.CityId = newCityId;
-            }
-
-            await this.officeService.CreateAsync(input);
-            return this.RedirectToRoute(new { Controller = "Administration", Action = "Index" });
+            return this.View(input);
         }
 
         public IActionResult RemoveOffice()
         {
-            return this.View();
+            RemoveOfficeInputModel model = new RemoveOfficeInputModel();
+            model.AvailableOfficesToRemove = this.officeService.GeAllOfficesAndSortingCentersAsKeyValuePairs();
+            return this.View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveOffice(RemoveOfficeInputModel input)
+        {
+            input.AvailableOfficesToRemove = this.officeService.GeAllOfficesAndSortingCentersAsKeyValuePairs();
+
+            if (this.ModelState.IsValid)
+            {
+                var removedOffice = await this.officeService.Remove(input.OfficeToRemove);
+                input.ResultMessage = $"Офис - {removedOffice.Name} - {removedOffice.PostCode} - беше прекратен успешно.";
+            }
+
+            return this.View(input);
+        }
+
+        //public IActionResult SuccessPartial()
+        //{
+        //    return this.PartialView("_ResponseMessagePartial");
+        //}
+
+        private void LoadAddOfficeData(AddOfficeInputModel input)
+        {
+            input.CitiesItems = this.cityService.GetAllCitiesAsKeyValuePairs();
+            input.SortingCentersItems = this.officeService.GetAllSortingCentersAsKeyValuePairs();
+            input.AllUsers = this.userService.GetAllUsersAsKeyValuePair();
         }
     }
 }

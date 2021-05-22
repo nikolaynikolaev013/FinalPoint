@@ -13,7 +13,8 @@
         private readonly IDeletableEntityRepository<Parcel> parcelRep;
         private readonly IClientService clientService;
 
-        public ParcelService(IDeletableEntityRepository<Parcel> parcelRep,
+        public ParcelService(
+            IDeletableEntityRepository<Parcel> parcelRep,
             IClientService clientService,
             UserManager<ApplicationUser> userManager)
         {

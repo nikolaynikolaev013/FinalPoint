@@ -1,26 +1,29 @@
 ﻿@model LoadUnloadIndexViewModel
 @{
-
     ViewData["Title"] = Model.Type;
+    var availableLines = Model.Lines?.Select(x => new SelectListItem(x.Value, x.Key));
 }
 
 <div class="container-fluid">
     <div class="row mt-4">
         <div class="col-md-2 p-0">
-            <h5 class="text-center text-secondary mt-1">@(Model.Type == ProtocolType.Loading ? $"{Model.Type} към:" : $"{Model.Type} от:")</h5>
+            <h5 class="text-center text-secondary mt-1">@(Model.Type == ProtocolType.Loading ? $"Товарене към:" : $"Разтоварване от:")</h5>
         </div>
+
         <div class="col-md-10">
-            <div class="input-group">
-                <select class="custom-select" id="inputGroupSelect02">
-                    @foreach (var line in Model.Lines)
-                    {
-                        <option value="@line">@line</option>
-                    }
-                </select>
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button">Нов протокол</button>
+            <form method="post" class="col-md-12">
+                <div class="input-group form-group">
+                    <select asp-for="LineToLoad" asp-items="availableLines" data-live-search="true" class="col-md-10 selectpicker custom-select form-control">
+                    </select>
+
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-outline-secondary form-control">Нов протокол</button>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
+        <div class="row">
+
+        </div>
+
     </div>
-</div>

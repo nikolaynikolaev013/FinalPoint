@@ -1,20 +1,49 @@
-﻿
+﻿@model FireEmployeeInputModel
 @{
     ViewData["Title"] = "Уволняване на служител";
+    var allEmployees = Model.AvailableEmployeesToDelete?.Select(x => new SelectListItem(x.Value, x.Key));
 }
 
 
 <h1 class="text-center text-secondary mb-4">@ViewData["Title"]</h1>
 
+@if (Model.ResultMessage != null)
+{
+    <div class="alert alert-success" role="alert">
+        @Model.ResultMessage
+    </div>
+}
 
 <div class="row">
+    <form method="post" class="col-md-6 offset-md-3">
         <div class="form-group">
-            <label asp-for="ResponsibleSortingCenter"></label>
-            <select asp-for="ResponsibleSortingCenter" asp-items="sortingCentersItems" data-live-search="true" class="selectpicker form-control">
+            <label asp-for="EmployeeToFire"></label>
+            <select asp-for="EmployeeToFire" asp-items="allEmployees" data-live-search="true" class="selectpicker form-control">
             </select>
-            <span asp-validation-for="ResponsibleSortingCenter" class="text-danger"></span>
+            <span asp-validation-for="EmployeeToFire" class="text-danger"></span>
         </div>
 
-        <button type="submit" class="btn btn-success col-md-8 offset-md-2 form-control">Добавяне</button>
+        <button id="delBtn" type="button" onclick="togglePanel(true)" class="btn btn-danger col-md-8 offset-md-2 form-control animate__animated animate__backInRight animate__faster">Уволняване</button>
+
+        <div id="confirmDeleteDiv" class="mt-2 animate__animated animate__backInRight animate__faster">
+            <span class="col-md-4">Сигурни ли сте? </span>
+            <button type="submit" class="btn btn-danger col-md-4 form-control">Да</button>
+            <button type="button" onclick="togglePanel(false)" class="btn btn-success col-md-4 form-control">Не</button>
+        </div>
     </form>
 </div>
+
+@section Scripts{
+    <script>$("#confirmDeleteDiv").hide();
+
+    function togglePanel(isClicked) {
+        if (isClicked) {
+            $("#delBtn").hide();
+            $("#confirmDeleteDiv").show();
+        } else {
+            $("#delBtn").show();
+            $("#confirmDeleteDiv").hide();
+        }
+    }</script>
+
+}

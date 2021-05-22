@@ -9,7 +9,7 @@
     public class AddOfficeInputModel
     {
         [CustomRequired]
-        [MinLength(4, ErrorMessage = "Полето трябва да съдържа поне 4 цифри")]
+        [Range(1000, int.MaxValue, ErrorMessage = "Полето трябва да съдържа поне 4 цифри")]
         [Display(Name = "Пощенски код", Prompt = "Въведете пощенския код")]
         public int PostCode { get; set; }
 
@@ -38,6 +38,8 @@
         [CustomRequired]
         [Display(Name = "Собственик")]
         public int OwnerId { get; set; }
+
+        public string ResultMessage { get; set; }
 
         public IEnumerable<KeyValuePair<string, string>> CitiesItems { get; set; }
 

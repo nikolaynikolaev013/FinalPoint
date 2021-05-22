@@ -8,11 +8,12 @@
     {
         public LoadUnloadIndexViewModel()
         {
-            this.Lines = new HashSet<string>();
         }
 
         public ProtocolType Type { get; set; }
 
-        public ICollection<string> Lines { get; set; }
+        public int LineToLoad { get; set; }
+
+        public IEnumerable<KeyValuePair<string, string>> Lines { get; set; }
     }
 }

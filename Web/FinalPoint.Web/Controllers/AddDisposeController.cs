@@ -36,7 +36,7 @@ namespace FinalPoint.Web.Controllers
             model.SenderInputModel.AllClients = allClients;
             model.RecipentInputModel.AllClients = allClients;
 
-            model.AllOffices = this.officeService.GeAllOfficesAsKeyValuePairs();
+            model.AllOffices = this.officeService.GeAllOfficesAndSortingCentersAsKeyValuePairs();
             return this.View(model);
         }
 
@@ -48,7 +48,7 @@ namespace FinalPoint.Web.Controllers
             input.SenderInputModel.AllClients = allClients;
             input.RecipentInputModel.AllClients = allClients;
 
-            input.AllOffices = this.officeService.GeAllOfficesAsKeyValuePairs();
+            input.AllOffices = this.officeService.GeAllOfficesAndSortingCentersAsKeyValuePairs();
 
             if (this.ModelState.IsValid)
             {

@@ -5,6 +5,7 @@ namespace FinalPoint.Web.Controllers
     using System;
 
     using FinalPoint.Data.Models.Enums;
+    using FinalPoint.Services.Data.Administration;
     using FinalPoint.Web.ViewModels.DTOs.LoadUnload;
     using FinalPoint.Web.ViewModels.LoadUnload;
     using FinalPoint.Web.ViewModels.Shared;
@@ -12,6 +13,13 @@ namespace FinalPoint.Web.Controllers
 
     public class LoadUnloadController : Controller
     {
+        private readonly IOfficeService officeService;
+
+        public LoadUnloadController(IOfficeService officeService)
+        {
+            this.officeService = officeService;
+        }
+
         // GET: /<controller>/
         public IActionResult Load(string line)
         {
@@ -19,8 +27,7 @@ namespace FinalPoint.Web.Controllers
             {
                 LoadUnloadIndexViewModel model = new LoadUnloadIndexViewModel();
                 model.Type = ProtocolType.Loading;
-                model.Lines.Add("Белослав");
-                model.Lines.Add("Цветен квартал");
+                model.Lines = this.officeService.GeAllOfficesAndSortingCentersAsKeyValuePairs();
                 return this.View("LoadUnload", model);
             }
             else
@@ -45,8 +52,7 @@ namespace FinalPoint.Web.Controllers
             {
                 LoadUnloadIndexViewModel model = new LoadUnloadIndexViewModel();
                 model.Type = ProtocolType.Unloading;
-                model.Lines.Add("Христо Ботев");
-                model.Lines.Add("Спартак");
+                model.Lines = this.officeService.GeAllOfficesAndSortingCentersAsKeyValuePairs();
                 return this.View("LoadUnload", model);
             }
             else
