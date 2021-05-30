@@ -2,7 +2,7 @@
 @model CheckParcelResponseModel
 
 <div class="alert alert-@Model.StatusClass animate__animated animate__@Model.AnimationClass" role="alert">
-    @if (Model.Status == ParcelStatus.NotFound || Model.Status == ParcelStatus.FoundButNotInProtocol)
+    @if (Model.Status == ParcelStatus.NotFound || Model.Status == ParcelStatus.FoundButNotInProtocol || Model.Status == ParcelStatus.AlreadyIn)
     {
         <div class="row">
             <h2 class="alert-heading col-md-12 text-center">@Model.ResultMessage</h2>

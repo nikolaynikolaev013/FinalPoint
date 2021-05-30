@@ -3,8 +3,12 @@
 
 @model RegisterModel
 @inject IOfficeService OfficeServices
-@{ ViewData["Title"] = "Добавяне на служител";
-                var allOffices = OfficeServices.GeAllOfficesAndSortingCentersAsKeyValuePairs().Select(x => new SelectListItem(x.Value, x.Key)); }
+@inject IUserRoleService UserRoleService
+@{
+    ViewData["Title"] = "Добавяне на служител";
+    var allOffices = OfficeServices.GeAllOfficesAndSortingCentersAsKeyValuePairs().Select(x => new SelectListItem(x.Value, x.Key));
+    var allRoles = UserRoleService.GetAllUserRolesAsKeyValuePairs()?.Select(x => new SelectListItem(x.Value, x.Key));
+        }
 
 
 <h1 class="text-center text-secondary mb-4">@ViewData["Title"]</h1>
@@ -36,6 +40,12 @@
                 <label asp-for="Input.PersonalId"></label>
                 <input asp-for="Input.PersonalId" class="form-control" />
                 <span asp-validation-for="Input.PersonalId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Role"></label>
+                <select asp-for="Input.Role" asp-items="allRoles" data-live-search="true" class="selectpicker form-control">
+                </select>
+                <span asp-validation-for="Input.Role" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Input.Email"></label>

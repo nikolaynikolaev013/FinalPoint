@@ -39,11 +39,22 @@
             newOffice.OfficeType = model.OfficeType;
             newOffice.CityId = model.CityId;
             newOffice.Address = model.Address;
-            newOffice.ResponsibleSortingCenterId = model.ResponsibleSortingCenter;
             newOffice.OwnerId = model.OwnerId;
+
+            if (model.OfficeType == OfficeType.Office)
+            {
+                newOffice.ResponsibleSortingCenterId = model.ResponsibleSortingCenter;
+            }
+            else
+            {
+                newOffice.ResponsibleSortingCenterId = null;
+            }
 
             await this.officeRep.AddAsync(newOffice);
             await this.officeRep.SaveChangesAsync();
+
+            await this.userService
+                    .SetUserNewWorkOfficeByUserPersonalId(newOffice.OwnerId, newOffice.Id);
         }
 
         public IEnumerable<KeyValuePair<string, string>> GeAllOfficesAndSortingCentersAsKeyValuePairs()

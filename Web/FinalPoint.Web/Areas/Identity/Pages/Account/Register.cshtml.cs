@@ -7,7 +7,7 @@
     using System.Text;
     using System.Text.Encodings.Web;
     using System.Threading.Tasks;
-
+    using FinalPoint.Common;
     using FinalPoint.Data.Models;
     using FinalPoint.Web.ViewModels.CustomAttributes;
     using Microsoft.AspNetCore.Authentication;
@@ -19,7 +19,7 @@
     using Microsoft.AspNetCore.WebUtilities;
     using Microsoft.Extensions.Logging;
 
-    [AllowAnonymous]
+    [Authorize(Roles = GlobalConstants.AdministratorRoleName + ", " + GlobalConstants.OwnerRoleName)]
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -73,9 +73,13 @@
             [Display(Name = "Личен код:", Prompt = "Въведете личния код на служителя")]
             public int PersonalId { get; set; }
 
-            [Required]
-            [Display(Name = "Офис/РЦ в което работи")]
+            [CustomRequired]
+            [Display(Name = "Офис/РЦ в който работи")]
             public int OfficeId { get; set; }
+
+            [CustomRequired]
+            [Display(Name = "Длъжност")]
+            public string Role { get; set; }
 
             [CustomRequired]
             [StringLength(100, ErrorMessage = "Паролата трябва да е с дължина между {2} и {1} символа.", MinimumLength = 6)]
@@ -102,11 +106,13 @@
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = Input.PersonalId.ToString(), Email = Input.Email, FirstName = Input.FirstName, MiddleName = Input.MiddleName, LastName = Input.LastName, DateOfBirth = Input.DateOfBirth, PersonalId = Input.PersonalId, WorkOfficeId = Input.OfficeId};
+                var user = new ApplicationUser { UserName = Input.PersonalId.ToString(), Email = Input.Email, FirstName = Input.FirstName, MiddleName = Input.MiddleName, LastName = Input.LastName, DateOfBirth = Input.DateOfBirth, PersonalId = Input.PersonalId, WorkOfficeId = Input.OfficeId };
 
-                var result = await _userManager.CreateAsync(user, Input.Password);
+                var result = await _userManager.CreateAsync(user, this.Input.Password);
 
-                if (result.Succeeded)
+                var roleResult = await this._userManager.AddToRoleAsync(user, this.Input.Role);
+
+                if (result.Succeeded && roleResult.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
 

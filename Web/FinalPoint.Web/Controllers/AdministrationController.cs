@@ -5,12 +5,15 @@ namespace FinalPoint.Web.Controllers
     using System.Security.Claims;
     using System.Threading.Tasks;
 
+    using FinalPoint.Common;
     using FinalPoint.Data.Models;
     using FinalPoint.Services.Data;
     using FinalPoint.Web.ViewModels.Administration;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
+    [Authorize(Roles = GlobalConstants.AdministratorRoleName + ", "+ GlobalConstants.OwnerRoleName)]
     public class AdministrationController : Controller
     {
         private readonly IOfficeService officeService;

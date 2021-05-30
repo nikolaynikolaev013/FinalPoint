@@ -42,7 +42,7 @@
             var currUser = this.userService
                         .GetUserById(input.UserId);
 
-            var openProtocol = this.GetOpenProtocols(input.RecipentOfficeId, currUser.WorkOfficeId).FirstOrDefault();
+            var openProtocol = this.GetOpenProtocols(input.RecipentOfficeId, (int)currUser.WorkOfficeId).FirstOrDefault();
 
             var translatedType = TranslateType(input.Type);
 
@@ -54,7 +54,7 @@
                 {
                     Type = input.Type,
                     CreatedByEmployee = currUser,
-                    OfficeFromId = currUser.WorkOfficeId,
+                    OfficeFromId = (int)currUser.WorkOfficeId,
                     OfficeToId = input.RecipentOfficeId,
                 };
 
@@ -172,7 +172,7 @@
                     {
                         responseModel.StatusClass = "danger";
                         responseModel.AnimationClass = "fadeIn";
-                        responseModel.Status = ParcelStatus.Checked;
+                        responseModel.Status = ParcelStatus.AlreadyIn;
                     }
                     else
                     {
@@ -385,6 +385,9 @@
                         break;
                     case ParcelStatus.NotFound:
                         resultMessage = "Пратката не беше открита!";
+                        break;
+                    case ParcelStatus.AlreadyIn:
+                        resultMessage = "Пратката вече е добавена в протокола!";
                         break;
                 }
             }

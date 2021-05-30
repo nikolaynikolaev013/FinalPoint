@@ -37,7 +37,7 @@
         public string Address { get; set; }
 
         [ForeignKey(nameof(Office))]
-        public int ResponsibleSortingCenterId { get; set; }
+        public int? ResponsibleSortingCenterId { get; set; }
 
         public virtual Office ResponsibleSortingCenter { get; set; }
 

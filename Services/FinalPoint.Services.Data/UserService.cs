@@ -57,6 +57,21 @@
                    .Select(x => new KeyValuePair<string, string>(x.PersonalId.ToString(), x.FullName + " - " + x.PersonalId.ToString())); ;
         }
 
+        public async Task SetUserNewWorkOfficeByUserPersonalId(int personalId, int newWorkOfficeId)
+        {
+            var user = this.usersRep
+                        .All()
+                        .Where(x => x.PersonalId == personalId)
+                        .FirstOrDefault();
+
+            if (user != null
+                && user.WorkOfficeId != 90001
+                && user.PersonalId != 10001)
+            {
+                user.WorkOfficeId = newWorkOfficeId;
+                await this.usersRep.SaveChangesAsync();
+            }
+        }
 
         public ApplicationUser GetUserById(string userId)
         {

@@ -83,6 +83,7 @@
             services.AddTransient<IClientService, ClientService>();
             services.AddTransient<IParcelService, ParcelService>();
             services.AddTransient<IProtocolService, ProtocolService>();
+            services.AddTransient<IUserRoleService, UserRoleService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -138,7 +139,7 @@
                         endpoints.MapControllerRoute(
                                     "ReloadParcelsTable", "ReloadParcelsTable", new { controller = "LoadUnload", action = "ReloadParcelsTable" });
 
-                    endpoints.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+                        endpoints.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
                         endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
                         endpoints.MapRazorPages();
                     });

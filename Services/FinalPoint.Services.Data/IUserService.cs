@@ -19,5 +19,7 @@
         ApplicationUser GetUserById(string userId);
 
         ApplicationUser GetUserByPersonalId(int userPersonalId);
+
+        Task SetUserNewWorkOfficeByUserPersonalId(int personalId, int newWorkOfficeId);
     }
 }

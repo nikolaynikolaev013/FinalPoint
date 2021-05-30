@@ -8,5 +8,6 @@ namespace FinalPoint.Data.Models.Enums
         Added = 30,
         NotFound = 40,
         FoundButNotInProtocol = 50,
+        AlreadyIn = 60,
     }
 }

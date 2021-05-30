@@ -49,7 +49,7 @@ namespace FinalPoint.Data.Models
         public int PersonalId { get; set; }
 
         [ForeignKey(nameof(Office))]
-        public int WorkOfficeId { get; set; }
+        public int? WorkOfficeId { get; set; }
 
         public virtual Office WorkOffice { get; set; }
 

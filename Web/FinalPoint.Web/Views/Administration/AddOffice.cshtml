@@ -39,7 +39,7 @@
             <span asp-validation-for="CityId" class="text-danger"></span>
         </div>
 
-        <div id="addCity" hidden>
+        <div id="addCity">
             <div class="form-group">
                 <label asp-for="CityInputModel.Name" class="text-info"></label>
                 <a onclick="addNewCity()" class="text-secondary">(Избиране от вече създаден град)</a>
@@ -60,7 +60,7 @@
             <span asp-validation-for="Address" class="text-danger"></span>
         </div>
 
-        <div class="form-group">
+        <div id ="responsibleSortingCenter" class="form-group">
             <label asp-for="ResponsibleSortingCenter"></label>
             <select asp-for="ResponsibleSortingCenter" asp-items="sortingCentersItems" data-live-search="true" class="selectpicker form-control">
             </select>
@@ -82,32 +82,42 @@
 @section Scripts{
 
     <script>
-    let isAddingNewCity = false;
-    let currCityEl = document.querySelector("#currCity");
-    let addCityEl = document.querySelector("#addCity");
+        let isAddingNewCity = false;
 
     function addNewCity() {
         isAddingNewCity = !isAddingNewCity;
 
         if (isAddingNewCity) {
-
-            currCityEl.hidden = true;
-            addCityEl.hidden = false;
-
-            @*addCityEl.className += " animate__animated animate__backInRight";
-            addCityEl.hidden = false;
-
-            currCityEl.className += " animate__animated animate__backOutLeft";*@
+            $("#currCity").hide();
+            $("#addCity").show();
         } else {
-            @*addCityEl.className += " animate__animated animate__backOutRight";
-            //addCityEl.querySelector("#addCity").hidden = false;
-
-            currCityEl.className += " animate__animated animate__backInLeft";*@
-
-            currCityEl.hidden = false;
-            addCityEl.hidden = true;
+            $("#currCity").show();
+            $("#addCity").hide();
         }
     }
+
+        $("#OfficeType").change(function () {
+            var isOffice = $(this).children("option:selected").val();
+            @*Enum 10 is office*@
+            if (isOffice == 10) {
+                $("#responsibleSortingCenter").show();
+            } else {
+                $("#responsibleSortingCenter").hide();
+            }
+        });
+
+
+
+        @*Initial loader*@
+        var isOffice = $("#OfficeType").children("option:selected").val();
+        @* Enum 10 is office *@
+            if (isOffice == 10) {
+            $("#responsibleSortingCenter").show();
+        } else {
+            $("#responsibleSortingCenter").hide();
+        }
+
+        $("#addCity").hide();
     </script>
 
 }
