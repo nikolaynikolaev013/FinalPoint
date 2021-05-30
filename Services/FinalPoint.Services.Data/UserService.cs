@@ -65,7 +65,7 @@
                         .FirstOrDefault();
 
             if (user != null
-                && user.WorkOfficeId != 90001
+                && user.WorkOfficeId == 13
                 && user.PersonalId != 10001)
             {
                 user.WorkOfficeId = newWorkOfficeId;

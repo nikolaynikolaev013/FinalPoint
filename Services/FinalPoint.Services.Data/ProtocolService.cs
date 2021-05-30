@@ -122,7 +122,19 @@
             return output;
         }
 
-        public Protocol GetProtocolById(int protocolId)
+
+        public int GetNumberOfCheckedAndAddedParcels(int protocolId)
+        {
+            return this.protocolParcelRep
+                .All()
+
+                .Where(x => x.ProtocolId == protocolId
+                        && (x.Status == ParcelStatus.Added || x.Status == ParcelStatus.Checked))
+                .ToList()
+                .Count();
+        }
+
+        public Protocol GetProparcelsId(int protocolId)
         {
             return this.protocolRep
                         .All()
@@ -153,6 +165,16 @@
             return this.protocolRep
                 .All()
                 .Where(x => x.Id == protocolId)
+                .FirstOrDefault();
+        }
+
+        public Protocol GetProtocolById(int protocolId)
+        {
+            return this.protocolRep
+                .All()
+                .Where(x => x.Id == protocolId)
+                .Include(x=>x.OfficeFrom)
+                .Include(x=>x.OfficeTo)
                 .FirstOrDefault();
         }
 
@@ -409,5 +431,6 @@
 
             return resultMessage;
         }
+
     }
 }

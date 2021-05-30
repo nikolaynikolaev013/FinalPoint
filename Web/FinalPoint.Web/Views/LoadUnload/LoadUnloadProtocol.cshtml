@@ -27,11 +27,11 @@
 
         <div class="col-md-4">
             <div class="row">
-                <h5>1/@Model.Parcels.Count пратки</h5>
+                <h5><span id="numberOfCheckedParcels">0</span>/<span id="numberOfParcels">@Model.ParcelTableShowViewData.Parcels.Count</span> пратки</h5>
             </div>
-            <div class="row">
+            @*<div class="row">
                 <h5>0/0 транспортни опаковки</h5>
-            </div>
+            </div>*@
         </div>
 
         <div id="test">
@@ -68,6 +68,15 @@
                         url: "/ReloadParcelsTable/" + @Model.Id,
                         success: function (res) {
                             $("#parcelsTable").html(res);
+
+
+                            $.ajax({
+                            method: "GET",
+                            url: "/Parcels/" + @Model.Id,
+                            success: function (res) {
+                                $("#numberOfCheckedParcels").html(res);
+                            }
+                        });
                         }
                     });
                 }
@@ -90,6 +99,15 @@
             }
         });
 
+
+        @*initial load*@
+        $.ajax({
+            method: "GET",
+            url: "/Parcels/" + @Model.Id,
+            success: function (res) {
+                $("#numberOfCheckedParcels").html(res);
+            }
+        });
     </script>
 
 

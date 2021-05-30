@@ -19,6 +19,8 @@
 
         ICollection<ParcelsTableShowParcelViewModel> GetAllProtocolParcels(int protocolId);
 
+        int GetNumberOfCheckedAndAddedParcels(int protocolId);
+
         Protocol GetProtocolById(int protocolId);
 
         Task LoadNewProtocolParcels(ApplicationUser user, int protocolId, int officeFromId, int officeToId);

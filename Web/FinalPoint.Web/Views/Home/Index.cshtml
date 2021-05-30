@@ -12,9 +12,7 @@
             <h1 class="text-center text-secondary mb-4">Добре дошли, @this.UserManager.GetUserAsync(User)?.Result?.FullName</h1>
             <hr />
 
-            @if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName)
-              && !this.User.IsInRole(GlobalConstants.OfficeOwnerRoleName)
-              && !this.User.IsInRole(GlobalConstants.OwnerRoleName))
+            @if (!this.User.IsInRole(GlobalConstants.OwnerRoleName))
             {
                 <div class="row offset-md-2">
                     <div class="col-md-5">
