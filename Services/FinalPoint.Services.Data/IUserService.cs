@@ -1,18 +1,23 @@
-﻿namespace FinalPoint.Services.Data.Administration
+﻿namespace FinalPoint.Services.Data
 {
     using System.Collections.Generic;
     using System.Security.Claims;
     using System.Threading.Tasks;
+
     using FinalPoint.Data.Models;
 
     public interface IUserService
     {
         IEnumerable<KeyValuePair<string, string>> GetAllUsersAsKeyValuePair();
 
-        IEnumerable<KeyValuePair<string, string>> GetAllUsersWithoutCurrentAsKeyValuePair(ClaimsPrincipal currUser);
+        IEnumerable<KeyValuePair<string, string>> GetAllUsersWithoutCurrentAsKeyValuePair(string currUserId);
 
-        Task<IEnumerable<int>> GetAllPersonalIds();
+        ICollection<int> GetAllPersonalIds();
 
         Task<ApplicationUser> RemoveUser(int userPersonalId);
+
+        ApplicationUser GetUserById(string userId);
+
+        ApplicationUser GetUserByPersonalId(int userPersonalId);
     }
 }

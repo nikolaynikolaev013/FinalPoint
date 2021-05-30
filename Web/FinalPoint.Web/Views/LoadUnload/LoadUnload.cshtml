@@ -1,4 +1,4 @@
-﻿@model LoadUnloadIndexViewModel
+﻿ @model LoadUnloadIndexViewModel
 @{
     ViewData["Title"] = Model.Type;
     var availableLines = Model.Lines?.Select(x => new SelectListItem(x.Value, x.Key));
@@ -17,13 +17,43 @@
                     </select>
 
                     <div class="input-group-append">
-                        <button type="button" class="btn btn-outline-secondary form-control">Нов протокол</button>
+                        <button id="new" type="submit" class="btn btn-outline-secondary form-control">Нов протокол</button>
                     </div>
                 </div>
             </form>
         </div>
-        <div class="row">
-
-        </div>
-
     </div>
+
+    @section Scripts{
+        <script>
+            @*$("#NewProtocolConfirmation").hide();
+            $("#AlreadyOpenProtocolConfirmation").hide();
+
+            $("#new").click(function () {
+                $("#NewProtocolConfirmation").hide();
+                $("#AlreadyOpenProtocolConfirmation").hide();
+
+                let recipentOffice = $("#LineToLoad").val();
+                let type = 1;
+                let data = { 'type': type, 'recipentOfficeId': recipentOffice };
+
+                $.ajax({
+                    type: "POST",
+                    url: "/api/Protocols",
+                    data: JSON.stringify(data),
+                    success: function (data) {
+                        if (!data.alreadyCreated) {
+
+                            $("#NewProtocolConfirmation").show();
+                            $("#protocolNumber").text(data.protocols[0].id);
+                        } else {
+                            $("#AlreadyOpenProtocolConfirmation").show();
+                            $("#protocolNumber").text(data.protocols[0].id);
+                        }
+                    },
+                    contentType: "application/json",
+
+                });
+            })*@
+        </script>
+    }

@@ -16,6 +16,7 @@
             this.Width = 0.20;
             this.Height = 0.10;
             this.Length = 0.20;
+            this.NumberOfParts = 1;
         }
 
         [CustomRequired]
@@ -43,18 +44,23 @@
         public double Weight { get; set; }
 
         [CustomRequired]
-        [Display(Name = "Наложен платеж?")]
+        [Display(Name = "Части")]
+        [Range(0, double.MaxValue)]
+        public int NumberOfParts { get; set; }
+
+        [CustomRequired]
+        [Display(Name = "Наложен платеж ")]
         public bool HasCashOnDelivery { get; set; }
 
         [Display(Name = "Цена за наложен платеж:")]
         public double? CashOnDeliveryPrice { get; set; }
 
         [CustomRequired]
-        [Display(Name = "Чупливо?")]
+        [Display(Name = "Чупливо ")]
         public bool IsFragile { get; set; }
 
         [CustomRequired]
-        [Display(Name = "Не палетизирай?")]
+        [Display(Name = "Не палетизирай ")]
         public bool DontPaletize { get; set; }
 
         public ParcelChargeType ChargeType { get; set; }

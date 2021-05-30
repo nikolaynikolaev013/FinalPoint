@@ -14,6 +14,7 @@
             this.HasCashOnDelivery = false;
             this.IsFragile = false;
             this.DontPaletize = false;
+            this.NumberOfParts = 1;
         }
 
         [Required]
@@ -36,6 +37,8 @@
         public double Length { get; set; }
 
         public double Weight { get; set; }
+
+        public int NumberOfParts { get; set; }
 
         public bool HasCashOnDelivery { get; set; }
 

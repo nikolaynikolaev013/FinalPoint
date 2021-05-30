@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using FinalPoint.Data.Models.Enums;
 
     public class LoadUnloadIndexViewModel
@@ -12,6 +13,7 @@
 
         public ProtocolType Type { get; set; }
 
+        [Required]
         public int LineToLoad { get; set; }
 
         public IEnumerable<KeyValuePair<string, string>> Lines { get; set; }

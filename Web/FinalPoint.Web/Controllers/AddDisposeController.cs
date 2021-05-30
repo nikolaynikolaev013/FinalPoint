@@ -4,7 +4,7 @@ namespace FinalPoint.Web.Controllers
 {
     using System.Threading.Tasks;
     using FinalPoint.Data.Models;
-    using FinalPoint.Services.Data.Administration;
+    using FinalPoint.Services.Data;
     using FinalPoint.Web.ViewModels.AddDispose;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;

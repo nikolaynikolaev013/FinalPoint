@@ -1,4 +1,4 @@
-﻿namespace FinalPoint.Services.Data.Administration
+﻿namespace FinalPoint.Services.Data
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -10,14 +10,18 @@
 
     public class OfficeService : IOfficeService
     {
-        private readonly IDeletableEntityRepository<FinalPoint.Data.Models.Office> officeRep;
+        private readonly IDeletableEntityRepository<Office> officeRep;
         private readonly ICityService cityService;
+        private readonly IUserService userService;
 
-        public OfficeService(IDeletableEntityRepository<FinalPoint.Data.Models.Office> officeRep,
-            ICityService cityService)
+        public OfficeService(
+            IDeletableEntityRepository<Office> officeRep,
+            ICityService cityService,
+            IUserService userService)
         {
             this.officeRep = officeRep;
             this.cityService = cityService;
+            this.userService = userService;
         }
 
         public async Task CreateAsync(AddOfficeInputModel model)
@@ -81,9 +85,28 @@
                 }).ToList().Select(x => new KeyValuePair<string, string>(x.Id.ToString(), x.Name));
         }
 
+        public Office GetOffice(int officeId)
+        {
+            return this.officeRep
+                    .All()
+                    .Where(x => x.Id == officeId)
+                    .FirstOrDefault();
+        }
+
         public async Task<Office> Remove(int officeId)
         {
-            var officeToDelete = this.officeRep.All().FirstOrDefault(x => x.Id == officeId);
+            var officeToDelete = this.GetOffice(officeId);
+
+            var officeEmployees = this.officeRep
+                .All()
+                .Where(x => x.Id == officeId)
+                .Select(x => new { x.Employees })
+                .FirstOrDefault();
+
+            foreach (var employee in officeEmployees.Employees)
+            {
+                await this.userService.RemoveUser(employee.PersonalId);
+            }
 
             this.officeRep.Delete(officeToDelete);
             await this.officeRep.SaveChangesAsync();

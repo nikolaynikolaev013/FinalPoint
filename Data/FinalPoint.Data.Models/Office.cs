@@ -24,7 +24,7 @@
         public OfficeType OfficeType { get; set; }
 
         [ForeignKey(nameof(ApplicationUser))]
-        public int? OwnerId { get; set; }
+        public int OwnerId { get; set; }
 
         public virtual ApplicationUser Owner { get; set; }
 
@@ -37,9 +37,15 @@
         public string Address { get; set; }
 
         [ForeignKey(nameof(Office))]
-        public int? ResponsibleSortingCenterId { get; set; }
+        public int ResponsibleSortingCenterId { get; set; }
 
         public virtual Office ResponsibleSortingCenter { get; set; }
+
+        [InverseProperty("OfficeFrom")]
+        public virtual ICollection<Protocol> ProtocolsFrom { get; set; }
+
+        [InverseProperty("OfficeTo")]
+        public virtual ICollection<Protocol> ProtocolsTo { get; set; }
 
         [InverseProperty("WorkOffice")]
         public virtual ICollection<ApplicationUser> Employees { get; set; }
@@ -48,6 +54,6 @@
         public virtual ICollection<Parcel> Parcels { get; set; }
 
         [InverseProperty("SendingOffice")]
-        public virtual ICollection<Parcel> SentParcels{ get; set; }
+        public virtual ICollection<Parcel> SentParcels { get; set; }
     }
 }

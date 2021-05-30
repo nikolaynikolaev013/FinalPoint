@@ -5,6 +5,7 @@ namespace FinalPoint.Data.Models
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using System.Security.Claims;
     using FinalPoint.Data.Common.Models;
 
     using Microsoft.AspNetCore.Identity;
@@ -48,7 +49,7 @@ namespace FinalPoint.Data.Models
         public int PersonalId { get; set; }
 
         [ForeignKey(nameof(Office))]
-        public int? WorkOfficeId { get; set; }
+        public int WorkOfficeId { get; set; }
 
         public virtual Office WorkOffice { get; set; }
 
@@ -60,5 +61,10 @@ namespace FinalPoint.Data.Models
         public virtual ICollection<IdentityUserClaim<string>> Claims { get; set; }
 
         public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; }
+
+        public static implicit operator ApplicationUser(ClaimsPrincipal v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

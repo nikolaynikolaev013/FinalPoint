@@ -30,6 +30,7 @@
     <Folder Include="GroupUngroup\" />
     <Folder Include="Shared\" />
     <Folder Include="AddDispose\" />
+    <Folder Include="ViewComponents\" />
     <Folder Include="CustomAttributes\" />
   </ItemGroup>
 </Project>

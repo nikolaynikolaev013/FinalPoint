@@ -12,5 +12,20 @@
         {
             this.ErrorMessage = "Моля въведете валиден персонален код.";
         }
+
+        public override bool IsValid(object value)
+        {
+
+            //if (value is int intValue)
+            //{
+            //if (!allPersonalIds.Contains((int)value))
+            //{
+            //    return true;
+            //}
+            //}
+
+            return base.IsValid(value);
+        }
+
     }
 }

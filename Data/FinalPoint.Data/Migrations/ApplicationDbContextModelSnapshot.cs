@@ -16,7 +16,7 @@ namespace FinalPoint.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.5")
+                .HasAnnotation("ProductVersion", "5.0.6")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("FinalPoint.Data.Models.ApplicationRole", b =>
@@ -148,7 +148,7 @@ namespace FinalPoint.Data.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<int?>("WorkOfficeId")
+                    b.Property<int>("WorkOfficeId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -275,7 +275,7 @@ namespace FinalPoint.Data.Migrations
                     b.Property<int>("OfficeType")
                         .HasColumnType("int");
 
-                    b.Property<int?>("OwnerId")
+                    b.Property<int>("OwnerId")
                         .HasColumnType("int");
 
                     b.Property<string>("OwnerId1")
@@ -284,7 +284,7 @@ namespace FinalPoint.Data.Migrations
                     b.Property<int>("PostCode")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ResponsibleSortingCenterId")
+                    b.Property<int>("ResponsibleSortingCenterId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -355,6 +355,9 @@ namespace FinalPoint.Data.Migrations
 
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("NumberOfParts")
+                        .HasColumnType("int");
 
                     b.Property<int>("ReceivingOfficeId")
                         .HasColumnType("int");
@@ -429,6 +432,12 @@ namespace FinalPoint.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("OfficeFromId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OfficeToId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("ParcelId")
                         .HasColumnType("int");
 
@@ -440,6 +449,10 @@ namespace FinalPoint.Data.Migrations
                     b.HasIndex("CreatedByEmployeeId1");
 
                     b.HasIndex("IsDeleted");
+
+                    b.HasIndex("OfficeFromId");
+
+                    b.HasIndex("OfficeToId");
 
                     b.HasIndex("ParcelId");
 
@@ -465,16 +478,10 @@ namespace FinalPoint.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("OfficeStorageFromId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OfficeStorageToId")
-                        .HasColumnType("int");
-
                     b.Property<int>("ParcelId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ProtocolId")
+                    b.Property<int>("ProtocolId")
                         .HasColumnType("int");
 
                     b.Property<int>("ResponsibleUserId")
@@ -483,16 +490,15 @@ namespace FinalPoint.Data.Migrations
                     b.Property<string>("ResponsibleUserId1")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("TimeEdited")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
                     b.HasIndex("IsDeleted");
-
-                    b.HasIndex("OfficeStorageFromId");
-
-                    b.HasIndex("OfficeStorageToId");
 
                     b.HasIndex("ParcelId");
 
@@ -643,7 +649,9 @@ namespace FinalPoint.Data.Migrations
                 {
                     b.HasOne("FinalPoint.Data.Models.Office", "WorkOffice")
                         .WithMany("Employees")
-                        .HasForeignKey("WorkOfficeId");
+                        .HasForeignKey("WorkOfficeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("WorkOffice");
                 });
@@ -662,7 +670,9 @@ namespace FinalPoint.Data.Migrations
 
                     b.HasOne("FinalPoint.Data.Models.Office", "ResponsibleSortingCenter")
                         .WithMany()
-                        .HasForeignKey("ResponsibleSortingCenterId");
+                        .HasForeignKey("ResponsibleSortingCenterId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("City");
 
@@ -732,46 +742,50 @@ namespace FinalPoint.Data.Migrations
                         .WithMany()
                         .HasForeignKey("CreatedByEmployeeId1");
 
+                    b.HasOne("FinalPoint.Data.Models.Office", "OfficeFrom")
+                        .WithMany("ProtocolsFrom")
+                        .HasForeignKey("OfficeFromId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("FinalPoint.Data.Models.Office", "OfficeTo")
+                        .WithMany("ProtocolsTo")
+                        .HasForeignKey("OfficeToId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("FinalPoint.Data.Models.Parcel", null)
                         .WithMany("Protocols")
                         .HasForeignKey("ParcelId");
 
                     b.Navigation("CreatedByEmployee");
+
+                    b.Navigation("OfficeFrom");
+
+                    b.Navigation("OfficeTo");
                 });
 
             modelBuilder.Entity("FinalPoint.Data.Models.ProtocolParcel", b =>
                 {
-                    b.HasOne("FinalPoint.Data.Models.Office", "OfficeStorageFrom")
-                        .WithMany()
-                        .HasForeignKey("OfficeStorageFromId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("FinalPoint.Data.Models.Office", "OfficeStorageTo")
-                        .WithMany()
-                        .HasForeignKey("OfficeStorageToId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("FinalPoint.Data.Models.Parcel", "Parcel")
                         .WithMany()
                         .HasForeignKey("ParcelId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("FinalPoint.Data.Models.Protocol", null)
+                    b.HasOne("FinalPoint.Data.Models.Protocol", "Protocol")
                         .WithMany("Parcels")
-                        .HasForeignKey("ProtocolId");
+                        .HasForeignKey("ProtocolId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("FinalPoint.Data.Models.ApplicationUser", "ResponsibleUser")
                         .WithMany()
                         .HasForeignKey("ResponsibleUserId1");
 
-                    b.Navigation("OfficeStorageFrom");
-
-                    b.Navigation("OfficeStorageTo");
-
                     b.Navigation("Parcel");
+
+                    b.Navigation("Protocol");
 
                     b.Navigation("ResponsibleUser");
                 });
@@ -855,6 +869,10 @@ namespace FinalPoint.Data.Migrations
                     b.Navigation("Employees");
 
                     b.Navigation("Parcels");
+
+                    b.Navigation("ProtocolsFrom");
+
+                    b.Navigation("ProtocolsTo");
 
                     b.Navigation("SentParcels");
                 });

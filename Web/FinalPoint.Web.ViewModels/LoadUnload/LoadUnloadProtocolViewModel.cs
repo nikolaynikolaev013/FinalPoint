@@ -5,6 +5,7 @@
     using FinalPoint.Data.Models.Enums;
     using FinalPoint.Web.ViewModels.DTOs.LoadUnload;
     using FinalPoint.Web.ViewModels.Shared;
+    using FinalPoint.Web.ViewModels.ViewComponents;
 
     public class LoadUnloadProtocolViewModel
     {
@@ -15,14 +16,24 @@
 
         public ProtocolType Type { get; set; }
 
-        public string Id { get; set; }
+        public ParcelsTableShowModel ParcelTableShowViewData { get; set; }
 
-        public string Line { get; set; }
+        public string TranslatedType { get; set; }
+
+        public int Id { get; set; }
+
+        public int Line { get; set; }
 
         public DateTime Date { get; set; }
 
         public ParcelINsertPartialViewModel ParcelInsertViewModel { get; set; }
 
         public ICollection<ParcelDto> Parcels { get; set; }
+
+        public string Message { get; set; }
+
+        public string TypeOfMessage { get; set; }
+
+        public int RecipentOfficeId { get; set; }
     }
 }

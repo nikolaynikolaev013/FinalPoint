@@ -3,6 +3,7 @@
     using System;
     using System.ComponentModel.DataAnnotations.Schema;
     using FinalPoint.Data.Common.Models;
+    using FinalPoint.Data.Models.Enums;
 
     public class ProtocolParcel : BaseDeletableModel<int>
     {
@@ -15,6 +16,12 @@
 
         public virtual Parcel Parcel { get; set; }
 
+        [ForeignKey(nameof(Protocol))]
+        public int ProtocolId { get; set; }
+
+        public Protocol Protocol { get; set; }
+
+        public ParcelStatus Status { get; set; }
 
         [ForeignKey(nameof(ApplicationUser))]
         public int ResponsibleUserId { get; set; }
@@ -22,15 +29,5 @@
         public virtual ApplicationUser ResponsibleUser { get; set; }
 
         public DateTime TimeEdited { get; set; }
-
-        [ForeignKey(nameof(Office))]
-        public int OfficeStorageFromId { get; set; }
-
-        public virtual Office OfficeStorageFrom { get; set; }
-
-        [ForeignKey(nameof(Office))]
-        public int OfficeStorageToId { get; set; }
-
-        public virtual Office OfficeStorageTo { get; set; }
     }
 }

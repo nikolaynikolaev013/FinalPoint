@@ -9,7 +9,6 @@
     using FinalPoint.Data.Repositories;
     using FinalPoint.Data.Seeding;
     using FinalPoint.Services.Data;
-    using FinalPoint.Services.Data.Administration;
     using FinalPoint.Services.Mapping;
     using FinalPoint.Services.Messaging;
     using FinalPoint.Web.ViewModels;
@@ -36,7 +35,7 @@
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(
-                options => options.UseSqlServer(this.configuration.GetConnectionString("DefaultConnection")));
+                options => options.UseLazyLoadingProxies().UseSqlServer(this.configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDefaultIdentity<ApplicationUser>(options =>
             {
@@ -83,6 +82,7 @@
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IClientService, ClientService>();
             services.AddTransient<IParcelService, ParcelService>();
+            services.AddTransient<IProtocolService, ProtocolService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -132,7 +132,13 @@
                         endpoints.MapControllerRoute(
                             "Unload", "Unload/{line?}", new { controller = "LoadUnload", action = "Unload" });
 
-                        endpoints.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+                        endpoints.MapControllerRoute(
+                                "CheckedParcelResult", "CheckedParcelResult", new { controller = "LoadUnload", action = "CheckedParcelResult" });
+
+                        endpoints.MapControllerRoute(
+                                    "ReloadParcelsTable", "ReloadParcelsTable", new { controller = "LoadUnload", action = "ReloadParcelsTable" });
+
+                    endpoints.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
                         endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
                         endpoints.MapRazorPages();
                     });

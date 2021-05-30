@@ -1,4 +1,4 @@
-﻿namespace FinalPoint.Services.Data.Administration
+﻿namespace FinalPoint.Services.Data
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -16,5 +16,7 @@
         IEnumerable<KeyValuePair<string, string>> GetAllSortingCentersAsKeyValuePairs();
 
         Task<Office> Remove(int officePostcodeToSkip);
+
+        Office GetOffice(int officeId);
     }
 }

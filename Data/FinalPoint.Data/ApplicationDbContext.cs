@@ -88,6 +88,17 @@
             builder.Entity<ApplicationUser>()
                 .Property(x => x.FullName)
                 .HasComputedColumnSql("[FirstName] + ' ' + [MiddleName] + ' ' + [LastName]");
+
+            builder.Entity<Protocol>()
+                .HasOne(x => x.OfficeTo)
+                .WithMany(x => x.ProtocolsTo)
+                .HasForeignKey(x => x.OfficeToId);
+
+            builder.Entity<ApplicationUser>()
+                .HasOne(x => x.WorkOffice)
+                .WithMany(x => x.Employees)
+                .HasForeignKey(x => x.WorkOfficeId);
+
         }
 
         private static void SetIsDeletedQueryFilter<T>(ModelBuilder builder)

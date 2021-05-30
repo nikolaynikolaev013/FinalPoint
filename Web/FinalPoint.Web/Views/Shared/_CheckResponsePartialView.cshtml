@@ -1,0 +1,23 @@
+﻿@using FinalPoint.Web.ViewModels.ViewComponents
+@model CheckParcelResponseModel
+
+<div class="alert alert-@Model.StatusClass animate__animated animate__@Model.AnimationClass" role="alert">
+    @if (Model.Status == ParcelStatus.NotFound || Model.Status == ParcelStatus.FoundButNotInProtocol)
+    {
+        <div class="row">
+            <h2 class="alert-heading col-md-12 text-center">@Model.ResultMessage</h2>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <h2 class="alert-heading col-md-4">@Model.ResultMessage</h2>
+            <h2 class="alert-heading col-md-5 offset-md-3">Номер: @Model.ParcelId | Части: @Model.NumberOfParts</h2>
+        </div>
+        <hr />
+        <div class="row">
+            <h6>От: @Model.OfficeNameFrom  ->  Към: @Model.OfficeNameTo</h6>
+        </div>
+    }
+
+</div>

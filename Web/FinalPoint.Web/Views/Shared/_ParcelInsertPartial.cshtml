@@ -3,7 +3,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="input-group mb-3">
-            <input type="text" class="form-control border-right-0" placeholder="Моля въведете/сканирайте номер на пратка." aria-label="Моля въведете/сканирайте номер на пратка." aria-describedby="scan-input">
+            <input id="parcelIdInput" name="parcelIdInput" type="number" class="form-control border-right-0" placeholder="Моля въведете/сканирайте номер на пратка." aria-label="Моля въведете/сканирайте номер на пратка." aria-describedby="scan-input">
 
             <span class="input-group-append bg-white border-left-0">
                 <span class="input-group-text bg-transparent">
@@ -12,8 +12,13 @@
             </span>
 
             <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button">@Model.ButtonText</button>
+                <button id="submitBtn" class="btn btn-outline-secondary" type="button">@Model.ButtonText</button>
             </div>
         </div>
     </div>
+</div>
+
+<div class="row mb-3">
+    <input name="addRemoveRadioBtns" id="check" class="btn btn-outline-secondary m-1 ml-3" type="radio" checked>Добавяне</input>
+    <input name="addRemoveRadioBtns" id="remove" class="btn btn-outline-secondary m-1 ml-1" type="radio" >Премахване</input>
 </div>

@@ -33,7 +33,7 @@
         public string Address { get; set; }
 
         [Display(Name = "Обслужващо РЦ (ако е приложимо)")]
-        public int? ResponsibleSortingCenter { get; set; }
+        public int ResponsibleSortingCenter { get; set; }
 
         [CustomRequired]
         [Display(Name = "Собственик")]
