@@ -19,5 +19,9 @@
         public const string OfficeManagerRoleName = "OfficeManager";
 
         public const string DriverRoleName = "Driver";
+
+        public const string VirtualSortingCenterIdNumber = "13";
+
+        public const string VirtualSortingCenterPostcode = "90001";
     }
 }

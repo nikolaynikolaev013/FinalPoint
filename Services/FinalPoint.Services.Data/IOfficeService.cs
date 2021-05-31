@@ -18,5 +18,7 @@
         Task<Office> Remove(int officePostcodeToSkip);
 
         Office GetOffice(int officeId);
+
+        string GetOfficeAsStringById(int officeId);
     }
 }

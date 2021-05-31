@@ -6,11 +6,11 @@ namespace FinalPoint.Web.Controllers
 {
     [Route("[controller]/{protocolId}")]
     [ApiController]
-    public class ParcelsController : BaseController
+    public class ProtocolController : Controller
     {
         private readonly IProtocolService protocolParcelService;
 
-        public ParcelsController(IProtocolService protocolParcelService)
+        public ProtocolController(IProtocolService protocolParcelService)
         {
             this.protocolParcelService = protocolParcelService;
         }

@@ -81,6 +81,14 @@
                     .FirstOrDefault();
         }
 
+        public ApplicationUser GetUserByClaimsPrincipal(ClaimsPrincipal user)
+        {
+            return this.usersRep
+                    .All()
+                    .Where(x => x.Id == user.FindFirst(ClaimTypes.NameIdentifier).Value)
+                    .FirstOrDefault();
+        }
+
         public ApplicationUser GetUserByPersonalId(int userPersonalId)
         {
             return this.usersRep

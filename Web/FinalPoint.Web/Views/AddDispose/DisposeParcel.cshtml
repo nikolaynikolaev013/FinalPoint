@@ -1,8 +1,64 @@
-﻿@model AddParcelInputModel
+﻿@using FinalPoint.Data.Models
 @{
-    
     ViewData["title"] = "Издаване на пратка";
 }
 
 
-<h1>hey from dispose</h1>
+<h1 class="text-center text-secondary mb-4">@ViewData["Title"]</h1>
+<hr class="mb-5" />
+
+<div asp-validation-summary="All" class="text-danger"></div>
+
+<partial name="_ParcelSearchInputPartialView" />
+
+<div id="parcelSearchResult"></div>
+
+@section Scripts {
+    <script>
+        $("#search").click(function () {
+            GetParcelResults()
+        });
+
+        function disposeParcel(parcelId) {
+            $.ajax({
+                method: "DELETE",
+                url: "/CheckParcel/" + parcelId,
+                success: function (res) {
+                    $("#parcelCard_" + parcelId).addClass("animate__backOutRight").delay(500).hide(0);
+                    setTimeout(GetParcelResults, 500);
+                }
+            });
+        }
+
+        function GetParcelResults() {
+            let parcelId = CheckNullUndefined($("#parcelId").val()) ? $("#parcelId").val() : 0;
+            let firstName = CheckNullUndefined($("#recipentFirstName").val()) ? $("#recipentFirstName").val() : 0;
+            let lastName = CheckNullUndefined($("#recipentLastName").val()) ? $("#recipentLastName").val() : 0;
+            let phoneNumber = CheckNullUndefined($("#recipentPhoneNumber").val()) ? $("#recipentPhoneNumber").val() : 0;
+
+            $.ajax({
+                method: "GET",
+                url: "/CheckParcel/" + parcelId + "/" + firstName + "/" + lastName + "/" + phoneNumber,
+                success: function (res) {
+                    $("#parcelSearchResult").html(res);
+
+                    $(".confirmDelete").hide();
+                }
+            });
+            function CheckNullUndefined(value) {
+                return !(typeof value == 'string' && !value.trim() || typeof value == 'undefined' || value === null);
+            }
+        }
+
+        function disposeToggleConfirm(parcelId) {
+            if (!$("#disposeBtn_" + parcelId).is(":hidden")) {
+
+                $("#disposeBtn_" + parcelId).hide();
+                $("#confirmDeleteDiv_" + parcelId).show();
+            }
+            else {
+                $("#disposeBtn_" + parcelId).show();
+                $("#confirmDeleteDiv_" + parcelId).hide();
+            }
+        }</script>
+}

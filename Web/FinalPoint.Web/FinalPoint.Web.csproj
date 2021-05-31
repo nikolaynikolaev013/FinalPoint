@@ -53,5 +53,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Remove="Views\Shared\CheckedParcelSuccessBlock.cshtml" />
+    <Content Remove="Views\Shared\_ParcelSearchInputPartialView.cshtml" />
   </ItemGroup>
 </Project>

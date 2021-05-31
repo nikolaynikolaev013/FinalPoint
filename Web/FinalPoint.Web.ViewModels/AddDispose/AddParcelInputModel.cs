@@ -80,6 +80,8 @@
 
         public int CurrentOfficeId { get; set; }
 
+        public string CurrOfficeAsString { get; set; }
+
         public IEnumerable<KeyValuePair<string, string>> AllOffices { get; set; }
     }
 }

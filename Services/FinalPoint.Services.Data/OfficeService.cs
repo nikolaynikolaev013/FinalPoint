@@ -57,6 +57,17 @@
                     .SetUserNewWorkOfficeByUserPersonalId(newOffice.OwnerId, newOffice.Id);
         }
 
+        public string GetOfficeAsStringById(int officeId)
+        {
+            var office = this.officeRep
+                        .All()
+                        .Where(x => x.Id == officeId)
+                        .Select(x => new { cityName = x.City.Name,x.Name, x.PostCode })
+                        .FirstOrDefault();
+
+            return $"{office.cityName} - {office.Name} - {office.PostCode}";
+        }
+
         public IEnumerable<KeyValuePair<string, string>> GeAllOfficesAndSortingCentersAsKeyValuePairs()
         {
             return this.officeRep
@@ -70,11 +81,12 @@
                    }).ToList().Select(x => new KeyValuePair<string, string>(x.Id.ToString(), $"{x.City} - {x.Name} - {x.PostCode}"));
         }
 
-        public IEnumerable<KeyValuePair<string, string>> GeAllOfficesAndSortingCentersWithoutCurrOneAsKeyValuePairs(int officePostcodeToSkip)
+        public IEnumerable<KeyValuePair<string, string>> GeAllOfficesAndSortingCentersWithoutCurrOneAsKeyValuePairs(int officeIdToSkip)
         {
             return this.officeRep
                       .AllAsNoTracking()
-                      .Where(x=>x.PostCode != officePostcodeToSkip)
+                      .Where(x => x.Id != officeIdToSkip
+                                && x.PostCode != 90001)
                       .Select(x => new
                       {
                           x.Id,

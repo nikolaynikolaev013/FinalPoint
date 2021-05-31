@@ -72,7 +72,7 @@
 
                             $.ajax({
                             method: "GET",
-                            url: "/Parcels/" + @Model.Id,
+                                url: "/Protocol/" + @Model.Id,
                             success: function (res) {
                                 $("#numberOfCheckedParcels").html(res);
                             }
@@ -103,7 +103,7 @@
         @*initial load*@
         $.ajax({
             method: "GET",
-            url: "/Parcels/" + @Model.Id,
+            url: "/Protocol/" + @Model.Id,
             success: function (res) {
                 $("#numberOfCheckedParcels").html(res);
             }

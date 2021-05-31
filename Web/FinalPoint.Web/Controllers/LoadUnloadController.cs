@@ -31,10 +31,11 @@ namespace FinalPoint.Web.Controllers
         }
 
         // GET: /<controller>/
-        public IActionResult Load(int input)
+        public IActionResult Load()
         {
             LoadUnloadIndexViewModel model = new LoadUnloadIndexViewModel();
-            model.Lines = this.officeService.GeAllOfficesAndSortingCentersAsKeyValuePairs();
+            var currUser = this.userService.GetUserByClaimsPrincipal(this.User);
+            model.Lines = this.officeService.GeAllOfficesAndSortingCentersWithoutCurrOneAsKeyValuePairs(currUser.WorkOfficeId);
             model.Type = ProtocolType.Loading;
             return this.View("LoadUnload", model);
         }
@@ -68,11 +69,6 @@ namespace FinalPoint.Web.Controllers
 
             };
             return this.View("LoadUnloadProtocol", model);
-        }
-
-        private object FillUpParcelsTableShowData(object protocolId)
-        {
-            throw new NotImplementedException();
         }
 
         public IActionResult Unload(string line)
@@ -132,7 +128,7 @@ namespace FinalPoint.Web.Controllers
             var model = new ParcelsTableShowModel();
 
             var protocol = this.protocolService.GetProtocolById(protocolId);
-            var user = this.userService.GetUserById(this.User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var user = this.userService.GetUserByClaimsPrincipal(this.User);
 
             await this.protocolService.LoadNewProtocolParcels(user, protocol.Id, protocol.OfficeFromId, protocol.OfficeToId);
             model.Protocol = this.protocolService.GetProtocolById(protocolId);

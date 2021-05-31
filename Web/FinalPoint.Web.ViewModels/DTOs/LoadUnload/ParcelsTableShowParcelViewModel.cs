@@ -11,6 +11,8 @@ namespace FinalPoint.Web.ViewModels.DTOs.LoadUnload
 
         public ProtocolParcel ProtocolParcel { get; set; }
 
+        public Parcel Parcel { get; set; }
+
         public string TranslatedStatus { get; set; }
     }
 }

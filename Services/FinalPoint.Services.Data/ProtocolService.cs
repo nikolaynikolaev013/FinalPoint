@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Security.Claims;
     using System.Threading.Tasks;
 
     using FinalPoint.Data.Common.Repositories;
@@ -12,7 +11,6 @@
     using FinalPoint.Web.ViewModels.DTOs;
     using FinalPoint.Web.ViewModels.DTOs.LoadUnload;
     using FinalPoint.Web.ViewModels.ViewComponents;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
 
     public class ProtocolService : IProtocolService
@@ -102,18 +100,22 @@
         {
             var output = new HashSet<ParcelsTableShowParcelViewModel>();
 
-            var parcels = this.protocolParcelRep
+            var protocolParcels = this.protocolParcelRep
                     .All()
                     .Where(x => x.ProtocolId == protocolId)
                     .Include(x => x.Parcel)
                     .ToHashSet();
 
-            foreach (var parcel in parcels)
+            foreach (var protocolParcel in protocolParcels)
             {
+                var parcel = this.parcelService
+                                    .GetParcelWithOfficesAndCitiesById(protocolParcel.ParcelId);
+
                 var newParcel = new ParcelsTableShowParcelViewModel()
                 {
-                    ProtocolParcel = parcel,
-                    TranslatedStatus = this.TranslateStatus(parcel.Status),
+                    Parcel = parcel,
+                    ProtocolParcel = protocolParcel,
+                    TranslatedStatus = this.TranslateStatus(protocolParcel.Status),
                 };
 
                 output.Add(newParcel);
@@ -121,7 +123,6 @@
 
             return output;
         }
-
 
         public int GetNumberOfCheckedAndAddedParcels(int protocolId)
         {
@@ -184,7 +185,7 @@
 
             var proposedProtocolParcels = this.GetProtocolParcelIds(protocolId);
 
-            var parcel = this.parcelService.GetParcelById(parcelId);
+            var parcel = this.parcelService.GetParcelAsParcelCheckResultDtoById(parcelId);
 
             if (parcel != null)
             {
@@ -235,7 +236,7 @@
         {
             var responseModel = new CheckParcelResponseModel();
 
-            var parcel = this.parcelService.GetParcelById(parcelId);
+            var parcel = this.parcelService.GetParcelAsParcelCheckResultDtoById(parcelId);
 
             if (parcel != null)
             {
@@ -297,10 +298,18 @@
 
         public async Task AddParcelToProtocol(int parcelId, int protocolId, int resposnibleUserPersonalId, ParcelStatus status)
         {
+            var parcel = this.parcelService
+                            .GetParcelById(parcelId);
+
             var protocolParcelObj = this.protocolParcelRep
                             .All()
                             .Where(x => x.ProtocolId == protocolId && x.ParcelId == parcelId)
                             .FirstOrDefault();
+
+            if (parcel == null)
+            {
+                return;
+            }
 
             if (protocolParcelObj != null)
             {
@@ -308,14 +317,15 @@
             }
             else
             {
+                parcel.CurrentOfficeId = 90001;
+
                 protocolParcelObj = new ProtocolParcel()
                 {
                     Status = status,
-                    ParcelId = parcelId,
+                    Parcel = parcel,
                     ProtocolId = protocolId,
                     ResponsibleUserId = resposnibleUserPersonalId,
                     TimeEdited = DateTime.UtcNow,
-
                 };
                 await this.protocolParcelRep.AddAsync(protocolParcelObj);
             }

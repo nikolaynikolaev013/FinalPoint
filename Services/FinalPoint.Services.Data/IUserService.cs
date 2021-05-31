@@ -20,6 +20,8 @@
 
         ApplicationUser GetUserByPersonalId(int userPersonalId);
 
+        ApplicationUser GetUserByClaimsPrincipal(ClaimsPrincipal user);
+
         Task SetUserNewWorkOfficeByUserPersonalId(int personalId, int newWorkOfficeId);
     }
 }

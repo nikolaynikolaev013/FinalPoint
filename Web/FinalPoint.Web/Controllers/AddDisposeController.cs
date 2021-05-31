@@ -2,10 +2,12 @@
 
 namespace FinalPoint.Web.Controllers
 {
+    using System.Security.Claims;
     using System.Threading.Tasks;
     using FinalPoint.Data.Models;
     using FinalPoint.Services.Data;
     using FinalPoint.Web.ViewModels.AddDispose;
+    using FinalPoint.Web.ViewModels.TrackParcel;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
@@ -14,41 +16,35 @@ namespace FinalPoint.Web.Controllers
         private readonly IOfficeService officeService;
         private readonly IClientService clientService;
         private readonly IParcelService parcelService;
+        private readonly IUserService userService;
         private readonly UserManager<ApplicationUser> userManager;
 
         public AddDisposeController(
             IOfficeService officeService,
             IClientService clientService,
             IParcelService parcelService,
+            IUserService userService,
             UserManager<ApplicationUser> userManager)
         {
             this.officeService = officeService;
             this.clientService = clientService;
             this.parcelService = parcelService;
+            this.userService = userService;
             this.userManager = userManager;
         }
 
         public IActionResult AddParcel()
         {
             AddParcelInputModel model = new AddParcelInputModel();
-            var allClients = this.clientService.GetAllClientsAsKeyValuePairs();
+            this.FillUpAddParcelInputModel(model);
 
-            model.SenderInputModel.AllClients = allClients;
-            model.RecipentInputModel.AllClients = allClients;
-
-            model.AllOffices = this.officeService.GeAllOfficesAndSortingCentersAsKeyValuePairs();
             return this.View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> AddParcel(AddParcelInputModel input)
         {
-            var allClients = this.clientService.GetAllClientsAsKeyValuePairs();
-
-            input.SenderInputModel.AllClients = allClients;
-            input.RecipentInputModel.AllClients = allClients;
-
-            input.AllOffices = this.officeService.GeAllOfficesAndSortingCentersAsKeyValuePairs();
+            this.FillUpAddParcelInputModel(input);
 
             if (this.ModelState.IsValid)
             {
@@ -70,6 +66,18 @@ namespace FinalPoint.Web.Controllers
         public IActionResult DisposeParcel()
         {
             return this.View();
+        }
+
+        private void FillUpAddParcelInputModel(AddParcelInputModel input)
+        {
+            var currUser = this.userService.GetUserById(this.User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var allClients = this.clientService.GetAllClientsAsKeyValuePairs();
+
+            input.SenderInputModel.AllClients = allClients;
+            input.RecipentInputModel.AllClients = allClients;
+
+            input.AllOffices = this.officeService.GeAllOfficesAndSortingCentersAsKeyValuePairs();
+            input.CurrOfficeAsString = this.officeService.GetOfficeAsStringById(currUser.WorkOfficeId);
         }
     }
 }
