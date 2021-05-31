@@ -12,6 +12,7 @@
         public LoadUnloadProtocolViewModel()
         {
             this.Parcels = new HashSet<ParcelDto>();
+            this.IsClosed = false;
         }
 
         public ProtocolType Type { get; set; }
@@ -23,6 +24,8 @@
         public int Id { get; set; }
 
         public int Line { get; set; }
+
+        public bool IsClosed { get; set; }
 
         public DateTime Date { get; set; }
 

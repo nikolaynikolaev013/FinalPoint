@@ -49,16 +49,7 @@
                 return !(typeof value == 'string' && !value.trim() || typeof value == 'undefined' || value === null);
             }
         }
+    </script>
 
-        function disposeToggleConfirm(parcelId) {
-            if (!$("#disposeBtn_" + parcelId).is(":hidden")) {
-
-                $("#disposeBtn_" + parcelId).hide();
-                $("#confirmDeleteDiv_" + parcelId).show();
-            }
-            else {
-                $("#disposeBtn_" + parcelId).show();
-                $("#confirmDeleteDiv_" + parcelId).hide();
-            }
-        }</script>
+    <script src="~/js/ToggleConfirmationPanel.js"></script>
 }

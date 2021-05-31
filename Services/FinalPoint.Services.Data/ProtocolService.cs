@@ -104,6 +104,8 @@
                     .All()
                     .Where(x => x.ProtocolId == protocolId)
                     .Include(x => x.Parcel)
+                    .OrderByDescending(x => x.Status == ParcelStatus.Added)
+                    .ThenByDescending(x => x.Status == ParcelStatus.Checked)
                     .ToHashSet();
 
             foreach (var protocolParcel in protocolParcels)
@@ -148,10 +150,10 @@
         public ICollection<Protocol> GetOpenProtocols(int recipentOfficeId, int senderOfficeId)
         {
             var recipentOffice = this.officeService
-                            .GetOffice(recipentOfficeId);
+                            .GetOfficeById(recipentOfficeId);
 
             var senderOffice = this.officeService
-                            .GetOffice(senderOfficeId);
+                            .GetOfficeById(senderOfficeId);
 
             return this.protocolRep
                 .All()
@@ -298,15 +300,12 @@
 
         public async Task AddParcelToProtocol(int parcelId, int protocolId, int resposnibleUserPersonalId, ParcelStatus status)
         {
-            var parcel = this.parcelService
-                            .GetParcelById(parcelId);
-
             var protocolParcelObj = this.protocolParcelRep
                             .All()
                             .Where(x => x.ProtocolId == protocolId && x.ParcelId == parcelId)
                             .FirstOrDefault();
 
-            if (parcel == null)
+            if (!await this.parcelService.UpdateParcelCurrentOfficeByOfficePostcode(parcelId, 90001))
             {
                 return;
             }
@@ -317,12 +316,11 @@
             }
             else
             {
-                parcel.CurrentOfficeId = 90001;
 
                 protocolParcelObj = new ProtocolParcel()
                 {
                     Status = status,
-                    Parcel = parcel,
+                    ParcelId = parcelId,
                     ProtocolId = protocolId,
                     ResponsibleUserId = resposnibleUserPersonalId,
                     TimeEdited = DateTime.UtcNow,
@@ -335,6 +333,13 @@
 
         public async Task RemoveParcelFromProtocol(int parcelId, int protocolId, int resposnibleUserPersonalId)
         {
+            var responsibleUser = this.userService.GetUserByPersonalId(resposnibleUserPersonalId);
+
+            if (!await this.parcelService.UpdateParcelCurrentOfficeByOfficeId(parcelId, responsibleUser.WorkOfficeId))
+            {
+                return;
+            }
+
             var protocolParcelObj = this.protocolParcelRep
                             .All()
                             .Where(x => x.ProtocolId == protocolId && x.ParcelId == parcelId)
@@ -352,6 +357,31 @@
                     .Where(x => x.ProtocolId == protocolId)
                     .Select(x => x.Parcel.Id)
                     .ToHashSet();
+        }
+
+        public async Task<bool> CloseProtocol(int protocolId)
+        {
+            var protocol = this.protocolRep
+                        .All()
+                        .Where(x => x.Id == protocolId)
+                        .FirstOrDefault();
+            if (protocol != null)
+            {
+                protocol.IsClosed = true;
+                await this.protocolRep.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool IsClosed(int protocolId)
+        {
+            return this.protocolRep
+                        .All()
+                        .Where(x => x.Id == protocolId)
+                        .FirstOrDefault()
+                        .IsClosed;
         }
 
         private static string TranslateType(ProtocolType input)

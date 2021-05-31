@@ -7,17 +7,23 @@
 
 
 <div class="container-fluid">
-    <div class="row">
-        <div class="alert alert-@Model.TypeOfMessage alert-dismissible fade show col-md-12 animate__animated" role="alert">
-            @Model.Message
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
+    @if (!Model.IsClosed)
+    {
+        <div class="row">
+            <div id="protocolMainResponseMessage" class="alert alert-@Model.TypeOfMessage alert-dismissible fade show col-md-12 animate__animated" role="alert">
+                <div id="message">
+                    @Model.Message
+                </div>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
         </div>
-    </div>
+
+    }
 
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-6">
             <p>
                 Протокол №: <span class="text-warning">@Model.Id</span> |
                 Линия: <span class="text-warning"> @Model.Line </span> |
@@ -25,24 +31,37 @@
             </p>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-2">
             <div class="row">
                 <h5><span id="numberOfCheckedParcels">0</span>/<span id="numberOfParcels">@Model.ParcelTableShowViewData.Parcels.Count</span> пратки</h5>
             </div>
             @*<div class="row">
-                <h5>0/0 транспортни опаковки</h5>
-            </div>*@
+                    <h5>0/0 транспортни опаковки</h5>
+                </div>*@
         </div>
 
-        <div id="test">
+        @if (!Model.IsClosed)
+        {
+            <input type="button" id="hideBtn" onclick="toggleConfirmation()" class="col-md-4 btn btn-success form-control animate__animated animate__backInRight animate__faster" value="Приключи протокола" />
+
+            <span id="confirmPanel" class="confirmDelete col-md-4">
+                <div class=" p-1 m-1 animate__animated animate__backInRight animate__faster">
+                    <span class="col-md-3">Сигурни ли сте? </span>
+                    <button type="submit" onclick="closeProtocol(@Model.Id)" class="col-md-2 btn btn-danger form-control">Да</button>
+                    <button type="button" onclick="toggleConfirmation()" class="col-md-2 btn btn-success form-control">Не</button>
+                </div>
+            </span>
+        }
+    </div>
+
+    @if (!Model.IsClosed)
+    {
+        <partial name="_ParcelInsertPartial" model="Model.ParcelInsertViewModel" />
+
+        <div id="responseMessage">
         </div>
-    </div>
+    }
 
-
-    <partial name="_ParcelInsertPartial" model="Model.ParcelInsertViewModel" />
-
-    <div id="responseMessage">
-    </div>
 
     <div id="parcelsTable">
         <partial name="_ParcelsTableShowPartialView" model="Model.ParcelTableShowViewData" />
@@ -52,6 +71,25 @@
 
 @section Scripts{
     <script>
+
+        function closeProtocol(protocolId){
+            $.ajax({
+                method: "Put",
+                url: "api/Protocol/" + @Model.Id,
+                success: function (res) {
+                    if (res) {
+                        $("#protocolMainResponseMessage #message").text("Протокол №" + @Model.Id + " беше приключен успешно!");
+                        $("#protocolMainResponseMessage").addClass("alert-success");
+                        $("#protocolMainResponseMessage").removeClass("alert-warning");
+                        $("#parcelInsert").hide();
+                        $("#hideBtn").hide();
+                        $("#confirmPanel").hide();
+                        $("#responseMessage")?.hide();
+                        }
+                    }
+                });
+        }
+
         $("#submitBtn").click(function () {
             let parcelId = $("#parcelIdInput").val();
 
@@ -72,7 +110,7 @@
 
                             $.ajax({
                             method: "GET",
-                                url: "/Protocol/" + @Model.Id,
+                                url: "api/Protocol/" + @Model.Id,
                             success: function (res) {
                                 $("#numberOfCheckedParcels").html(res);
                             }
@@ -101,15 +139,16 @@
 
 
         @*initial load*@
+        $("#confirmPanel").hide();
+
         $.ajax({
             method: "GET",
-            url: "/Protocol/" + @Model.Id,
+            url: "api/Protocol/" + @Model.Id,
             success: function (res) {
                 $("#numberOfCheckedParcels").html(res);
             }
         });
     </script>
 
-
-    <script></script>
+    <script src="~/js/ToggleConfirmationPanel.js"></script>
 }

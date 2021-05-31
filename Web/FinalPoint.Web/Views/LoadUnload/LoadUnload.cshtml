@@ -26,34 +26,5 @@
 
     @section Scripts{
         <script>
-            @*$("#NewProtocolConfirmation").hide();
-            $("#AlreadyOpenProtocolConfirmation").hide();
-
-            $("#new").click(function () {
-                $("#NewProtocolConfirmation").hide();
-                $("#AlreadyOpenProtocolConfirmation").hide();
-
-                let recipentOffice = $("#LineToLoad").val();
-                let type = 1;
-                let data = { 'type': type, 'recipentOfficeId': recipentOffice };
-
-                $.ajax({
-                    type: "POST",
-                    url: "/api/Protocols",
-                    data: JSON.stringify(data),
-                    success: function (data) {
-                        if (!data.alreadyCreated) {
-
-                            $("#NewProtocolConfirmation").show();
-                            $("#protocolNumber").text(data.protocols[0].id);
-                        } else {
-                            $("#AlreadyOpenProtocolConfirmation").show();
-                            $("#protocolNumber").text(data.protocols[0].id);
-                        }
-                    },
-                    contentType: "application/json",
-
-                });
-            })*@
         </script>
     }

@@ -28,5 +28,9 @@
         Task<CheckParcelResponseModel> TryCheckParcelInProtocol(int parcelId, int protocolId, int responsibleUserPersonalId);
 
         Task<CheckParcelResponseModel> TryRemoveParcelFromProtocol(int parcelId, int protocolId, int responsibleUserPersonalId);
+
+        Task<bool> CloseProtocol(int protocolId);
+
+        bool IsClosed(int protocolId);
     }
 }

@@ -66,10 +66,14 @@ namespace FinalPoint.Web.Controllers
                 {
                     ButtonText = "Добавяне",
                 },
-
             };
+
+            model.IsClosed = this.protocolService.IsClosed(model.Id);
+
             return this.View("LoadUnloadProtocol", model);
         }
+
+
 
         public IActionResult Unload(string line)
         {

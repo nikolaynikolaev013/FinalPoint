@@ -108,7 +108,7 @@
                 }).ToList().Select(x => new KeyValuePair<string, string>(x.Id.ToString(), x.Name));
         }
 
-        public Office GetOffice(int officeId)
+        public Office GetOfficeById(int officeId)
         {
             return this.officeRep
                     .All()
@@ -116,9 +116,17 @@
                     .FirstOrDefault();
         }
 
+        public Office GetOfficeByPostcode(int officePostcode)
+        {
+            return this.officeRep
+                    .All()
+                    .Where(x => x.PostCode == officePostcode)
+                    .FirstOrDefault();
+        }
+
         public async Task<Office> Remove(int officeId)
         {
-            var officeToDelete = this.GetOffice(officeId);
+            var officeToDelete = this.GetOfficeById(officeId);
 
             var officeEmployees = this.officeRep
                 .All()

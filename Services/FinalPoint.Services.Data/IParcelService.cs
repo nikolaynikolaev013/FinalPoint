@@ -22,5 +22,9 @@ namespace FinalPoint.Services.Data
         Parcel GetParcelById(int parcelId);
 
         Parcel GetParcelWithOfficesAndCitiesById(int parcelId);
+
+        Task<bool> UpdateParcelCurrentOfficeByOfficeId(int parcelId, int newCurrentOfficeId);
+
+        Task<bool> UpdateParcelCurrentOfficeByOfficePostcode(int parcelId, int newCurrentOfficePostcode);
     }
 }

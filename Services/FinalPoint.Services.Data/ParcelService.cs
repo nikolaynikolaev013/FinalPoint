@@ -19,20 +19,17 @@
         private readonly IClientService clientService;
         private readonly IOfficeService officeService;
         private readonly IUserService userService;
-        private readonly IParcelService parcelService;
 
         public ParcelService(
             IDeletableEntityRepository<Parcel> parcelRep,
             IClientService clientService,
             IOfficeService officeService,
-            IUserService userService,
-            IParcelService parcelService)
+            IUserService userService)
         {
             this.parcelRep = parcelRep;
             this.clientService = clientService;
             this.officeService = officeService;
             this.userService = userService;
-            this.parcelService = parcelService;
         }
 
         public async Task CreateAsync(AddParcelInputModel input)
@@ -66,7 +63,7 @@
 
         public ICollection<Parcel> GetAllParcelsFromTo(int officeFromId, int officeToId)
         {
-            var officeFrom = this.officeService.GetOffice(officeFromId);
+            var officeFrom = this.officeService.GetOfficeById(officeFromId);
 
             return this.parcelRep
                 .All()
@@ -158,10 +155,25 @@
             return false;
         }
 
-        public async Task<bool> UpdateParcelCurrentOffice(int parcelId,int newCurrentOfficeId)
+        public async Task<bool> UpdateParcelCurrentOfficeByOfficeId(int parcelId, int newCurrentOfficeId)
         {
-            var parcel = this.parcelService.GetParcelById(parcelId);
-            var newCurrentOffice = this.officeService.GetOffice(newCurrentOfficeId);
+            var parcel = this.GetParcelById(parcelId);
+            var newCurrentOffice = this.officeService.GetOfficeById(newCurrentOfficeId);
+
+            if (parcel != null && newCurrentOffice != null)
+            {
+                parcel.CurrentOffice = newCurrentOffice;
+                await this.parcelRep.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> UpdateParcelCurrentOfficeByOfficePostcode(int parcelId, int newCurrentOfficePostcode)
+        {
+            var parcel = this.GetParcelById(parcelId);
+            var newCurrentOffice = this.officeService.GetOfficeByPostcode(newCurrentOfficePostcode);
 
             if (parcel != null && newCurrentOffice != null)
             {
