@@ -13,24 +13,34 @@
     {
         Task<NewOrOpenProtocolViewModel> CheckOrCreateProtocol(NewProtocolCreateOrOpenDataInputDto input);
 
-        Protocol GetProtocol(int protocolId);
+        Task<bool> CloseProtocol(int protocolId);
 
-        ICollection<Protocol> GetOpenProtocols(int recipentOfficeId, int senderOfficeId);
+        Task LoadNewProtocolParcels(ApplicationUser user, ProtocolType protocolType, int protocolId, int officeFromId, int officeToId);
+
+        Task<CheckParcelResponseModel> TryAddParcelInProtocol(int parcelId, int protocolId, int responsibleUserPersonalId);
+
+        Task AddParcelToProtocol(int parcelId, int protocolId, int resposnibleUserPersonalId, ParcelStatus status);
+
+        Task<CheckParcelResponseModel> TryRemoveParcelFromProtocol(int parcelId, int protocolId, int responsibleUserPersonalId);
+
+        Task RemoveParcelFromProtocol(int parcelId, int protocolId, int resposnibleUserPersonalId);
+
+        bool CheckIfParcelIsInProtocol(int parcelId, int protocolId);
+
+        bool CheckIfParcelIsAlreadyCheckedOrAddedToAProtocol(int parcelId, int protocolId);
+
+        bool IsClosed(int protocolId);
 
         ICollection<ParcelsTableShowParcelViewModel> GetAllProtocolParcels(int protocolId);
 
         int GetNumberOfCheckedAndAddedParcels(int protocolId);
 
-        Protocol GetProtocolById(int protocolId);
+        Protocol GetProtocolWithOfficesById(int protocolId);
 
-        Task LoadNewProtocolParcels(ApplicationUser user, int protocolId, int officeFromId, int officeToId);
+        ICollection<Protocol> GetOpenProtocols(ProtocolType protocolType, int recipentOfficeId, int senderOfficeId);
 
-        Task<CheckParcelResponseModel> TryCheckParcelInProtocol(int parcelId, int protocolId, int responsibleUserPersonalId);
+        ICollection<int> GetProtocolParcelIds(int protocolId);
 
-        Task<CheckParcelResponseModel> TryRemoveParcelFromProtocol(int parcelId, int protocolId, int responsibleUserPersonalId);
 
-        Task<bool> CloseProtocol(int protocolId);
-
-        bool IsClosed(int protocolId);
     }
 }

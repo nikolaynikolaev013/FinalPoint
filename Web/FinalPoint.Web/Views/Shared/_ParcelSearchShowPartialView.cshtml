@@ -132,13 +132,13 @@
                     @if (parcel.CurrentOfficeId == Model.CurrUserWorkOfficeId)
                     {
                         <div class="card-body form-group p-1 m-1 text-center">
-                                <input type="button" id="disposeBtn_@parcel.Id" onclick="toggleConfirmation(@parcel.Id)" class="col-md-4 btn btn-success form-control animate__animated animate__backInRight animate__faster" value="Издай" />
+                                <input id="mainDisposeBtn_@parcel.Id" type="button" onclick="toggleConfirmation('mainDisposeBtn_', 'confirmDeleteDiv_', @parcel.Id)" class="col-md-4 btn btn-success form-control animate__animated animate__backInRight animate__faster" value="Издай" />
 
                                 <span id="confirmDeleteDiv_@parcel.Id" class="confirmDelete">
                                     <div class=" p-1 m-1 animate__animated animate__backInRight animate__faster">
                                         <span class="col-md-3">Сигурни ли сте? </span>
                                         <button type="button" onclick="disposeParcel(@parcel.Id)" class="col-md-2 btn btn-danger form-control">Да</button>
-                                        <button type="button" onclick="toggleConfirmation(@parcel.Id)" class="col-md-2 btn btn-success form-control">Не</button>
+                                        <button id="disposeBtn_@parcel.Id" type="button" onclick="toggleConfirmation('mainDisposeBtn_', 'confirmDeleteDiv_', @parcel.Id)" class="col-md-2 btn btn-success form-control">Не</button>
                                     </div>
                                 </span>
                         </div>

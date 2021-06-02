@@ -10,7 +10,7 @@
     {
         public Parcel()
         {
-            this.Protocols = new HashSet<Protocol>();
+            this.Protocols = new HashSet<ProtocolParcel>();
             this.HasCashOnDelivery = false;
             this.IsFragile = false;
             this.DontPaletize = false;
@@ -77,7 +77,8 @@
 
         public virtual Office CurrentOffice { get; set; }
 
-        public virtual ICollection<Protocol> Protocols { get; set; }
+        //[InverseProperty("Parcel")]
+        public virtual ICollection<ProtocolParcel> Protocols { get; set; }
     }
 
 }

@@ -17,7 +17,7 @@
             this.citiesRep = citiesRep;
         }
 
-        public async Task<int> CreateNewCity(AddCityInputModel model)
+        public async Task<int> CreateAsync(AddCityInputModel model)
         {
             var newCity = new City();
             newCity.Name = model.Name;

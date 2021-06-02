@@ -40,7 +40,7 @@
             var currUser = this.userService
                         .GetUserById(input.UserId);
 
-            var openProtocol = this.GetOpenProtocols(input.RecipentOfficeId, (int)currUser.WorkOfficeId).FirstOrDefault();
+            var openProtocol = this.GetOpenProtocols(input.Type, input.RecipentOfficeId, (int)currUser.WorkOfficeId).FirstOrDefault();
 
             var translatedType = TranslateType(input.Type);
 
@@ -68,16 +68,32 @@
                 viewModel.TypeOfMessage = "warning animate__jello";
             }
 
-            await this.LoadNewProtocolParcels(currUser, openProtocol.Id, openProtocol.OfficeFromId, openProtocol.OfficeToId);
+            await this.LoadNewProtocolParcels(currUser, input.Type, openProtocol.Id, openProtocol.OfficeFromId, openProtocol.OfficeToId);
 
             viewModel.Protocol = openProtocol;
             viewModel.TranslatedType = translatedType;
             return viewModel;
         }
 
-        public async Task LoadNewProtocolParcels(ApplicationUser user, int protocolId, int officeFromId, int officeToId)
+        public async Task<bool> CloseProtocol(int protocolId)
         {
-            var parcels = this.parcelService.GetAllParcelsFromTo(officeFromId, officeToId);
+            var protocol = this.protocolRep
+                        .All()
+                        .Where(x => x.Id == protocolId)
+                        .FirstOrDefault();
+            if (protocol != null)
+            {
+                protocol.IsClosed = true;
+                await this.protocolRep.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task LoadNewProtocolParcels(ApplicationUser user, ProtocolType protocolType, int protocolId, int officeFromId, int officeToId)
+        {
+            var parcels = this.parcelService.GetAllParcelsFromTo(protocolType, user.WorkOfficeId, officeFromId, officeToId);
 
             foreach (var parcel in parcels)
             {
@@ -96,92 +112,7 @@
             await this.protocolParcelRep.SaveChangesAsync();
         }
 
-        public ICollection<ParcelsTableShowParcelViewModel> GetAllProtocolParcels(int protocolId)
-        {
-            var output = new HashSet<ParcelsTableShowParcelViewModel>();
-
-            var protocolParcels = this.protocolParcelRep
-                    .All()
-                    .Where(x => x.ProtocolId == protocolId)
-                    .Include(x => x.Parcel)
-                    .OrderByDescending(x => x.Status == ParcelStatus.Added)
-                    .ThenByDescending(x => x.Status == ParcelStatus.Checked)
-                    .ToHashSet();
-
-            foreach (var protocolParcel in protocolParcels)
-            {
-                var parcel = this.parcelService
-                                    .GetParcelWithOfficesAndCitiesById(protocolParcel.ParcelId);
-
-                var newParcel = new ParcelsTableShowParcelViewModel()
-                {
-                    Parcel = parcel,
-                    ProtocolParcel = protocolParcel,
-                    TranslatedStatus = this.TranslateStatus(protocolParcel.Status),
-                };
-
-                output.Add(newParcel);
-            }
-
-            return output;
-        }
-
-        public int GetNumberOfCheckedAndAddedParcels(int protocolId)
-        {
-            return this.protocolParcelRep
-                .All()
-
-                .Where(x => x.ProtocolId == protocolId
-                        && (x.Status == ParcelStatus.Added || x.Status == ParcelStatus.Checked))
-                .ToList()
-                .Count();
-        }
-
-        public Protocol GetProparcelsId(int protocolId)
-        {
-            return this.protocolRep
-                        .All()
-                        .Where(x => x.Id == protocolId)
-                        .Include(x => x.OfficeFrom)
-                        .Include(x => x.OfficeTo)
-                        .FirstOrDefault();
-        }
-
-        public ICollection<Protocol> GetOpenProtocols(int recipentOfficeId, int senderOfficeId)
-        {
-            var recipentOffice = this.officeService
-                            .GetOfficeById(recipentOfficeId);
-
-            var senderOffice = this.officeService
-                            .GetOfficeById(senderOfficeId);
-
-            return this.protocolRep
-                .All()
-                .Where(x => x.IsClosed == false
-                    && x.OfficeTo == recipentOffice
-                    && x.OfficeFrom == senderOffice)
-                .ToHashSet();
-        }
-
-        public Protocol GetProtocol(int protocolId)
-        {
-            return this.protocolRep
-                .All()
-                .Where(x => x.Id == protocolId)
-                .FirstOrDefault();
-        }
-
-        public Protocol GetProtocolById(int protocolId)
-        {
-            return this.protocolRep
-                .All()
-                .Where(x => x.Id == protocolId)
-                .Include(x=>x.OfficeFrom)
-                .Include(x=>x.OfficeTo)
-                .FirstOrDefault();
-        }
-
-        public async Task<CheckParcelResponseModel> TryCheckParcelInProtocol(int parcelId, int protocolId, int responsibleUserPersonalId)
+        public async Task<CheckParcelResponseModel> TryAddParcelInProtocol(int parcelId, int protocolId, int responsibleUserPersonalId)
         {
             var responseModel = new CheckParcelResponseModel();
 
@@ -234,6 +165,53 @@
             return responseModel;
         }
 
+        public async Task AddParcelToProtocol(int parcelId, int protocolId, int resposnibleUserPersonalId, ParcelStatus status)
+        {
+            var protocolParcelObj = this.protocolParcelRep
+                            .All()
+                            .Where(x => x.ProtocolId == protocolId && x.ParcelId == parcelId)
+                            .FirstOrDefault();
+
+            var protocol = this.GetProtocolWithOfficesById(protocolId);
+
+            if (protocol.Type == ProtocolType.Loading)
+            {
+                if (!await this.parcelService.UpdateParcelCurrentOfficeByOfficePostcode(parcelId, 90001))
+                {
+                    return;
+                }
+            }
+            else
+            {
+                var responsibleUser = this.userService.GetUserByPersonalId(resposnibleUserPersonalId);
+
+                if (!await this.parcelService.UpdateParcelCurrentOfficeByOfficeId(parcelId, responsibleUser.WorkOfficeId))
+                {
+                    return;
+                }
+            }
+
+            if (protocolParcelObj != null)
+            {
+                protocolParcelObj.Status = status;
+            }
+            else
+            {
+
+                protocolParcelObj = new ProtocolParcel()
+                {
+                    Status = status,
+                    ParcelId = parcelId,
+                    ProtocolId = protocolId,
+                    ResponsibleUserId = resposnibleUserPersonalId,
+                    TimeEdited = DateTime.UtcNow,
+                };
+                await this.protocolParcelRep.AddAsync(protocolParcelObj);
+            }
+
+            await this.protocolParcelRep.SaveChangesAsync();
+        }
+
         public async Task<CheckParcelResponseModel> TryRemoveParcelFromProtocol(int parcelId, int protocolId, int responsibleUserPersonalId)
         {
             var responseModel = new CheckParcelResponseModel();
@@ -275,12 +253,43 @@
             return responseModel;
         }
 
+        public async Task RemoveParcelFromProtocol(int parcelId, int protocolId, int resposnibleUserPersonalId)
+        {
+            var protocol = this.GetProtocolWithOfficesById(protocolId);
+
+            if (protocol.Type == ProtocolType.Loading)
+            {
+                var responsibleUser = this.userService.GetUserByPersonalId(resposnibleUserPersonalId);
+
+                if (!await this.parcelService.UpdateParcelCurrentOfficeByOfficeId(parcelId, responsibleUser.WorkOfficeId))
+                {
+                    return;
+                }
+            }
+            else
+            {
+                if (!await this.parcelService.UpdateParcelCurrentOfficeByOfficePostcode(parcelId, 90001))
+                {
+                    return;
+                }
+            }
+
+            var protocolParcelObj = this.protocolParcelRep
+                            .All()
+                            .Where(x => x.ProtocolId == protocolId && x.ParcelId == parcelId)
+                            .FirstOrDefault();
+
+            this.protocolParcelRep.HardDelete(protocolParcelObj);
+
+            await this.protocolParcelRep.SaveChangesAsync();
+        }
+
         public bool CheckIfParcelIsInProtocol(int parcelId, int protocolId)
         {
             return this.protocolRep
                 .All()
                 .Where(x => x.Id == protocolId)
-                .Select(x=>new { x.Parcels })
+                .Select(x => new { x.Parcels })
                 .FirstOrDefault()
                 .Parcels
                 .FirstOrDefault(x => x.ParcelId == parcelId) != null;
@@ -298,56 +307,81 @@
             return parcel?.Status == ParcelStatus.Checked || parcel?.Status == ParcelStatus.Added;
         }
 
-        public async Task AddParcelToProtocol(int parcelId, int protocolId, int resposnibleUserPersonalId, ParcelStatus status)
+        public bool IsClosed(int protocolId)
         {
-            var protocolParcelObj = this.protocolParcelRep
-                            .All()
-                            .Where(x => x.ProtocolId == protocolId && x.ParcelId == parcelId)
-                            .FirstOrDefault();
-
-            if (!await this.parcelService.UpdateParcelCurrentOfficeByOfficePostcode(parcelId, 90001))
-            {
-                return;
-            }
-
-            if (protocolParcelObj != null)
-            {
-                protocolParcelObj.Status = status;
-            }
-            else
-            {
-
-                protocolParcelObj = new ProtocolParcel()
-                {
-                    Status = status,
-                    ParcelId = parcelId,
-                    ProtocolId = protocolId,
-                    ResponsibleUserId = resposnibleUserPersonalId,
-                    TimeEdited = DateTime.UtcNow,
-                };
-                await this.protocolParcelRep.AddAsync(protocolParcelObj);
-            }
-
-            await this.protocolParcelRep.SaveChangesAsync();
+            return this.protocolRep
+                        .All()
+                        .Where(x => x.Id == protocolId)
+                        .FirstOrDefault()
+                        .IsClosed;
         }
 
-        public async Task RemoveParcelFromProtocol(int parcelId, int protocolId, int resposnibleUserPersonalId)
+        public ICollection<ParcelsTableShowParcelViewModel> GetAllProtocolParcels(int protocolId)
         {
-            var responsibleUser = this.userService.GetUserByPersonalId(resposnibleUserPersonalId);
+            var output = new HashSet<ParcelsTableShowParcelViewModel>();
 
-            if (!await this.parcelService.UpdateParcelCurrentOfficeByOfficeId(parcelId, responsibleUser.WorkOfficeId))
+            var protocolParcels = this.protocolParcelRep
+                    .All()
+                    .Where(x => x.ProtocolId == protocolId)
+                    .Include(x => x.Parcel)
+                    .OrderByDescending(x => x.Status == ParcelStatus.Added)
+                    .ThenByDescending(x => x.Status == ParcelStatus.Checked)
+                    .ToHashSet();
+
+            foreach (var protocolParcel in protocolParcels)
             {
-                return;
+                var parcel = this.parcelService
+                                    .GetParcelWithOfficesAndCitiesById(protocolParcel.ParcelId);
+
+                var newParcel = new ParcelsTableShowParcelViewModel()
+                {
+                    Parcel = parcel,
+                    ProtocolParcel = protocolParcel,
+                    TranslatedStatus = this.TranslateStatus(protocolParcel.Status),
+                };
+
+                output.Add(newParcel);
             }
 
-            var protocolParcelObj = this.protocolParcelRep
-                            .All()
-                            .Where(x => x.ProtocolId == protocolId && x.ParcelId == parcelId)
-                            .FirstOrDefault();
+            return output;
+        }
 
-            this.protocolParcelRep.HardDelete(protocolParcelObj);
+        public int GetNumberOfCheckedAndAddedParcels(int protocolId)
+        {
+            return this.protocolParcelRep
+                .All()
 
-            await this.protocolParcelRep.SaveChangesAsync();
+                .Where(x => x.ProtocolId == protocolId
+                        && (x.Status == ParcelStatus.Added || x.Status == ParcelStatus.Checked))
+                .ToList()
+                .Count();
+        }
+
+        public Protocol GetProtocolWithOfficesById(int protocolId)
+        {
+            return this.protocolRep
+                        .All()
+                        .Where(x => x.Id == protocolId)
+                        .Include(x => x.OfficeFrom)
+                        .Include(x => x.OfficeTo)
+                        .FirstOrDefault();
+        }
+
+        public ICollection<Protocol> GetOpenProtocols(ProtocolType protocolType, int recipentOfficeId, int senderOfficeId)
+        {
+            var recipentOffice = this.officeService
+                            .GetOfficeById(recipentOfficeId);
+
+            var senderOffice = this.officeService
+                            .GetOfficeById(senderOfficeId);
+
+            return this.protocolRep
+                .All()
+                .Where(x => x.Type == protocolType
+                    && x.IsClosed == false
+                    && x.OfficeTo == recipentOffice
+                    && x.OfficeFrom == senderOffice)
+                .ToHashSet();
         }
 
         public ICollection<int> GetProtocolParcelIds(int protocolId)
@@ -357,31 +391,6 @@
                     .Where(x => x.ProtocolId == protocolId)
                     .Select(x => x.Parcel.Id)
                     .ToHashSet();
-        }
-
-        public async Task<bool> CloseProtocol(int protocolId)
-        {
-            var protocol = this.protocolRep
-                        .All()
-                        .Where(x => x.Id == protocolId)
-                        .FirstOrDefault();
-            if (protocol != null)
-            {
-                protocol.IsClosed = true;
-                await this.protocolRep.SaveChangesAsync();
-                return true;
-            }
-
-            return false;
-        }
-
-        public bool IsClosed(int protocolId)
-        {
-            return this.protocolRep
-                        .All()
-                        .Where(x => x.Id == protocolId)
-                        .FirstOrDefault()
-                        .IsClosed;
         }
 
         private static string TranslateType(ProtocolType input)

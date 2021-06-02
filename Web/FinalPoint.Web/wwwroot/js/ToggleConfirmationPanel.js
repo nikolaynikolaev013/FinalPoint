@@ -1,15 +1,17 @@
 ﻿
-function toggleConfirmation(parcelId) {
+function toggleConfirmation(mainBtnId, confirmPanelId, parcelId) {
     if (!parcelId) {
         parcelId = '';
     }
-    if (!$("#hideBtn" + parcelId).is(":hidden")) {
 
-        $("#hideBtn" + parcelId).hide();
-        $("#confirmPanel" + parcelId).show();
+    if (!$("#" + mainBtnId + parcelId).is(":hidden")) {
+        console.log("not hidden");
+
+        $("#" + mainBtnId + parcelId).hide();
+        $("#" + confirmPanelId + parcelId).show();
     }
     else {
-        $("#hideBtn" + parcelId).show();
-        $("#confirmPanel" + parcelId).hide();
+        $("#" + mainBtnId + parcelId).show();
+        $("#" + confirmPanelId + parcelId).hide();
     }
 }

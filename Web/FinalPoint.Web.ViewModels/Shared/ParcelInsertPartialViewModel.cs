@@ -1,9 +1,9 @@
 ﻿using System;
 namespace FinalPoint.Web.ViewModels.Shared
 {
-    public class ParcelINsertPartialViewModel
+    public class ParcelInsertPartialViewModel
     {
-        public ParcelINsertPartialViewModel()
+        public ParcelInsertPartialViewModel()
         {
         }
 

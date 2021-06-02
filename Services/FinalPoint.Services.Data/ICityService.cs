@@ -7,7 +7,7 @@
 
     public interface ICityService
     {
-        Task<int> CreateNewCity(AddCityInputModel model);
+        Task<int> CreateAsync(AddCityInputModel model);
 
         IEnumerable<KeyValuePair<string, string>> GetAllCitiesAsKeyValuePairs();
     }

@@ -29,7 +29,7 @@
 
         public DateTime Date { get; set; }
 
-        public ParcelINsertPartialViewModel ParcelInsertViewModel { get; set; }
+        public ParcelInsertPartialViewModel ParcelInsertViewModel { get; set; }
 
         public ICollection<ParcelDto> Parcels { get; set; }
 

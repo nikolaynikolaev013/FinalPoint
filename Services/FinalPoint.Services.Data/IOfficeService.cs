@@ -7,7 +7,17 @@
 
     public interface IOfficeService
     {
-        Task CreateAsync(AddOfficeInputModel model);
+        Task<Office> CreateAsync(AddOfficeInputModel model);
+
+        Task<Office> Remove(int officePostcodeToSkip);
+        
+        Office GetOfficeById(int officeId);
+
+        Office GetOfficeByPostcode(int officePostcode);
+
+        HashSet<int> GetAllOfficeIdsInRangeOfSortingCenterId(int sortingCenterId);
+
+        string GetOfficeAsStringById(int officeId);
 
         IEnumerable<KeyValuePair<string, string>> GeAllOfficesAndSortingCentersWithoutCurrOneAsKeyValuePairs(int officetoSkip);
 
@@ -15,12 +25,5 @@
 
         IEnumerable<KeyValuePair<string, string>> GetAllSortingCentersAsKeyValuePairs();
 
-        Task<Office> Remove(int officePostcodeToSkip);
-
-        Office GetOfficeById(int officeId);
-
-        Office GetOfficeByPostcode(int officePostcode);
-
-        string GetOfficeAsStringById(int officeId);
     }
 }

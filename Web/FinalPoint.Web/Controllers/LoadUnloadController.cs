@@ -62,7 +62,7 @@ namespace FinalPoint.Web.Controllers
                 Id = protocolInput.Protocol.Id,
                 Line = protocolInput.Protocol.OfficeTo.PostCode,
                 Date = protocolInput.Protocol.CreatedOn,
-                ParcelInsertViewModel = new ParcelINsertPartialViewModel()
+                ParcelInsertViewModel = new ParcelInsertPartialViewModel()
                 {
                     ButtonText = "Добавяне",
                 },
@@ -73,27 +73,47 @@ namespace FinalPoint.Web.Controllers
             return this.View("LoadUnloadProtocol", model);
         }
 
-
-
-        public IActionResult Unload(string line)
+        public IActionResult Unload()
         {
             LoadUnloadIndexViewModel model = new LoadUnloadIndexViewModel();
             model.Type = ProtocolType.Unloading;
-            model.Lines = this.officeService.GeAllOfficesAndSortingCentersAsKeyValuePairs();
+            var currUser = this.userService.GetUserByClaimsPrincipal(this.User);
+            model.Lines = this.officeService.GeAllOfficesAndSortingCentersWithoutCurrOneAsKeyValuePairs(currUser.WorkOfficeId);
+
             return this.View("LoadUnload", model);
-            //{
-            //    LoadUnloadProtocolViewModel model = new LoadUnloadProtocolViewModel();
-            //    model.ParcelInsertViewModel = new ParcelINsertPartialViewModel { ButtonText = "Добавяне", Controller = null };
-            //    model.Id = "12321";
-            //    model.Line = line;
-            //    model.Type = ProtocolType.Unloading;
-            //    model.Date = new DateTime(2020, 05, 05);
-            //    model.Parcels.Add(new ParcelDto { Id = "12322", Parts = 3, Status = "Проверена" });
-            //    model.Parcels.Add(new ParcelDto { Id = "3432", Parts = 1, Status = "Непроверена" });
-            //    model.Parcels.Add(new ParcelDto { Id = "456", Parts = 20, Status = "Добавена" });
-            //    model.Parcels.Add(new ParcelDto { Id = "456", Parts = 20, Status = "Добавена" });
-            //    return this.View("LoadUnloadProtocol", model);
-            //}
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Unload(LoadUnloadIndexViewModel input)
+        {
+            var protocolInput = await this.protocolService.CheckOrCreateProtocol(new ViewModels.DTOs.NewProtocolCreateOrOpenDataInputDto()
+            {
+                Type = ProtocolType.Unloading,
+                UserId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value,
+                RecipentOfficeId = input.LineToLoad,
+            });
+
+            var parcelsTableShowData = await this.FillUpParcelsTableShowData(protocolInput.Protocol.Id);
+
+            var model = new LoadUnloadProtocolViewModel()
+            {
+                ParcelTableShowViewData = parcelsTableShowData,
+                Type = protocolInput.Protocol.Type,
+                Message = protocolInput.Message,
+                TypeOfMessage = protocolInput.TypeOfMessage,
+                TranslatedType = protocolInput.TranslatedType,
+                Id = protocolInput.Protocol.Id,
+                Line = protocolInput.Protocol.OfficeTo.PostCode,
+                Date = protocolInput.Protocol.CreatedOn,
+                ParcelInsertViewModel = new ParcelInsertPartialViewModel()
+                {
+                    ButtonText = "Добавяне",
+                },
+            };
+
+            model.IsClosed = this.protocolService.IsClosed(model.Id);
+
+            return this.View("LoadUnloadProtocol", model);
         }
 
         [HttpGet]
@@ -108,7 +128,7 @@ namespace FinalPoint.Web.Controllers
 
             if (isCheck)
             {
-                model = await this.protocolService.TryCheckParcelInProtocol(parcelId, protocolId, responsibleUserPersonalId);
+                model = await this.protocolService.TryAddParcelInProtocol(parcelId, protocolId, responsibleUserPersonalId);
             }
             else
             {
@@ -131,11 +151,11 @@ namespace FinalPoint.Web.Controllers
         {
             var model = new ParcelsTableShowModel();
 
-            var protocol = this.protocolService.GetProtocolById(protocolId);
+            var protocol = this.protocolService.GetProtocolWithOfficesById(protocolId);
             var user = this.userService.GetUserByClaimsPrincipal(this.User);
 
-            await this.protocolService.LoadNewProtocolParcels(user, protocol.Id, protocol.OfficeFromId, protocol.OfficeToId);
-            model.Protocol = this.protocolService.GetProtocolById(protocolId);
+            await this.protocolService.LoadNewProtocolParcels(user, protocol.Type, protocol.Id, protocol.OfficeFromId, protocol.OfficeToId);
+            model.Protocol = this.protocolService.GetProtocolWithOfficesById(protocolId);
             model.Parcels = this.protocolService.GetAllProtocolParcels(protocolId);
             return model;
         }

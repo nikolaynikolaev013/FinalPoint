@@ -24,12 +24,12 @@
             this.userService = userService;
         }
 
-        public async Task CreateAsync(AddOfficeInputModel model)
+        public async Task<Office> CreateAsync(AddOfficeInputModel model)
         {
             if (model.CityInputModel.Name != null
                 && model.CityInputModel.Postcode != null)
             {
-                var newCityId = await this.cityService.CreateNewCity(model.CityInputModel);
+                var newCityId = await this.cityService.CreateAsync(model.CityInputModel);
                 model.CityId = newCityId;
             }
 
@@ -55,6 +55,27 @@
 
             await this.userService
                     .SetUserNewWorkOfficeByUserPersonalId(newOffice.OwnerId, newOffice.Id);
+            return newOffice;
+        }
+
+        public async Task<Office> Remove(int officeId)
+        {
+            var officeToDelete = this.GetOfficeById(officeId);
+
+            var officeEmployees = this.officeRep
+                .All()
+                .Where(x => x.Id == officeId)
+                .Select(x => new { x.Employees })
+                .FirstOrDefault();
+
+            foreach (var employee in officeEmployees.Employees)
+            {
+                await this.userService.RemoveUser(employee.PersonalId);
+            }
+
+            this.officeRep.Delete(officeToDelete);
+            await this.officeRep.SaveChangesAsync();
+            return officeToDelete;
         }
 
         public string GetOfficeAsStringById(int officeId)
@@ -66,6 +87,31 @@
                         .FirstOrDefault();
 
             return $"{office.cityName} - {office.Name} - {office.PostCode}";
+        }
+
+        public Office GetOfficeById(int officeId)
+        {
+            return this.officeRep
+                    .All()
+                    .Where(x => x.Id == officeId)
+                    .FirstOrDefault();
+        }
+
+        public Office GetOfficeByPostcode(int officePostcode)
+        {
+            return this.officeRep
+                    .All()
+                    .Where(x => x.PostCode == officePostcode)
+                    .FirstOrDefault();
+        }
+
+        public HashSet<int> GetAllOfficeIdsInRangeOfSortingCenterId(int sortingCenterId)
+        {
+            return this.officeRep
+                    .All()
+                    .Where(x => x.ResponsibleSortingCenterId == sortingCenterId)
+                    .Select(x=>x.Id)
+                    .ToHashSet();
         }
 
         public IEnumerable<KeyValuePair<string, string>> GeAllOfficesAndSortingCentersAsKeyValuePairs()
@@ -108,40 +154,5 @@
                 }).ToList().Select(x => new KeyValuePair<string, string>(x.Id.ToString(), x.Name));
         }
 
-        public Office GetOfficeById(int officeId)
-        {
-            return this.officeRep
-                    .All()
-                    .Where(x => x.Id == officeId)
-                    .FirstOrDefault();
-        }
-
-        public Office GetOfficeByPostcode(int officePostcode)
-        {
-            return this.officeRep
-                    .All()
-                    .Where(x => x.PostCode == officePostcode)
-                    .FirstOrDefault();
-        }
-
-        public async Task<Office> Remove(int officeId)
-        {
-            var officeToDelete = this.GetOfficeById(officeId);
-
-            var officeEmployees = this.officeRep
-                .All()
-                .Where(x => x.Id == officeId)
-                .Select(x => new { x.Employees })
-                .FirstOrDefault();
-
-            foreach (var employee in officeEmployees.Employees)
-            {
-                await this.userService.RemoveUser(employee.PersonalId);
-            }
-
-            this.officeRep.Delete(officeToDelete);
-            await this.officeRep.SaveChangesAsync();
-            return officeToDelete;
-        }
     }
 }
