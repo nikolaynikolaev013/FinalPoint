@@ -3,7 +3,11 @@
 @model AddParcelInputModel
 @inject UserManager<ApplicationUser> UserManager
 @{
-    ViewData["Title"] = "Приемане на пратка";
+        ViewData["Title"] = "Приемане на пратка";
+
+        ViewData["Breadcrumb"] = new List<KeyValuePair<string, string>>() {
+        new KeyValuePair<string, string>("Начало", "/"),
+        };
     var allOffices = Model.AllOffices?.Select(x => new SelectListItem(x.Value, x.Key));
     var allClients = Model.SenderInputModel.AllClients?.Select(x => new SelectListItem(x.Value, x.Key));
 }

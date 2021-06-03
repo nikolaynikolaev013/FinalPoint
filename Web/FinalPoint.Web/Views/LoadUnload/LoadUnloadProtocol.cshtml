@@ -1,7 +1,12 @@
 ﻿@using FinalPoint.Web.ViewModels.ViewComponents;
 @model LoadUnloadProtocolViewModel
 @{
-    ViewData["Title"] = Model.TranslatedType;
+    ViewData["Title"] = "Протокол №" + Model.Id;
+
+    ViewData["Breadcrumb"] = new List<KeyValuePair<string, string>>() {
+        new KeyValuePair<string, string>("Начало", "/"),
+        new KeyValuePair<string, string>(Model.TranslatedType, Model.Type == ProtocolType.Loading ? "/Load" : "/Unload"),
+        };
 }
 
 

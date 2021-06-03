@@ -13,6 +13,8 @@
 
         public ProtocolType Type { get; set; }
 
+        public string TranslatedType { get; set; }
+
         [Required]
         public int LineToLoad { get; set; }
 

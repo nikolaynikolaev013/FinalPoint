@@ -41,6 +41,7 @@
 
         ICollection<int> GetProtocolParcelIds(int protocolId);
 
+        string TranslateType(ProtocolType input);
 
     }
 }

@@ -1,6 +1,11 @@
 ﻿@model RemoveOfficeInputModel
 @{
     ViewData["Title"] = "Прекратяване на офис";
+
+    ViewData["Breadcrumb"] = new List<KeyValuePair<string, string>>() {
+        new KeyValuePair<string, string>("Начало", "/"),
+        new KeyValuePair<string, string>("Администрация", "/Administration"),
+        };
     var allOffices = Model.AvailableOfficesToRemove?.Select(x => new SelectListItem(x.Value, x.Key));
 }
 

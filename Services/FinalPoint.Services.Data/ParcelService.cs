@@ -122,10 +122,11 @@
 
             return this.parcelRep
                 .All()
-                .Where(x => parcelId != 0 ? x.Id == parcelId : true
+                .Where(x => (parcelId != 0 ? x.Id == parcelId : true
                             && firstName != "0" ? x.Recipent.FirstName == firstName : true
                             && lastName != "0" ? x.Recipent.LastName == lastName : true
-                            && phoneNumber != "0" ? x.Recipent.PhoneNumber == phoneNumber : true
+                            && phoneNumber != "0" ? x.Recipent.PhoneNumber == phoneNumber : true)
+
                             && x.ReceivingOfficeId == employee.WorkOfficeId)
                 .Include(x => x.CurrentOffice)
                 .ThenInclude(x => x.City)

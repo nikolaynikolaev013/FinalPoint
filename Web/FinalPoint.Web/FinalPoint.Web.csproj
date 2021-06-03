@@ -50,6 +50,7 @@
     <Folder Include="Views\LoadUnload\" />
     <Folder Include="Views\AddDispose\" />
     <Folder Include="Views\Administration\" />
+    <Folder Include="Views\Search\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="Views\Shared\CheckedParcelSuccessBlock.cshtml" />

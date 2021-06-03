@@ -393,7 +393,7 @@
                     .ToHashSet();
         }
 
-        private static string TranslateType(ProtocolType input)
+        public string TranslateType(ProtocolType input)
         {
             var translatedType = string.Empty;
 

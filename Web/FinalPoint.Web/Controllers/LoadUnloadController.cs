@@ -37,6 +37,7 @@ namespace FinalPoint.Web.Controllers
             var currUser = this.userService.GetUserByClaimsPrincipal(this.User);
             model.Lines = this.officeService.GeAllOfficesAndSortingCentersWithoutCurrOneAsKeyValuePairs(currUser.WorkOfficeId);
             model.Type = ProtocolType.Loading;
+            model.TranslatedType = this.protocolService.TranslateType(model.Type);
             return this.View("LoadUnload", model);
         }
 
@@ -79,6 +80,7 @@ namespace FinalPoint.Web.Controllers
             model.Type = ProtocolType.Unloading;
             var currUser = this.userService.GetUserByClaimsPrincipal(this.User);
             model.Lines = this.officeService.GeAllOfficesAndSortingCentersWithoutCurrOneAsKeyValuePairs(currUser.WorkOfficeId);
+            model.TranslatedType = this.protocolService.TranslateType(model.Type);
 
             return this.View("LoadUnload", model);
         }

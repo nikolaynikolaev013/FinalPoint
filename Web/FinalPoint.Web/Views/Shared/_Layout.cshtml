@@ -25,6 +25,19 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+
+                <nav aria-label="breadcrumb" class="mt-3">
+                    <ol class="breadcrumb bg-white">
+                        @if (ViewData["Breadcrumb"] != null)
+                        {
+                            foreach (var item in (List<KeyValuePair<string, string>>)ViewData["Breadcrumb"])
+                            {
+                            <li class="breadcrumb-item"><a href="@item.Value" class="text-info">@item.Key</a></li>
+                            }
+                        }
+                        <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+                    </ol>
+                </nav>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
                 </div>

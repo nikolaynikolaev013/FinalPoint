@@ -4,6 +4,11 @@
     var sortingCentersItems = Model.SortingCentersItems?.Select(x => new SelectListItem(x.Value, x.Key));
     var allUsersItems = Model.AllUsers?.Select(x => new SelectListItem(x.Value, x.Key));
     ViewData["Title"] = "Създаване на нов офис";
+
+    ViewData["Breadcrumb"] = new List<KeyValuePair<string, string>>() {
+        new KeyValuePair<string, string>("Начало", "/"),
+        new KeyValuePair<string, string>("Администрация", "/administration"),
+        };
 }
 
 <h1 class="text-center text-secondary mb-4">@ViewData["Title"]</h1>

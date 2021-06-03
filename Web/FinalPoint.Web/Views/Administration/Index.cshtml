@@ -1,5 +1,9 @@
 ﻿@{
     ViewData["Title"] = "Администрация";
+
+    ViewData["Breadcrumb"] = new List<KeyValuePair<string, string>>() {
+        new KeyValuePair<string, string>("Начало", "/"),
+        };
 }
 
 <h1 class="text-center text-secondary mb-4">@ViewData["Title"]</h1>

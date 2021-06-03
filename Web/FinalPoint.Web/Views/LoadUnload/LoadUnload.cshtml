@@ -1,7 +1,11 @@
 ﻿ @model LoadUnloadIndexViewModel
 @{
-    ViewData["Title"] = Model.Type;
+    ViewData["Title"] = Model.TranslatedType;
     var availableLines = Model.Lines?.Select(x => new SelectListItem(x.Value, x.Key));
+
+    ViewData["Breadcrumb"] = new List<KeyValuePair<string, string>>() {
+        new KeyValuePair<string, string>("Начало", "/"),
+        };
 }
 
 <div class="container-fluid">
