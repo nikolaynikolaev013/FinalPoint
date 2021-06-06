@@ -1,5 +1,6 @@
 ﻿namespace FinalPoint.Services.Data
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Security.Claims;
@@ -8,6 +9,7 @@
     using FinalPoint.Data.Common.Repositories;
     using FinalPoint.Data.Models;
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
 
     public class UserService : IUserService
     {
@@ -59,14 +61,11 @@
 
         public async Task SetUserNewWorkOfficeByUserPersonalId(int personalId, int newWorkOfficeId)
         {
-            var user = this.usersRep
-                        .All()
-                        .Where(x => x.PersonalId == personalId)
-                        .FirstOrDefault();
+            var user = this.GetUserByPersonalId(personalId);
 
             if (user != null
-                && user.WorkOfficeId == 13
-                && user.PersonalId != 10001)
+                && user.WorkOffice.Name.ToLower() == "виртуален"
+                && !await this.userManager.IsInRoleAsync(user, "Owner"))
             {
                 user.WorkOfficeId = newWorkOfficeId;
                 await this.usersRep.SaveChangesAsync();
@@ -85,15 +84,17 @@
         {
             return this.usersRep
                     .All()
+                    .Include(x => x.WorkOffice)
                     .Where(x => x.Id == user.FindFirst(ClaimTypes.NameIdentifier).Value)
                     .FirstOrDefault();
         }
 
-        public ApplicationUser GetUserByPersonalId(int userPersonalId)
+        public ApplicationUser GetUserByPersonalId(int? userPersonalId)
         {
             return this.usersRep
                     .All()
                     .Where(x => x.PersonalId == userPersonalId)
+                    .Include(x => x.WorkOffice)
                     .FirstOrDefault();
         }
 

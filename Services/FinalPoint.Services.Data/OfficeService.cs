@@ -53,8 +53,11 @@
             await this.officeRep.AddAsync(newOffice);
             await this.officeRep.SaveChangesAsync();
 
-            await this.userService
-                    .SetUserNewWorkOfficeByUserPersonalId(newOffice.OwnerId, newOffice.Id);
+            if (newOffice.OwnerId != null)
+            {
+                await this.userService
+                        .SetUserNewWorkOfficeByUserPersonalId((int)newOffice.OwnerId, newOffice.Id);
+            }
             return newOffice;
         }
 
@@ -118,6 +121,7 @@
         {
             return this.officeRep
                    .AllAsNoTracking()
+                   .Where(x=>x.Name.ToLower() != "виртуален")
                    .Select(x => new
                    {
                        x.Id,
@@ -132,7 +136,7 @@
             return this.officeRep
                       .AllAsNoTracking()
                       .Where(x => x.Id != officeIdToSkip
-                                && x.PostCode != 90001)
+                                && x.Name.ToLower() != "виртуален")
                       .Select(x => new
                       {
                           x.Id,
@@ -140,6 +144,39 @@
                           x.PostCode,
                           City = x.City.Name,
                       }).ToList().Select(x => new KeyValuePair<string, string>(x.Id.ToString(), $"{x.City} - {x.Name} - {x.PostCode}"));
+        }
+
+        public IEnumerable<KeyValuePair<string, string>> GetLoadUnloadOffices(Office currentOffice)
+        {
+            if (currentOffice.OfficeType == OfficeType.Office)
+            {
+                return this.officeRep
+                      .AllAsNoTracking()
+                      .Where(x => x.Id == currentOffice.ResponsibleSortingCenterId)
+                      .Select(x => new
+                      {
+                          x.Id,
+                          x.Name,
+                          x.PostCode,
+                          City = x.City.Name,
+                      }).ToList().Select(x => new KeyValuePair<string, string>(x.Id.ToString(), $"{x.City} - {x.Name} - {x.PostCode}"));
+            }
+            else
+            {
+                return this.officeRep
+                      .AllAsNoTracking()
+                      .Where(x=>
+                      (x.ResponsibleSortingCenterId == currentOffice.Id || x.OfficeType == OfficeType.SortingCenter)
+                      && x.Name.ToLower() != "виртуален")
+                      .Select(x => new
+                      {
+                          x.Id,
+                          x.Name,
+                          x.PostCode,
+                          City = x.City.Name,
+                      }).ToList().Select(x => new KeyValuePair<string, string>(x.Id.ToString(), $"{x.City} - {x.Name} - {x.PostCode}"));
+            }
+            
         }
 
         public IEnumerable<KeyValuePair<string, string>> GetAllSortingCentersAsKeyValuePairs()

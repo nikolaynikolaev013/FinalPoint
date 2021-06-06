@@ -11,23 +11,33 @@ namespace FinalPoint.Web.Controllers
     {
         private readonly IParcelService parcelService;
         private readonly IUserService userService;
+        private readonly IProtocolService protocolService;
 
         public CheckParcelController(
                     IParcelService parcelService,
-                    IUserService userService)
+                    IUserService userService,
+                    IProtocolService protocolService)
         {
             this.parcelService = parcelService;
             this.userService = userService;
+            this.protocolService = protocolService;
         }
 
         [HttpGet]
-        [Route("/[controller]/{parcelId}/{firstName}/{lastName}/{phoneNumber}")]
-        public async Task<IActionResult> SearchForParcel(int? parcelId, string firstName, string lastName, string phoneNumber)
+        [Route("/[controller]/{parcelId}/{firstName}/{lastName}/{phoneNumber}/{isDispose}")]
+        public async Task<IActionResult> SearchForParcel(int? parcelId, string firstName, string lastName, string phoneNumber, bool isDispose)
         {
             var user = this.userService.GetUserByClaimsPrincipal(this.User);
 
             var model = new TrackParcelResultModel();
-            model.Parcels = this.parcelService.SearchForParcels(parcelId, firstName, lastName, phoneNumber, this.User);
+            model.Parcels = this.parcelService.SearchForParcels(parcelId, firstName, lastName, phoneNumber, this.User, isDispose);
+
+            foreach (var parcel in model.Parcels)
+            {
+                parcel.Protocols = this.protocolService.GetAllParcelProtocolsByParcelId(parcel.Id);
+            }
+
+            model.IsDispose = isDispose;
             model.CurrUserWorkOfficeId = user.WorkOfficeId;
 
             return this.PartialView("_ParcelSearchShowPartialView", model);

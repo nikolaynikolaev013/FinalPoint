@@ -25,6 +25,8 @@
 
         Task RemoveParcelFromProtocol(int parcelId, int protocolId, int resposnibleUserPersonalId);
 
+        ICollection<ProtocolParcel> GetAllParcelProtocolsByParcelId(int parcelId);
+
         bool CheckIfParcelIsInProtocol(int parcelId, int protocolId);
 
         bool CheckIfParcelIsAlreadyCheckedOrAddedToAProtocol(int parcelId, int protocolId);
@@ -42,6 +44,7 @@
         ICollection<int> GetProtocolParcelIds(int protocolId);
 
         string TranslateType(ProtocolType input);
+
 
     }
 }

@@ -18,7 +18,16 @@ namespace FinalPoint.Data.Seeding
                 return;
             }
             return;
-            // await dbContext.Offices.AddAsync(new Office() { PostCode = 9000, Name = "Варна НЛЦ", Address = "бул. Република 59", CityId = 1 });
+
+            await dbContext.Offices.AddAsync(new Office() {
+                PostCode = 909090,
+                Name = "Виртуален",
+                Address = "Виртуален",
+                City = new City { Name = "Варна", Postcode = 9000, },
+                OfficeType = Models.Enums.OfficeType.SortingCenter,
+            });
+
+            await dbContext.Offices.AddAsync(new Office() { PostCode = 9000, Name = "Варна НЛЦ", Address = "бул. Република 59", CityId = 0, OfficeType = Models.Enums.OfficeType.Office, ResponsibleSortingCenterId = 0 });
         }
     }
 }

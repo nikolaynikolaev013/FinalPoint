@@ -11,6 +11,7 @@
     using FinalPoint.Data.Models.Enums;
     using FinalPoint.Web.ViewModels.AddDispose;
     using FinalPoint.Web.ViewModels.DTOs;
+    using FinalPoint.Web.ViewModels.Shared;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
 
@@ -47,9 +48,9 @@
                 CashOnDeliveryPrice = input.CashOnDeliveryPrice,
                 IsFragile = input.IsFragile,
                 DontPaletize = input.DontPaletize,
-                SendingEmployeeId = input.SendingEmployeeId,
-                CurrentOfficeId = input.CurrentOfficeId,
-                SendingOfficeId = input.SendingOfficeId,
+                SendingEmployee = input.SendingEmployee,
+                CurrentOffice = input.CurrentOffice,
+                SendingOffice = input.SendingOffice,
                 ReceivingOfficeId = input.ReceivingOfficeId,
                 ChargeType = input.ChargeType,
                 DeliveryPrice = input.DeliveryPrice,
@@ -116,28 +117,100 @@
             return false;
         }
 
-        public ICollection<Parcel> SearchForParcels(int? parcelId, string firstName, string lastName, string phoneNumber, ClaimsPrincipal user)
+        public ICollection<SingleParcelSearchShowPartialViewModel> SearchForParcels(int? parcelId, string firstName, string lastName, string phoneNumber, ClaimsPrincipal user, bool isDispose)
         {
             var employee = this.userService.GetUserByClaimsPrincipal(user);
 
             return this.parcelRep
                 .All()
-                .Where(x => (parcelId != 0 ? x.Id == parcelId : true
-                            && firstName != "0" ? x.Recipent.FirstName == firstName : true
-                            && lastName != "0" ? x.Recipent.LastName == lastName : true
-                            && phoneNumber != "0" ? x.Recipent.PhoneNumber == phoneNumber : true)
-
-                            && x.ReceivingOfficeId == employee.WorkOfficeId)
                 .Include(x => x.CurrentOffice)
-                .ThenInclude(x => x.City)
+                .Include(x => x.SendingEmployee)
                 .Include(x => x.SendingOffice)
                 .ThenInclude(x => x.City)
+                .Include(x => x.Sender)
                 .Include(x => x.ReceivingOffice)
                 .ThenInclude(x => x.City)
-                .Include(x => x.Sender)
                 .Include(x => x.Recipent)
-                .OrderByDescending(x => x.CurrentOfficeId == x.ReceivingOfficeId)
+                .Where(x => (parcelId != 0 ? x.Id == parcelId : true)
+                            && (firstName != "0" ? x.Recipent.FirstName == firstName : true)
+                            && (lastName != "0" ? x.Recipent.LastName == lastName : true)
+                            && (phoneNumber != "0" ? x.Recipent.PhoneNumber == phoneNumber : true)
+
+                            && (isDispose == true ? (x.ReceivingOfficeId == employee.WorkOfficeId) : true))
+
+                .Select(x => new SingleParcelSearchShowPartialViewModel()
+                {
+                    DateReceived = x.CreatedOn,
+                    Id = x.Id,
+                    Description = x.Description,
+                    Width = x.Width,
+                    Height = x.Height,
+                    Length = x.Length,
+                    Weight = x.Weight,
+                    HasCashOnDelivery = x.HasCashOnDelivery,
+                    CashOnDeliveryPrice = x.CashOnDeliveryPrice,
+                    IsFragile = x.IsFragile,
+                    DontPaletize = x.DontPaletize,
+                    DeliveryPrice = x.DeliveryPrice,
+                    SendingEmployeeFullName = x.SendingEmployee.FullName,
+                    SendingOfficeCityName = x.SendingOffice.City.Name,
+                    SendingOfficeName = x.SendingOffice.Name,
+                    SendingOfficePostcode = x.SendingOffice.PostCode,
+                    SenderFullnameAndPhoneNumber = $"{x.Sender.FirstName} {x.Sender.LastName} - {x.Sender.PhoneNumber}",
+                    ReceivingOfficeCityName = x.ReceivingOffice.City.Name,
+                    ReceivingOfficePostcode = x.ReceivingOffice.PostCode,
+                    ReceivingOfficeName = x.ReceivingOffice.Name,
+                    RecipentFullnameAndPhoneNumber = $"{x.Recipent.FirstName} {x.Recipent.LastName} - {x.Recipent.PhoneNumber}",
+                    ReceivingOfficeId = x.ReceivingOffice.Id,
+                    CurrentOfficeId = x.CurrentOffice.Id,
+                    CurrentOfficeName = x.CurrentOffice.Name,
+                    CurrentOfficePostCode = x.CurrentOffice.PostCode,
+                }).OrderByDescending(x => x.CurrentOfficeId == x.ReceivingOfficeId)
                 .ToList();
+        }
+
+        public SingleParcelSearchShowPartialViewModel GetSingleParcelInfoByParcelId(int parcelId)
+        {
+            return this.parcelRep
+                .All()
+                .Include(x => x.CurrentOffice)
+                .Include(x => x.SendingEmployee)
+                .Include(x => x.SendingOffice)
+                .ThenInclude(x => x.City)
+                .Include(x => x.Sender)
+                .Include(x => x.ReceivingOffice)
+                .ThenInclude(x => x.City)
+                .Include(x => x.Recipent)
+                .Where(x => x.Id == parcelId)
+                .Select(x => new SingleParcelSearchShowPartialViewModel()
+                {
+                    DateReceived = x.CreatedOn,
+                    Id = x.Id,
+                    Description = x.Description,
+                    Width = x.Width,
+                    Height = x.Height,
+                    Length = x.Length,
+                    Weight = x.Weight,
+                    HasCashOnDelivery = x.HasCashOnDelivery,
+                    CashOnDeliveryPrice = x.CashOnDeliveryPrice,
+                    IsFragile = x.IsFragile,
+                    DontPaletize = x.DontPaletize,
+                    DeliveryPrice = x.DeliveryPrice,
+                    SendingEmployeeFullName = x.SendingEmployee.FullName,
+                    SendingOfficeCityName = x.SendingOffice.City.Name,
+                    SendingOfficeName = x.SendingOffice.Name,
+                    SendingOfficePostcode = x.SendingOffice.PostCode,
+                    SenderFullnameAndPhoneNumber = $"{x.Sender.FirstName} {x.Sender.LastName} - {x.Sender.PhoneNumber}",
+                    ReceivingOfficeCityName = x.ReceivingOffice.City.Name,
+                    ReceivingOfficePostcode = x.ReceivingOffice.PostCode,
+                    ReceivingOfficeName = x.ReceivingOffice.Name,
+                    RecipentFullnameAndPhoneNumber = $"{x.Recipent.FirstName} {x.Recipent.LastName} - {x.Recipent.PhoneNumber}",
+                    ReceivingOfficeId = x.ReceivingOffice.Id,
+                    CurrentOfficeId = x.CurrentOffice.Id,
+                    CurrentOfficeName = x.CurrentOffice.Name,
+                    CurrentOfficePostCode = x.CurrentOffice.PostCode,
+                })
+                .FirstOrDefault();
         }
 
         public ICollection<Parcel> GetAllParcelsFromTo(ProtocolType protocolType, int currentOfficeId, int officeFromId, int officeToId)
@@ -154,6 +227,8 @@
 
                 return this.parcelRep
                     .All()
+                    .Include(x => x.Protocols)
+                    .ThenInclude(x => x.ResponsibleUser)
                     .Where(
                             x => x.CurrentOfficeId == officeFromId
 

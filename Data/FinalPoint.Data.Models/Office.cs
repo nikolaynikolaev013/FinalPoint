@@ -24,7 +24,7 @@
         public OfficeType OfficeType { get; set; }
 
         [ForeignKey(nameof(ApplicationUser))]
-        public int OwnerId { get; set; }
+        public int? OwnerId { get; set; }
 
         public virtual ApplicationUser Owner { get; set; }
 

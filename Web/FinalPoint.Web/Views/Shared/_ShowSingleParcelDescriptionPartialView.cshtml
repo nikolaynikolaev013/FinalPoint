@@ -1,0 +1,133 @@
+﻿@using FinalPoint.Data.Models
+@model SingleParcelSearchShowPartialViewModel 
+@{
+}
+
+<div id="collapse_@Model.Id" class="collapse" aria-labelledby="collapse_@Model.Id" data-parent="#accordionExample">
+    <div class="card-body">
+        <!-- Card Body -->
+        <p>Пратка №: @Model.Id</p>
+        <div class="card-body d-flex pb-0">
+            <div class="form-group col-md-4 border rounded p-2">
+                <label for="ModelDesc_@Model.Id">Описание на пратката:</label>
+                <textarea id="ModelDesc_@Model.Id" class="form-control" rows="5" disabled>@Model.Description</textarea>
+            </div>
+
+            <div class="row">
+                <div class="row pl-3 m-auto">
+                    <div class="pl-3 pr-3 pb-2 rounded border col-md-3">
+                        <div class="row">
+                            <label for="Width_@Model.Id">Ширина</label>
+                        </div>
+                        <div class="row">
+                            <input id="Width_@Model.Id" class="form-control" value="@Model.Width" disabled />
+                        </div>
+                    </div>
+                    <div class="pl-2 pr-2 p-2 m-3"> x </div>
+                    <div class="pl-3 pr-3 pb-2 rounded border col-md-3">
+                        <div class="row">
+                            <label for="Height_@Model.Id">Височина</label>
+                        </div>
+                        <div class="row">
+                            <input id="Height_@Model.Id" class="form-control" value="@Model.Height" disabled />
+                        </div>
+                    </div>
+                    <div class="pl-2 pr-2 p-2 m-3"> x </div>
+                    <div class="pl-3 pr-3 pb-2 rounded border col-md-3">
+                        <div class="row">
+                            <label for="Length_@Model.Id">Дължина</label>
+                        </div>
+                        <div class="row">
+                            <input id="Length_@Model.Id" class="form-control" value="@Model.Length" disabled />
+                        </div>
+                    </div>
+                </div>
+                <div class="row card-body m-0">
+                    <div class="row">
+                        <div class="m-auto col-md-8">
+                            <div class="border rounded p-1 m-0 d-flex">
+                                <div class="ml-2 mr-2">
+                                    <p>Чупливо <i class="fas @(Model.IsFragile ? "fa-check" : "fa-times")"></i></p>
+                                </div>
+
+                                <div class="ml-2 mr-2">
+                                    <p>Не палетизирай <i class="fas @(Model.IsFragile ? "fa-check" : "fa-times")"></i></p>
+                                </div>
+
+                                <div class="ml-2 mr-2">
+                                    <p>Наложен платеж <i class="fas @(Model.IsFragile ? "fa-check" : "fa-times")"></i></p>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="border rounded p-1 m-1 m-auto">
+                            <p class="text-info">Цена за доставка: <span id="deliveryPrice">@Model.DeliveryPrice</span>лв.</p>
+                            @{decimal cashOnDeliveryPrice = Model.HasCashOnDelivery ? (decimal)Model.CashOnDeliveryPrice : 0; }
+
+                            <p class="text-danger ml-3">Общо събери: <span id="fullPrice">@(cashOnDeliveryPrice + Model.DeliveryPrice)</span>лв.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <hr class="mx-3 mt-0 mb-2" />
+
+        <h4 class="m-auto text-info">Подател:</h4>
+        <div class="row">
+            <div class="card-body d-flex">
+                <div class="col-md-7 rounded border p-3 m-1">
+                    <label for="senderOffice_@Model.Id">Изпращащ офис:</label>
+                    <input id="senderOffice_@Model.Id" class="form-control" value="@Model.SendingOfficeCityName - @Model.SendingOfficeName - @Model.SendingOfficePostcode" disabled />
+                </div>
+                <div class="col-md-5 rounded border p-3 m-1">
+                    <label for="senderNames_@Model.Id">Подател:</label>
+                    <input id="senderNames_@Model.Id" class="form-control" value="@Model.SenderFullnameAndPhoneNumber" disabled />
+                </div>
+            </div>
+        </div>
+
+        <hr class="mx-3 mt-0 mb-2" />
+
+        <h4 class="m-auto text-info">Получател:</h4>
+        <div class="row">
+
+            <div class="card-body d-flex">
+                <div class="col-md-7 rounded border p-3 m-1">
+                    <label for="recipentOffice_@Model.Id">Приемащ офис:</label>
+                    <input id="recipentOffice_@Model.Id" class="form-control" value="@Model.ReceivingOfficeCityName - @Model.ReceivingOfficeName - @Model.ReceivingOfficePostcode" disabled />
+                </div>
+                <div class="col-md-5 rounded border p-3 m-1">
+                    <label for="recipentNames_@Model.Id">Получател:</label>
+                    <input id="recipentNames_@Model.Id" class="form-control" value="@Model.RecipentFullnameAndPhoneNumber" disabled />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="">
+                <h4>История:</h4>
+                <ul class="timeline">
+
+                    <li>
+                        <strong> @Model.DateReceived - @Model.SendingEmployeeFullName</strong>
+                        <hr class="my-0" />
+                        <small>Приета в офис: @Model.SendingOfficeName (@Model.SendingOfficePostcode)</small>
+                    </li>
+
+                    @foreach (var protocol in Model.Protocols.Where(x => x.Status == ParcelStatus.Added || x.Status == ParcelStatus.Checked))
+                    {
+                        <li>
+                            <strong>@protocol?.CreatedOn.ToString("dd/MM/yyyy HH:mm:ss") - @protocol?.ResponsibleUser?.FullName</strong>
+                            <hr class="my-0" />
+                            <small>@(protocol?.Protocol?.Type == ProtocolType.Loading ? "Товарене" : "Разтоварване") - @protocol?.Protocol?.OfficeFrom?.Name (@protocol?.Protocol?.OfficeFrom?.PostCode) - @protocol?.Protocol?.OfficeTo?.Name (@protocol?.Protocol?.OfficeTo?.PostCode)</small>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div id="appendBtn_@Model.Id"></div>
+</div>

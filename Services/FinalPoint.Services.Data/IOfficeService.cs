@@ -21,6 +21,8 @@
 
         IEnumerable<KeyValuePair<string, string>> GeAllOfficesAndSortingCentersWithoutCurrOneAsKeyValuePairs(int officetoSkip);
 
+        IEnumerable<KeyValuePair<string, string>> GetLoadUnloadOffices(Office currentOffice);
+
         IEnumerable<KeyValuePair<string, string>> GeAllOfficesAndSortingCentersAsKeyValuePairs();
 
         IEnumerable<KeyValuePair<string, string>> GetAllSortingCentersAsKeyValuePairs();

@@ -56,15 +56,14 @@ namespace FinalPoint.Data.Models
         [InverseProperty("Owner")]
         public virtual ICollection<Office> OwnOffices { get; set; }
 
+        [InverseProperty("ResponsibleUser")]
+        public virtual ICollection<ProtocolParcel> ResponsibleForProtocolRecords { get; set; }
+
         public virtual ICollection<IdentityUserRole<string>> Roles { get; set; }
 
         public virtual ICollection<IdentityUserClaim<string>> Claims { get; set; }
 
         public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; }
 
-        public static implicit operator ApplicationUser(ClaimsPrincipal v)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

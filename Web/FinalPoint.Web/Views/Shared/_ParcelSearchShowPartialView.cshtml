@@ -19,119 +19,42 @@
             <div class="col-md-12">
                 <div class="card shadow mb-4">
                     <!-- Card Header -->
-                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-success">Пратка №@parcel.Id  </h6>
+                    <tr class="p-0 rounded">
+                        <td class="p-1">
+                            <div id="parcelSearchResult"></div>
+                            <div class="accordion" id="accordionExample">
+                                <div class="card ">
+                                    <button class="btn  collapsed col-md-12 btn-light" type="button" data-toggle="collapse" data-target="#collapse_@parcel.Id" aria-expanded="false" aria-controls="collapseTwo">
 
+                                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                            <h6 class="m-0 font-weight-bold text-success">Пратка №@parcel.Id</h6>
+
+                                            @if (Model.IsDispose)
+                                            {
+                                                @if (parcel.CurrentOfficeId == Model.CurrUserWorkOfficeId)
+                                                {
+                                                    <span class="text-success">Налична <i class="fas fa-check"></i></span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-danger">Налична в офис: @parcel.CurrentOfficeCityName - @parcel.CurrentOfficeName -           @parcel.CurrentOfficePostCode <i class="fas fa-times"></i></span>
+                                                }
+                                            }
+
+                                        </div>
+                                    </button>
+                                    <partial name="_ShowSingleParcelDescriptionPartialView" model="parcel" />
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    @if (Model.IsDispose)
+                    {
+                    <div id="disposeBtn_@parcel.Id">
                         @if (parcel.CurrentOfficeId == Model.CurrUserWorkOfficeId)
                         {
-                            <span class="text-success">Налична <i class="fas fa-check"></i></span>
-                        }
-                        else
-                        {
-                            <span class="text-danger">Налична в офис: @parcel.CurrentOffice.City.Name - @parcel.CurrentOffice.Name - @parcel.CurrentOffice.PostCode <i class="fas fa-times"></i></span>
-                        }
-                    </div>
-                    <!-- Card Body -->
-                    <div class="card-body d-flex pb-0">
-                        <div class="form-group col-md-4 border rounded p-2">
-                            <label for="parcelDesc_@parcel.Id">Описание на пратката:</label>
-                            <textarea id="parcelDesc_@parcel.Id" class="form-control" rows="5" disabled>@parcel.Description</textarea>
-                        </div>
-
-                        <div class="row">
-                        <div class="row pl-3 m-auto">
-                            <div class="pl-3 pr-3 pb-2 rounded border col-md-3">
-                                <div class="row">
-                                    <label for="Width_@parcel.Id">Ширина</label>
-                                </div>
-                                <div class="row">
-                                    <input id="Width_@parcel.Id" class="form-control" value="@parcel.Width" disabled />
-                                </div>
-                            </div>
-                            <div class="pl-2 pr-2 p-2 m-3"> x </div>
-                            <div class="pl-3 pr-3 pb-2 rounded border col-md-3">
-                                <div class="row">
-                                    <label for="Height_@parcel.Id">Височина</label>
-                                </div>
-                                <div class="row">
-                                    <input id="Height_@parcel.Id" class="form-control" value="@parcel.Height" disabled />
-                                </div>
-                            </div>
-                            <div class="pl-2 pr-2 p-2 m-3"> x </div>
-                            <div class="pl-3 pr-3 pb-2 rounded border col-md-3">
-                                <div class="row">
-                                    <label for="Length_@parcel.Id">Дължина</label>
-                                </div>
-                                <div class="row">
-                                    <input id="Length_@parcel.Id" class="form-control" value="@parcel.Length" disabled />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row card-body">
-                                <div class="m-auto">
-                                    <div class="border rounded p-4 m-1 d-flex">
-                                        <div class="ml-2 mr-2">
-                                            <p>Чупливо <i class="fas @(parcel.IsFragile ? "fa-check" : "fa-times")"></i></p>
-                                        </div>
-
-                                        <div class="ml-2 mr-2">
-                                            <p>Не палетизирай <i class="fas @(parcel.IsFragile ? "fa-check" : "fa-times")"></i></p>
-                                        </div>
-
-                                        <div class="ml-2 mr-2">
-                                            <p>Наложен платеж <i class="fas @(parcel.IsFragile ? "fa-check" : "fa-times")"></i></p>
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                                <div class="border rounded p-1 m-1 m-auto">
-                                    <p class="text-info">Цена за доставка: <span id="deliveryPrice">@parcel.DeliveryPrice</span>лв.</p>
-                                    @{decimal cashOnDeliveryPrice = parcel.HasCashOnDelivery ? (decimal)parcel.CashOnDeliveryPrice : 0; }
-
-                                    <p class="text-danger ml-3">Общо събери: <span id="fullPrice">@(cashOnDeliveryPrice + parcel.DeliveryPrice)</span>лв.</p>
-                                </div>
-                        </div>
-                        </div>
-                    </div>
-                    
-
-                    <hr class="mx-3 mt-0 mb-2" />
-
-                    <h4 class="m-auto text-info">Подател:</h4>
-                    <div class="row">
-                        <div class="card-body d-flex">
-                            <div class="col-md-7 rounded border p-3 m-1">
-                                <label for="senderOffice_@parcel.Id">Изпращащ офис:</label>
-                                <input id="senderOffice_@parcel.Id" class="form-control" value="@parcel.SendingOffice.City.Name - @parcel.SendingOffice.Name - @parcel.SendingOffice.PostCode" disabled />
-                            </div>
-                            <div class="col-md-5 rounded border p-3 m-1">
-                                <label for="senderNames_@parcel.Id">Подател:</label>
-                                <input id="senderNames_@parcel.Id" class="form-control" value="@parcel.Sender.FirstName @parcel.Sender.LastName - @parcel.Sender.PhoneNumber" disabled />
-                            </div>
-                        </div>
-                    </div>
-
-                    <hr class="mx-3 mt-0 mb-2" />
-
-                    <h4 class="m-auto text-info">Получател:</h4>
-                    <div class="row">
-
-                        <div class="card-body d-flex">
-                            <div class="col-md-7 rounded border p-3 m-1">
-                                <label for="recipentOffice_@parcel.Id">Приемащ офис офис:</label>
-                                <input id="recipentOffice_@parcel.Id" class="form-control" value="@parcel.ReceivingOffice.City.Name - @parcel.ReceivingOffice.Name - @parcel.ReceivingOffice.PostCode" disabled />
-                            </div>
-                            <div class="col-md-5 rounded border p-3 m-1">
-                                <label for="recipentNames_@parcel.Id">Получател:</label>
-                                <input id="recipentNames_@parcel.Id" class="form-control" value="@parcel.Recipent.FirstName @parcel.Recipent.LastName - @parcel.Recipent.PhoneNumber" disabled />
-                            </div>
-                        </div>
-                    </div>
-
-                    @if (parcel.CurrentOfficeId == Model.CurrUserWorkOfficeId)
-                    {
-                        <div class="card-body form-group p-1 m-1 text-center">
+                            <div class="card-body form-group p-1 m-1 text-center">
                                 <input id="mainDisposeBtn_@parcel.Id" type="button" onclick="toggleConfirmation('mainDisposeBtn_', 'confirmDeleteDiv_', @parcel.Id)" class="col-md-4 btn btn-success form-control animate__animated animate__backInRight animate__faster" value="Издай" />
 
                                 <span id="confirmDeleteDiv_@parcel.Id" class="confirmDelete">
@@ -141,9 +64,11 @@
                                         <button id="disposeBtn_@parcel.Id" type="button" onclick="toggleConfirmation('mainDisposeBtn_', 'confirmDeleteDiv_', @parcel.Id)" class="col-md-2 btn btn-success form-control">Не</button>
                                     </div>
                                 </span>
-                        </div>
-                    }
+                            </div>
+                        }
                     </div>
+                    }
+                </div>
                 </div>
             </div>
 

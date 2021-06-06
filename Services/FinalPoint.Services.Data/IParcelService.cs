@@ -5,6 +5,7 @@ using FinalPoint.Data.Models;
 using FinalPoint.Data.Models.Enums;
 using FinalPoint.Web.ViewModels.AddDispose;
 using FinalPoint.Web.ViewModels.DTOs;
+using FinalPoint.Web.ViewModels.Shared;
 
 namespace FinalPoint.Services.Data
 {
@@ -18,13 +19,15 @@ namespace FinalPoint.Services.Data
 
         Task<bool> UpdateParcelCurrentOfficeByOfficePostcode(int parcelId, int newCurrentOfficePostcode);
 
-        ICollection<Parcel> SearchForParcels(int? parcelId, string firstName, string lastName, string phoneNumber, ClaimsPrincipal user);
+        ICollection<SingleParcelSearchShowPartialViewModel> SearchForParcels(int? parcelId, string firstName, string lastName, string phoneNumber, ClaimsPrincipal user, bool isGlobal);
 
         ICollection<Parcel> GetAllParcelsFromTo(ProtocolType protocolType, int currentOfficeId, int officeFromId, int officeToId);
 
         ParcelCheckResultDto GetParcelAsParcelCheckResultDtoById(int parcelId);
 
         Parcel GetParcelById(int parcelId);
+
+        SingleParcelSearchShowPartialViewModel GetSingleParcelInfoByParcelId(int parcelId);
 
         Parcel GetParcelWithOfficesAndCitiesById(int parcelId);
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using FinalPoint.Data.Models;
+using FinalPoint.Web.ViewModels.Shared;
 
 namespace FinalPoint.Web.ViewModels.DTOs.LoadUnload
 {
@@ -11,7 +12,7 @@ namespace FinalPoint.Web.ViewModels.DTOs.LoadUnload
 
         public ProtocolParcel ProtocolParcel { get; set; }
 
-        public Parcel Parcel { get; set; }
+        public SingleParcelSearchShowPartialViewModel Parcel { get; set; }
 
         public string TranslatedStatus { get; set; }
     }

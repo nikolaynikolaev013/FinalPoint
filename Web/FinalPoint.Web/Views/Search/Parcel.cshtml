@@ -1,0 +1,19 @@
+﻿@{
+    ViewData["Title"] = "Търсене на пратка";
+    ViewData["Breadcrumb"] = new List<KeyValuePair<string, string>>() {
+        new KeyValuePair<string, string>("Начало", "/"),
+        new KeyValuePair<string, string>("Търсене", "/Search"),
+        };
+}
+
+
+<h1 class="text-center text-secondary mb-4">@ViewData["Title"]</h1>
+<hr class="mb-5" />
+
+<partial name="_ParcelSearchInputBlockPartialView" model="null"/>
+
+<div id="parcelSearchResult"></div>
+
+@section Scripts{
+    <script src="~/js/Search/GetParcelSearchResultsGlobalScript.js"></script>
+}

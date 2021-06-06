@@ -35,7 +35,7 @@
         [Display(Name = "Обслужващо РЦ (ако е приложимо)")]
         public int ResponsibleSortingCenter { get; set; }
 
-        [CustomRequired]
+        //[CustomRequired]
         [Display(Name = "Собственик")]
         public int OwnerId { get; set; }
 

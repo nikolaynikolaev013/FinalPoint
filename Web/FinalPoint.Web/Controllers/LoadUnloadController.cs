@@ -35,7 +35,7 @@ namespace FinalPoint.Web.Controllers
         {
             LoadUnloadIndexViewModel model = new LoadUnloadIndexViewModel();
             var currUser = this.userService.GetUserByClaimsPrincipal(this.User);
-            model.Lines = this.officeService.GeAllOfficesAndSortingCentersWithoutCurrOneAsKeyValuePairs(currUser.WorkOfficeId);
+            model.Lines = this.officeService.GetLoadUnloadOffices(currUser.WorkOffice);
             model.Type = ProtocolType.Loading;
             model.TranslatedType = this.protocolService.TranslateType(model.Type);
             return this.View("LoadUnload", model);
@@ -79,7 +79,7 @@ namespace FinalPoint.Web.Controllers
             LoadUnloadIndexViewModel model = new LoadUnloadIndexViewModel();
             model.Type = ProtocolType.Unloading;
             var currUser = this.userService.GetUserByClaimsPrincipal(this.User);
-            model.Lines = this.officeService.GeAllOfficesAndSortingCentersWithoutCurrOneAsKeyValuePairs(currUser.WorkOfficeId);
+            model.Lines = this.officeService.GetLoadUnloadOffices(currUser.WorkOffice);
             model.TranslatedType = this.protocolService.TranslateType(model.Type);
 
             return this.View("LoadUnload", model);
@@ -159,6 +159,12 @@ namespace FinalPoint.Web.Controllers
             await this.protocolService.LoadNewProtocolParcels(user, protocol.Type, protocol.Id, protocol.OfficeFromId, protocol.OfficeToId);
             model.Protocol = this.protocolService.GetProtocolWithOfficesById(protocolId);
             model.Parcels = this.protocolService.GetAllProtocolParcels(protocolId);
+
+            foreach (var parcel in model.Parcels)
+            {
+                parcel.Parcel.Protocols = this.protocolService.GetAllParcelProtocolsByParcelId(parcel.Parcel.Id);
+            }
+
             return model;
         }
     }

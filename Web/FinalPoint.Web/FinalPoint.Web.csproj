@@ -51,6 +51,8 @@
     <Folder Include="Views\AddDispose\" />
     <Folder Include="Views\Administration\" />
     <Folder Include="Views\Search\" />
+    <Folder Include="wwwroot\js\AddDispose\" />
+    <Folder Include="wwwroot\js\Search\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="Views\Shared\CheckedParcelSuccessBlock.cshtml" />

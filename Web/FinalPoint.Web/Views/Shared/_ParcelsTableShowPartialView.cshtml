@@ -6,29 +6,37 @@
         <table class="table table-striped table-hover ">
             @foreach (var parcel in Model.Parcels)
             {
-                <tr class="@(parcel.ProtocolParcel.Status == ParcelStatus.Checked ? "table-success" : parcel.ProtocolParcel.Status == ParcelStatus.Added ? "table-warning" : "") rounded">
-                    <td>
-                        <div class="row">
-                            <div class="col-md-2 p-0 pl-3">
-                                Пратка №: @parcel.ProtocolParcel.Parcel.Id
-                            </div>
-                            <div class="col-md-1 p-0">
-                                @parcel.ProtocolParcel.Parcel.NumberOfParts @(parcel.ProtocolParcel.Parcel.NumberOfParts == 1 ? "част" : "части")
-                            </div>
-                            <div class="row col-md-7">
-                                <div class="col-md-12">
-                                    От: @parcel.Parcel.SendingOffice.City.Name - @parcel.Parcel.SendingOffice.Name
-                                </div>
-                                <div class="col-md-12">
-                                    Към: @parcel.Parcel.ReceivingOffice.City.Name - @parcel.Parcel.ReceivingOffice.Name
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <i class="fas fa-@(parcel.ProtocolParcel.Status == ParcelStatus.Checked ? "check" : parcel.ProtocolParcel.Status == ParcelStatus.Added ? "plus" : "")"></i>
-                                @parcel.TranslatedStatus
+                <tr class="p-0 rounded">
+                    <td class="p-1">
+                        <div id="parcelSearchResult"></div>
+                        <div class="accordion" id="accordionExample">
+                            <div class="card ">
+                                <button class="btn  collapsed col-md-12 @(parcel.ProtocolParcel.Status == ParcelStatus.Checked ? "btn-success" : parcel.ProtocolParcel.Status == ParcelStatus.Added ? "btn-warning" : "btn-light")" type="button" data-toggle="collapse" data-target="#collapse_@parcel.Parcel.Id" aria-expanded="false" aria-controls="collapseTwo">
+
+                                    <div class="row">
+                                        <div class="col-md-2 p-0 pl-3">
+                                            Пратка №: @parcel.ProtocolParcel.Parcel.Id
+                                        </div>
+                                        <div class="col-md-1 p-0">
+                                            @parcel.ProtocolParcel.Parcel.NumberOfParts @(parcel.ProtocolParcel.Parcel.NumberOfParts == 1 ? "част" : "части")
+                                        </div>
+                                        <div class="row col-md-7">
+                                            <div class="col-md-12">
+                                                От: @parcel.Parcel.SendingOfficeCityName - @parcel.Parcel.SendingOfficeName
+                                            </div>
+                                            <div class="col-md-12">
+                                                Към: @parcel.Parcel.ReceivingOfficeCityName - @parcel.Parcel.ReceivingOfficeName
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <i class="fas fa-@(parcel.ProtocolParcel.Status == ParcelStatus.Checked ? "check" : parcel.ProtocolParcel.Status == ParcelStatus.Added ? "plus" : "")"></i>
+                                            @parcel.TranslatedStatus
+                                        </div>
+                                    </div>
+                                </button>
+                                <partial name="_ShowSingleParcelDescriptionPartialView" model="parcel.Parcel" />
                             </div>
                         </div>
-
                     </td>
                 </tr>
             }

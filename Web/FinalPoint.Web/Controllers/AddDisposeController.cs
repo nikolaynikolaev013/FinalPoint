@@ -48,12 +48,12 @@ namespace FinalPoint.Web.Controllers
 
             if (this.ModelState.IsValid)
             {
-                var user = await this.userManager.GetUserAsync(this.User);
+                var user = this.userService.GetUserByClaimsPrincipal(this.User);
                 input.DeliveryPrice = 10;
                 input.ChargeType = Data.Models.Enums.ParcelChargeType.Dimensions;
-                input.SendingOfficeId = (int)user.WorkOfficeId;
-                input.CurrentOfficeId = input.SendingOfficeId;
-                input.SendingEmployeeId = user.PersonalId;
+                input.SendingOffice = user.WorkOffice;
+                input.CurrentOffice = user.WorkOffice;
+                input.SendingEmployee = user;
 
                 await this.parcelService.CreateAsync(input);
 

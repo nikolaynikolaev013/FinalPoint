@@ -4,14 +4,16 @@ using FinalPoint.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FinalPoint.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210604090126_AddNullableOwnerIdToOffice")]
+    partial class AddNullableOwnerIdToOffice
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -769,7 +771,7 @@ namespace FinalPoint.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("FinalPoint.Data.Models.ApplicationUser", "ResponsibleUser")
-                        .WithMany("Protocols")
+                        .WithMany()
                         .HasForeignKey("ResponsibleUserId1");
 
                     b.Navigation("Parcel");
@@ -837,8 +839,6 @@ namespace FinalPoint.Data.Migrations
                     b.Navigation("Logins");
 
                     b.Navigation("OwnOffices");
-
-                    b.Navigation("Protocols");
 
                     b.Navigation("Roles");
                 });

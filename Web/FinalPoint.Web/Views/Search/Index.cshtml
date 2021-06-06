@@ -1,0 +1,35 @@
+﻿@{
+
+    ViewData["Title"] = "Търсене";
+    ViewData["Breadcrumb"] = new List<KeyValuePair<string, string>>() {
+        new KeyValuePair<string, string>("Начало", "/"),
+        };
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="text-center text-secondary mb-4">Търсене</h1>
+            <hr />
+
+            <div class="row offset-md-2">
+                <div class="col-md-5">
+                    <a asp-action="Parcel">
+                        <div class="card border-left-info shadow mb-3" style="width: 18rem;">
+                            <div class="card-body">
+                                <h4 class="card-title text-secondary">Търсене на пратка</h4>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-md-5">
+                    <a asp-action="Protocol">
+                        <div class="card border-left-info shadow mb-3" style="width: 18rem;">
+                            <div class="card-body">
+                                <h4 class="card-title text-secondary">Търсене на протокол</h4>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>

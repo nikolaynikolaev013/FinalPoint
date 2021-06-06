@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using FinalPoint.Data.Models;
+using FinalPoint.Web.ViewModels.Shared;
 
 namespace FinalPoint.Web.ViewModels.TrackParcel
 {
@@ -8,10 +9,12 @@ namespace FinalPoint.Web.ViewModels.TrackParcel
     {
         public TrackParcelResultModel()
         {
-            this.Parcels = new HashSet<Parcel>();
+            this.Parcels = new HashSet<SingleParcelSearchShowPartialViewModel>();
         }
 
-        public ICollection<Parcel> Parcels { get; set; }
+        public ICollection<SingleParcelSearchShowPartialViewModel> Parcels { get; set; }
+
+        public bool IsDispose { get; set; }
 
         public int CurrUserWorkOfficeId { get; set; }
     }

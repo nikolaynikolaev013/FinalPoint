@@ -10,6 +10,7 @@
     using FinalPoint.Data.Models.Enums;
     using FinalPoint.Web.ViewModels.DTOs;
     using FinalPoint.Web.ViewModels.DTOs.LoadUnload;
+    using FinalPoint.Web.ViewModels.Shared;
     using FinalPoint.Web.ViewModels.ViewComponents;
     using Microsoft.EntityFrameworkCore;
 
@@ -197,13 +198,14 @@
             }
             else
             {
+                var currUser = this.userService.GetUserByPersonalId(resposnibleUserPersonalId);
 
                 protocolParcelObj = new ProtocolParcel()
                 {
                     Status = status,
                     ParcelId = parcelId,
                     ProtocolId = protocolId,
-                    ResponsibleUserId = resposnibleUserPersonalId,
+                    ResponsibleUser = currUser,
                     TimeEdited = DateTime.UtcNow,
                 };
                 await this.protocolParcelRep.AddAsync(protocolParcelObj);
@@ -284,6 +286,20 @@
             await this.protocolParcelRep.SaveChangesAsync();
         }
 
+        public ICollection<ProtocolParcel> GetAllParcelProtocolsByParcelId(int parcelId)
+        {
+            return this.protocolParcelRep
+                .AllAsNoTracking()
+                .Include(x => x.ResponsibleUser)
+                .Include(x => x.Protocol)
+                .Include(x => x.Protocol.CreatedByEmployee)
+                .Include(x => x.Protocol.OfficeFrom)
+                .Include(x => x.Protocol.OfficeTo)
+                .Where(x => x.ParcelId == parcelId)
+                .OrderBy(x => x.CreatedOn)
+                .ToHashSet();
+        }
+
         public bool CheckIfParcelIsInProtocol(int parcelId, int protocolId)
         {
             return this.protocolRep
@@ -322,11 +338,30 @@
 
             var protocolParcels = this.protocolParcelRep
                     .All()
-                    .Where(x => x.ProtocolId == protocolId)
+                    .Include(x => x.ResponsibleUser)
+
                     .Include(x => x.Parcel)
+                    .ThenInclude(x => x.Sender)
+
+                    .Include(x => x.Parcel)
+                    .ThenInclude(x => x.Recipent)
+
+                    //.Include(x => x.Parcel.SendingEmployee)
+                    //.Include(x => x.Parcel.DeliveringEmployee)
+
+
+                    .Include(x => x.Protocol)
+                    .ThenInclude(x => x.OfficeFrom)
+
+                    .Include(x => x.Protocol)
+                    .ThenInclude(x => x.OfficeTo)
+
+                    .Where(x => x.ProtocolId == protocolId)
+
                     .OrderByDescending(x => x.Status == ParcelStatus.Added)
                     .ThenByDescending(x => x.Status == ParcelStatus.Checked)
                     .ToHashSet();
+
 
             foreach (var protocolParcel in protocolParcels)
             {
@@ -335,11 +370,10 @@
 
                 var newParcel = new ParcelsTableShowParcelViewModel()
                 {
-                    Parcel = parcel,
+                    Parcel = this.parcelService.GetSingleParcelInfoByParcelId(parcel.Id),
                     ProtocolParcel = protocolParcel,
                     TranslatedStatus = this.TranslateStatus(protocolParcel.Status),
                 };
-
                 output.Add(newParcel);
             }
 
@@ -364,9 +398,34 @@
                         .Where(x => x.Id == protocolId)
                         .Include(x => x.OfficeFrom)
                         .Include(x => x.OfficeTo)
+
+                        .Include(x => x.Parcels)
+                        .ThenInclude(x => x.ResponsibleUser)
+
+                        .Include(x => x.OfficeTo)
+                        .Include(x => x.OfficeFrom)
+
                         .FirstOrDefault();
         }
 
+        public ICollection<Protocol> GetLocalProtocolsByOfficeId(int id)
+        {
+            return this.protocolRep
+                .AllAsNoTracking()
+                .Include(x => x.CreatedByEmployee)
+                .Include(x => x.OfficeFrom)
+                .Include(x => x.OfficeTo)
+                .Where(x => x.OfficeFromId == id)
+                .Select(x=>new Protocol {
+                    Id = x.Id,
+                    CreatedOn = x.CreatedOn,
+                    CreatedByEmployee = x.CreatedByEmployee,
+                    OfficeFrom = x.OfficeFrom,
+                    OfficeTo = x.OfficeTo,
+                    Type = x.Type,
+                })
+                .ToHashSet();
+        }
         public ICollection<Protocol> GetOpenProtocols(ProtocolType protocolType, int recipentOfficeId, int senderOfficeId)
         {
             var recipentOffice = this.officeService

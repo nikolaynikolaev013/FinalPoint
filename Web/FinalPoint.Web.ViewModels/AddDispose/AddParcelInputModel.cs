@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using FinalPoint.Data.Models;
     using FinalPoint.Data.Models.Enums;
     using FinalPoint.Web.ViewModels.CustomAttributes;
 
@@ -10,8 +11,8 @@
         public AddParcelInputModel()
         {
             this.AllOffices = new HashSet<KeyValuePair<string, string>>();
-            this.SenderInputModel = new AddClientInputModel(Data.Models.Enums.ClientType.Подател);
-            this.RecipentInputModel = new AddClientInputModel(Data.Models.Enums.ClientType.Получател);
+            this.SenderInputModel = new AddClientInputModel(ClientType.Подател);
+            this.RecipentInputModel = new AddClientInputModel(ClientType.Получател);
             this.Weight = 1;
             this.Width = 0.20;
             this.Height = 0.10;
@@ -67,9 +68,9 @@
 
         public decimal DeliveryPrice { get; set; }
 
-        public int SendingEmployeeId { get; set; }
+        public ApplicationUser SendingEmployee { get; set; }
 
-        public int SendingOfficeId { get; set; }
+        public Office SendingOffice { get; set; }
 
         [Display(Name = "Офис на получател", Prompt = "Въведете офиса на получателя")]
         public int ReceivingOfficeId { get; set; }
@@ -78,7 +79,7 @@
 
         public AddClientInputModel RecipentInputModel { get; set; }
 
-        public int CurrentOfficeId { get; set; }
+        public Office CurrentOffice { get; set; }
 
         public string CurrOfficeAsString { get; set; }
 

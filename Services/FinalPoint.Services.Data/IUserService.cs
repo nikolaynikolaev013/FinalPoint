@@ -18,7 +18,7 @@
 
         ApplicationUser GetUserById(string userId);
 
-        ApplicationUser GetUserByPersonalId(int userPersonalId);
+        ApplicationUser GetUserByPersonalId(int? userPersonalId);
 
         ApplicationUser GetUserByClaimsPrincipal(ClaimsPrincipal user);
 
