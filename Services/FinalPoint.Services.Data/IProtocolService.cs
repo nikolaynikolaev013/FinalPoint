@@ -19,7 +19,7 @@
 
         Task<bool> CloseProtocol(int protocolId);
 
-        Task LoadNewProtocolParcels(ApplicationUser user, ProtocolType protocolType, int protocolId, int officeFromId, int officeToId);
+        Task LoadNewProtocolParcels(ApplicationUser user, ProtocolType protocolType, int protocolId, int officeFromId, int officeToId, bool withDisposed);
 
         Task<CheckParcelResponseModel> TryAddParcelInProtocol(int parcelId, int protocolId, int responsibleUserPersonalId);
 
@@ -35,7 +35,7 @@
 
         bool CheckIfParcelIsAlreadyCheckedOrAddedToAProtocol(int parcelId, int protocolId);
 
-        ICollection<ParcelsTableShowParcelViewModel> GetAllProtocolParcels(int protocolId);
+        ICollection<ParcelsTableShowParcelViewModel> GetAllProtocolParcels(int protocolId, bool withDisposed);
 
         int GetNumberOfCheckedAndAddedParcels(int protocolId);
 

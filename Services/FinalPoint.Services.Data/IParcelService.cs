@@ -21,7 +21,7 @@ namespace FinalPoint.Services.Data
 
         ICollection<SingleParcelSearchShowPartialViewModel> SearchForParcels(int? parcelId, string firstName, string lastName, string phoneNumber, ClaimsPrincipal user, bool isGlobal);
 
-        ICollection<Parcel> GetAllParcelsFromTo(ProtocolType protocolType, int currentOfficeId, int officeFromId, int officeToId);
+        ICollection<Parcel> GetAllParcelsFromTo(ProtocolType protocolType, int currentOfficeId, int officeFromId, int officeToId, bool withDisposed);
 
         ParcelCheckResultDto GetParcelAsParcelCheckResultDtoById(int parcelId);
 

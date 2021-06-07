@@ -81,8 +81,7 @@ namespace FinalPoint.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> AddOffice(AddOfficeInputModel input)
         {
-            this.LoadAddOfficeData(input);
-
+            
             if (this.ModelState.IsValid)
             {
                 await this.officeService.CreateAsync(input);
@@ -92,9 +91,13 @@ namespace FinalPoint.Web.Controllers
                 input.PostCode = 0;
                 input.Name = string.Empty;
                 input.Address = string.Empty;
+
+                this.LoadAddOfficeData(input);
                 return this.View(input);
             }
 
+
+            this.LoadAddOfficeData(input);
             return this.View(input);
         }
 

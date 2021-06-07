@@ -119,11 +119,23 @@
 
                     @foreach (var protocol in Model.Protocols.Where(x => x.Status == ParcelStatus.Added || x.Status == ParcelStatus.Checked))
                     {
-                        <li>
-                            <strong>@protocol?.CreatedOn.ToString("dd/MM/yyyy HH:mm:ss") - @protocol?.ResponsibleUser?.FullName</strong>
-                            <hr class="my-0" />
-                            <small>@(protocol?.Protocol?.Type == ProtocolType.Loading ? "Товарене" : "Разтоварване") - @protocol?.Protocol?.OfficeFrom?.Name (@protocol?.Protocol?.OfficeFrom?.PostCode) - @protocol?.Protocol?.OfficeTo?.Name (@protocol?.Protocol?.OfficeTo?.PostCode)</small>
-                        </li>
+                        @if (protocol?.Protocol?.Type == ProtocolType.Loading)
+                        {
+                            <li>
+                                <strong>@protocol?.CreatedOn.ToString("dd/MM/yyyy HH:mm:ss") - @protocol?.ResponsibleUser?.FullName</strong>
+                                <hr class="my-0" />
+                                <small>Товарене (Протокол №: @protocol.Protocol.Id)- От: @protocol?.Protocol?.OfficeFrom?.Name (@protocol?.Protocol?.OfficeFrom?.PostCode) - Към: @protocol?.Protocol?.OfficeTo?.Name (@protocol?.Protocol?.OfficeTo?.PostCode)</small>
+                            </li>
+                        }
+
+                        else
+                        {
+                            <li>
+                                <strong>@protocol?.CreatedOn.ToString("dd/MM/yyyy HH:mm:ss") - @protocol?.ResponsibleUser?.FullName</strong>
+                                <hr class="my-0" />
+                                <small>Разтоварване (Протокол №: @protocol.Protocol.Id)- От: @protocol?.Protocol?.OfficeTo?.Name (@protocol?.Protocol?.OfficeTo?.PostCode) - Към: @protocol?.Protocol?.OfficeFrom?.Name (@protocol?.Protocol?.OfficeFrom?.PostCode)</small>
+                            </li>
+                        }
                     }
                 </ul>
             </div>

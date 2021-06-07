@@ -43,7 +43,7 @@
 
             var openProtocol = this.GetOpenProtocols(input.Type, input.RecipentOfficeId, (int)currUser.WorkOfficeId).FirstOrDefault();
 
-            var translatedType = TranslateType(input.Type);
+            var translatedType = this.TranslateType(input.Type);
 
             var viewModel = new NewOrOpenProtocolViewModel();
 
@@ -69,7 +69,7 @@
                 viewModel.TypeOfMessage = "warning animate__jello";
             }
 
-            await this.LoadNewProtocolParcels(currUser, input.Type, openProtocol.Id, openProtocol.OfficeFromId, openProtocol.OfficeToId);
+            await this.LoadNewProtocolParcels(currUser, input.Type, openProtocol.Id, openProtocol.OfficeFromId, openProtocol.OfficeToId, false);
 
             viewModel.Protocol = openProtocol;
             viewModel.TranslatedType = translatedType;
@@ -92,7 +92,7 @@
                 throw new ArgumentException("Invalid protocolId");
             }
 
-            await this.LoadNewProtocolParcels(currUser, openProtocol.Type, openProtocol.Id, openProtocol.OfficeFromId, openProtocol.OfficeToId);
+            await this.LoadNewProtocolParcels(currUser, openProtocol.Type, openProtocol.Id, openProtocol.OfficeFromId, openProtocol.OfficeToId, true);
 
             viewModel.Protocol = openProtocol;
             viewModel.TranslatedType = translatedType;
@@ -125,9 +125,9 @@
             return false;
         }
 
-        public async Task LoadNewProtocolParcels(ApplicationUser user, ProtocolType protocolType, int protocolId, int officeFromId, int officeToId)
+        public async Task LoadNewProtocolParcels(ApplicationUser user, ProtocolType protocolType, int protocolId, int officeFromId, int officeToId, bool withDisposed)
         {
-            var parcels = this.parcelService.GetAllParcelsFromTo(protocolType, user.WorkOfficeId, officeFromId, officeToId);
+            var parcels = this.parcelService.GetAllParcelsFromTo(protocolType, user.WorkOfficeId, officeFromId, officeToId, withDisposed);
 
             foreach (var parcel in parcels)
             {
@@ -207,10 +207,11 @@
                             .FirstOrDefault();
 
             var protocol = this.GetProtocolWithOfficesById(protocolId);
+            var virtualOffice = this.officeService.GetVirtualOffice();
 
             if (protocol.Type == ProtocolType.Loading)
             {
-                if (!await this.parcelService.UpdateParcelCurrentOfficeByOfficePostcode(parcelId, 90001))
+                if (!await this.parcelService.UpdateParcelCurrentOfficeByOfficePostcode(parcelId, virtualOffice.PostCode))
                 {
                     return;
                 }
@@ -356,12 +357,15 @@
             return parcel?.Status == ParcelStatus.Checked || parcel?.Status == ParcelStatus.Added;
         }
 
-        public ICollection<ParcelsTableShowParcelViewModel> GetAllProtocolParcels(int protocolId)
+        public ICollection<ParcelsTableShowParcelViewModel> GetAllProtocolParcels(int protocolId, bool withDisposed)
         {
             var output = new HashSet<ParcelsTableShowParcelViewModel>();
+            var protocolParcels = new HashSet<ProtocolParcel>();
 
-            var protocolParcels = this.protocolParcelRep
-                    .All()
+            if (withDisposed)
+            {
+                protocolParcels = this.protocolParcelRep
+                    .AllWithDeleted()
                     .Include(x => x.ResponsibleUser)
 
                     .Include(x => x.Parcel)
@@ -370,31 +374,49 @@
                     .Include(x => x.Parcel)
                     .ThenInclude(x => x.Recipent)
 
-                    //.Include(x => x.Parcel.SendingEmployee)
-                    //.Include(x => x.Parcel.DeliveringEmployee)
-
 
                     .Include(x => x.Protocol)
                     .ThenInclude(x => x.OfficeFrom)
 
                     .Include(x => x.Protocol)
                     .ThenInclude(x => x.OfficeTo)
+                    .ToHashSet();
 
+            }
+            else
+            {
+                protocolParcels = this.protocolParcelRep
+                        .All()
+                        .Include(x => x.ResponsibleUser)
+
+                        .Include(x => x.Parcel)
+                        .ThenInclude(x => x.Sender)
+
+                        .Include(x => x.Parcel)
+                        .ThenInclude(x => x.Recipent)
+
+
+                        .Include(x => x.Protocol)
+                        .ThenInclude(x => x.OfficeFrom)
+
+                        .Include(x => x.Protocol)
+                        .ThenInclude(x => x.OfficeTo)
+                        .ToHashSet();
+            }
+
+            var result =
+                    protocolParcels
                     .Where(x => x.ProtocolId == protocolId)
 
                     .OrderByDescending(x => x.Status == ParcelStatus.Added)
                     .ThenByDescending(x => x.Status == ParcelStatus.Checked)
                     .ToHashSet();
 
-
-            foreach (var protocolParcel in protocolParcels)
+            foreach (var protocolParcel in result)
             {
-                var parcel = this.parcelService
-                                    .GetParcelWithOfficesAndCitiesById(protocolParcel.ParcelId);
-
                 var newParcel = new ParcelsTableShowParcelViewModel()
                 {
-                    Parcel = this.parcelService.GetSingleParcelInfoByParcelId(parcel.Id),
+                    Parcel = this.parcelService.GetSingleParcelInfoByParcelId(protocolParcel.ParcelId),
                     ProtocolParcel = protocolParcel,
                     TranslatedStatus = this.TranslateStatus(protocolParcel.Status),
                 };

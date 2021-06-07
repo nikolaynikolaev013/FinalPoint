@@ -82,7 +82,7 @@ namespace FinalPoint.Web.Controllers
                 User = this.User,
                 Id = id,
             });
-            var parcelsTableShowData = await this.FillUpParcelsTableShowData(protocolInput.Protocol.Id);
+            var parcelsTableShowData = await this.FillUpParcelsTableShowData(protocolInput.Protocol.Id, true);
 
             var model = new LoadUnloadProtocolViewModel()
             {
@@ -173,21 +173,21 @@ namespace FinalPoint.Web.Controllers
         [Route("/ReloadParcelsTable/{protocolId}")]
         public async Task<IActionResult> ReloadParcelsTable(int protocolId)
         {
-            var model = await this.FillUpParcelsTableShowData(protocolId);
+            var model = await this.FillUpParcelsTableShowData(protocolId, false);
 
             return this.PartialView("_ParcelsTableShowPartialView", model);
         }
 
-        private async Task<ParcelsTableShowModel> FillUpParcelsTableShowData(int protocolId)
+        private async Task<ParcelsTableShowModel> FillUpParcelsTableShowData(int protocolId, bool withDisposed = false)
         {
             var model = new ParcelsTableShowModel();
 
             var protocol = this.protocolService.GetProtocolWithOfficesById(protocolId);
             var user = this.userService.GetUserByClaimsPrincipal(this.User);
 
-            await this.protocolService.LoadNewProtocolParcels(user, protocol.Type, protocol.Id, protocol.OfficeFromId, protocol.OfficeToId);
+            await this.protocolService.LoadNewProtocolParcels(user, protocol.Type, protocol.Id, protocol.OfficeFromId, protocol.OfficeToId, true);
             model.Protocol = this.protocolService.GetProtocolWithOfficesById(protocolId);
-            model.Parcels = this.protocolService.GetAllProtocolParcels(protocolId);
+            model.Parcels = this.protocolService.GetAllProtocolParcels(protocolId, withDisposed);
 
             foreach (var parcel in model.Parcels)
             {

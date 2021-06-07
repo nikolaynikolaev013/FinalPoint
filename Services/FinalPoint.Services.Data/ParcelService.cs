@@ -172,7 +172,7 @@
         public SingleParcelSearchShowPartialViewModel GetSingleParcelInfoByParcelId(int parcelId)
         {
             return this.parcelRep
-                .All()
+                .AllAsNoTrackingWithDeleted()
                 .Include(x => x.CurrentOffice)
                 .Include(x => x.SendingEmployee)
                 .Include(x => x.SendingOffice)
@@ -213,23 +213,38 @@
                 .FirstOrDefault();
         }
 
-        public ICollection<Parcel> GetAllParcelsFromTo(ProtocolType protocolType, int currentOfficeId, int officeFromId, int officeToId)
+        public ICollection<Parcel> GetAllParcelsFromTo(ProtocolType protocolType, int currentOfficeId, int officeFromId, int officeToId, bool withDisposed)
         {
             var currentOffice = this.officeService.GetOfficeById(currentOfficeId);
             var officeFrom = this.officeService.GetOfficeById(officeFromId);
             var officeTo = this.officeService.GetOfficeById(officeToId);
+            var virtualOffice = this.officeService.GetVirtualOffice();
 
             var officeIdsInRangeOfSortingCenter = this.officeService.GetAllOfficeIdsInRangeOfSortingCenterId(currentOfficeId);
 
             if (protocolType == ProtocolType.Loading)
             {
                 var officeIdsInRangeOfTheOfficeToSortingCenter = this.officeService.GetAllOfficeIdsInRangeOfSortingCenterId(officeToId);
+                var parcels = new HashSet<Parcel>();
 
-                return this.parcelRep
-                    .All()
-                    .Include(x => x.Protocols)
-                    .ThenInclude(x => x.ResponsibleUser)
-                    .Where(
+                if (withDisposed)
+                {
+                    parcels = this.parcelRep
+                                    .AllWithDeleted()
+                                    .Include(x => x.Protocols)
+                                    .ThenInclude(x => x.ResponsibleUser)
+                                    .ToHashSet();
+                }
+                else
+                {
+                    parcels = this.parcelRep
+                                   .All()
+                                   .Include(x => x.Protocols)
+                                   .ThenInclude(x => x.ResponsibleUser)
+                                   .ToHashSet();
+                }
+                
+                    return parcels.Where(
                             x => x.CurrentOfficeId == officeFromId
 
                         // && x.Protocols
@@ -305,9 +320,9 @@
             {
                 return this.parcelRep
                         .All()
-                        .Where(x => x.CurrentOfficeId == 13 // If it is in the Virtual office
+                        .Where(x => x.CurrentOfficeId == virtualOffice.Id // If it is in the Virtual office
 
-                                    // If the last protocol of the parcel is closed
+                                // If the last protocol of the parcel is closed
                                 && x.Protocols.OrderByDescending(x => x.CreatedOn)
                                     .FirstOrDefault()
                                     .Protocol.IsClosed == true
@@ -413,7 +428,7 @@
         public Parcel GetParcelWithOfficesAndCitiesById(int parcelId)
         {
             return this.parcelRep
-                .All()
+                .AllAsNoTrackingWithDeleted()
                 .Include(x => x.ReceivingOffice)
                 .ThenInclude(x => x.City)
                 .Include(x => x.SendingOffice)

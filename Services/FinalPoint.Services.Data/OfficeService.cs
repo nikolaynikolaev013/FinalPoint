@@ -56,10 +56,10 @@
             await this.officeRep.AddAsync(newOffice);
             await this.officeRep.SaveChangesAsync();
 
-            if (newOffice.OwnerId != null)
+            if (newOffice.Owner.Id != null)
             {
                 await this.userService
-                        .SetUserNewWorkOfficeByUserPersonalId((int)newOffice.OwnerId, newOffice.Id);
+                        .SetUserNewWorkOfficeByUserPersonalId(newOffice.Owner.PersonalId, newOffice.Id);
             }
             return newOffice;
         }
@@ -103,6 +103,13 @@
                     .FirstOrDefault();
         }
 
+        public Office GetVirtualOffice()
+        {
+            return this.officeRep
+                .AllAsNoTracking()
+                .Where(x => x.Name.ToLower() == "виртуален")
+                .FirstOrDefault();
+        }
         public Office GetOfficeByPostcode(int officePostcode)
         {
             return this.officeRep
@@ -150,7 +157,6 @@
         {
             return this.officeRep
                    .AllAsNoTracking()
-                   .Where(x=>x.Name.ToLower() != "виртуален")
                    .Select(x => new
                    {
                        x.Id,

@@ -21,6 +21,8 @@
 
         string GetOfficeAsStringById(int officeId);
 
+        Office GetVirtualOffice();
+
         IEnumerable<KeyValuePair<string, string>> GeAllOfficesAndSortingCentersWithoutCurrOneAsKeyValuePairs(int officetoSkip);
 
         IEnumerable<KeyValuePair<string, string>> GetLoadUnloadOffices(Office currentOffice);

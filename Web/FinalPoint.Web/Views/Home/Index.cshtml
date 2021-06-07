@@ -12,27 +12,28 @@
 
             @if (!this.User.IsInRole(GlobalConstants.OwnerRoleName))
             {
-<div class="row offset-md-2">
-    <div class="col-md-5">
-        <a asp-controller="AddDispose" asp-action="AddParcel">
-            <div class="card border-left-info shadow mb-3" style="width: 18rem;">
-                <div class="card-body">
-                    <h4 class="card-title text-secondary">Приемане на пратка</h4>
+            <div class="row offset-md-2">
+                <div class="col-md-5">
+                    <a asp-controller="AddDispose" asp-action="AddParcel">
+                        <div class="card border-left-info shadow mb-3" style="width: 18rem;">
+                            <div class="card-body">
+                                <h4 class="card-title text-secondary">Приемане на пратка</h4>
+                            </div>
+                        </div>
+                    </a>
                 </div>
-            </div>
-        </a>
-    </div>
 
-    <div class="col-md-5">
-        <a asp-controller="AddDispose" asp-action="DisposeParcel">
-            <div class="card border-left-info shadow mb-3" style="width: 18rem;">
-                <div class="card-body">
-                    <h4 class="card-title text-secondary">Издаване на пратка</h4>
+                <div class="col-md-5">
+                    <a asp-controller="AddDispose" asp-action="DisposeParcel">
+                        <div class="card border-left-info shadow mb-3" style="width: 18rem;">
+                            <div class="card-body">
+                                <h4 class="card-title text-secondary">Издаване на пратка</h4>
+                            </div>
+                        </div>
+                    </a>
                 </div>
             </div>
-        </a>
-    </div>
-</div>            }
+            }
 
             <div class="row offset-md-2">
                 <div class="col-md-5">
