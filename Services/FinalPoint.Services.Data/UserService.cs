@@ -72,6 +72,14 @@
             }
         }
 
+        public ICollection<string> GetAllUsers()
+        {
+            return this.usersRep
+                    .AllAsNoTracking()
+                    .Select(x => $"{x.FullName} ({x.PersonalId}) - Офис: {x.WorkOffice.Name} ({x.WorkOffice.PostCode})")
+                    .ToHashSet();
+        }
+
         public ApplicationUser GetUserById(string userId)
         {
             return this.usersRep

@@ -16,6 +16,8 @@
 
         Task<ApplicationUser> RemoveUser(int userPersonalId);
 
+        ICollection<string> GetAllUsers();
+
         ApplicationUser GetUserById(string userId);
 
         ApplicationUser GetUserByPersonalId(int? userPersonalId);

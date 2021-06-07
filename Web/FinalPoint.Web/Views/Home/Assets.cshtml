@@ -1,0 +1,34 @@
+﻿@using FinalPoint.Web.ViewModels.Home
+@model LoginUsersAndOfficesShowViewModel
+@{
+    ViewData["Title"] = "Налични потребители и офиси";
+    ViewData["Breadcrumb"] = new List<KeyValuePair<string, string>>() {
+        new KeyValuePair<string, string>("Начало", "/"),
+        };
+}
+
+<h1 class="text-center text-secondary mb-4">@ViewData["Title"]</h1>
+<hr class="" />
+
+<h2 class="text-center">Потребители: <p class="h6">(Паролата за всеки потребител е N111111)</p></h2>
+
+<table class="table table-striped table-hover ">
+    @foreach (var user in Model.Users)
+    {
+        <tr>
+            <td>@user</td>
+        </tr>
+    }
+</table>
+
+
+<h2 class="text-center">Офиси:</h2>
+
+<table class="table table-striped table-hover ">
+    @foreach (var office in Model.Offices)
+    {
+        <tr>
+            <td>@office</td>
+        </tr>
+    }
+</table>

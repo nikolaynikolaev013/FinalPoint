@@ -39,7 +39,7 @@
         public async Task<NewOrOpenProtocolViewModel> CheckOrCreateProtocol(NewProtocolCreateOrOpenDataInputDto input)
         {
             var currUser = this.userService
-                        .GetUserById(input.UserId);
+                        .GetUserByClaimsPrincipal(input.User);
 
             var openProtocol = this.GetOpenProtocols(input.Type, input.RecipentOfficeId, (int)currUser.WorkOfficeId).FirstOrDefault();
 
@@ -74,6 +74,39 @@
             viewModel.Protocol = openProtocol;
             viewModel.TranslatedType = translatedType;
             return viewModel;
+        }
+
+        public async Task<NewOrOpenProtocolViewModel> LoadOldProtocol(NewProtocolCreateOrOpenDataInputDto input)
+        {
+            var currUser = this.userService
+                        .GetUserByClaimsPrincipal(input.User);
+
+            var openProtocol = this.GetProtocolWithOfficesById(input.Id);
+
+            var translatedType = this.TranslateType(openProtocol.Type);
+
+            var viewModel = new NewOrOpenProtocolViewModel();
+
+            if (openProtocol == null)
+            {
+                throw new ArgumentException("Invalid protocolId");
+            }
+
+            await this.LoadNewProtocolParcels(currUser, openProtocol.Type, openProtocol.Id, openProtocol.OfficeFromId, openProtocol.OfficeToId);
+
+            viewModel.Protocol = openProtocol;
+            viewModel.TranslatedType = translatedType;
+            return viewModel;
+        }
+
+        public Protocol GetProtocolWithOfficesById(int protocolId)
+        {
+            return this.protocolRep
+                        .AllAsNoTracking()
+                        .Include(x=>x.OfficeFrom)
+                        .Include(x=>x.OfficeTo)
+                        .Where(x => x.Id == protocolId)
+                        .FirstOrDefault();
         }
 
         public async Task<bool> CloseProtocol(int protocolId)
@@ -323,15 +356,6 @@
             return parcel?.Status == ParcelStatus.Checked || parcel?.Status == ParcelStatus.Added;
         }
 
-        public bool IsClosed(int protocolId)
-        {
-            return this.protocolRep
-                        .All()
-                        .Where(x => x.Id == protocolId)
-                        .FirstOrDefault()
-                        .IsClosed;
-        }
-
         public ICollection<ParcelsTableShowParcelViewModel> GetAllProtocolParcels(int protocolId)
         {
             var output = new HashSet<ParcelsTableShowParcelViewModel>();
@@ -391,23 +415,6 @@
                 .Count();
         }
 
-        public Protocol GetProtocolWithOfficesById(int protocolId)
-        {
-            return this.protocolRep
-                        .All()
-                        .Where(x => x.Id == protocolId)
-                        .Include(x => x.OfficeFrom)
-                        .Include(x => x.OfficeTo)
-
-                        .Include(x => x.Parcels)
-                        .ThenInclude(x => x.ResponsibleUser)
-
-                        .Include(x => x.OfficeTo)
-                        .Include(x => x.OfficeFrom)
-
-                        .FirstOrDefault();
-        }
-
         public ICollection<Protocol> GetLocalProtocolsByOfficeId(int id)
         {
             return this.protocolRep
@@ -416,16 +423,20 @@
                 .Include(x => x.OfficeFrom)
                 .Include(x => x.OfficeTo)
                 .Where(x => x.OfficeFromId == id)
-                .Select(x=>new Protocol {
+                .Select(x => new Protocol
+                {
                     Id = x.Id,
                     CreatedOn = x.CreatedOn,
                     CreatedByEmployee = x.CreatedByEmployee,
                     OfficeFrom = x.OfficeFrom,
                     OfficeTo = x.OfficeTo,
                     Type = x.Type,
+                    IsClosed = x.IsClosed,
                 })
+                .OrderByDescending(x => x.CreatedOn)
                 .ToHashSet();
         }
+
         public ICollection<Protocol> GetOpenProtocols(ProtocolType protocolType, int recipentOfficeId, int senderOfficeId)
         {
             var recipentOffice = this.officeService

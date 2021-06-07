@@ -35,7 +35,7 @@ namespace FinalPoint.Web.Controllers
         {
             var user = this.userService.GetUserByClaimsPrincipal(this.User);
             var protocols = this.protocolService.GetLocalProtocolsByOfficeId(user.WorkOfficeId);
-            return View();
+            return View(protocols);
         }
     }
 }

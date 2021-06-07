@@ -1,5 +1,56 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using FinalPoint.Data.Models
+@using FinalPoint.Data.Models.Enums
+@model ICollection<Protocol>
 @{
+    ViewData["Title"] = "Търсене на протокол";
+    ViewData["Breadcrumb"] = new List<KeyValuePair<string, string>>() {
+        new KeyValuePair<string, string>("Начало", "/"),
+        new KeyValuePair<string, string>("Търсене", "/Search"),
+        };
+}
+
+
+<h1 class="text-center text-secondary mb-4">@ViewData["Title"]</h1>
+<hr class="mb-5" />
+
+
+<div class="row mt-3">
+    <div class="col-md-12">
+            @foreach (var protocol in Model)
+            {
+                <div class="card my-2">
+                    <a class="btn col-md-12 @(protocol.IsClosed ? "btn-success" :  "btn-light")" type="button" asp-controller="LoadUnload" asp-action="LoadProtocol" asp-route-id="@protocol.Id">
+
+                        <div class="row">
+                            <div class="p-0 pl-3 m-auto">
+                                Протокол за @(protocol.Type == ProtocolType.Loading ? "товарене" : "разтоварване") №: @protocol.Id
+                            </div>
+
+                            <div class="createdBy m-auto">
+                                Създал: @protocol.CreatedByEmployee.FullName
+                            </div>
+
+                            <div class="m-auto">
+                                Дата: @protocol.CreatedOn.ToString("dd/MM/yyyy")
+                            </div>
+
+                            <div class="m-auto">
+                                От: @protocol.OfficeFrom.PostCode
+                            </div>
+
+                            <div class="m-auto">
+                                Към: @protocol.OfficeTo.Name (@protocol.OfficeTo.PostCode)
+                            </div>
+
+                            <div class="mr-1 ml-auto">
+                                <i class="fas fa-@(protocol.IsClosed ? "check" : "times")"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }
+</div>
+
+@section Scripts{
+    <script src="~/js/Search/GetParcelSearchResultsGlobalScript.js"></script>
 }

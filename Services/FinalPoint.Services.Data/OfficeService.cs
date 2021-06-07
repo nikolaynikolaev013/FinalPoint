@@ -7,6 +7,7 @@
     using FinalPoint.Data.Models;
     using FinalPoint.Data.Models.Enums;
     using FinalPoint.Web.ViewModels.Administration;
+    using Microsoft.EntityFrameworkCore;
 
     public class OfficeService : IOfficeService
     {
@@ -33,13 +34,15 @@
                 model.CityId = newCityId;
             }
 
+            var owner = this.userService.GetUserByPersonalId(model.OwnerId);
+
             var newOffice = new FinalPoint.Data.Models.Office();
             newOffice.PostCode = model.PostCode;
             newOffice.Name = model.Name;
             newOffice.OfficeType = model.OfficeType;
             newOffice.CityId = model.CityId;
             newOffice.Address = model.Address;
-            newOffice.OwnerId = model.OwnerId;
+            newOffice.Owner = owner;
 
             if (model.OfficeType == OfficeType.Office)
             {
@@ -115,6 +118,32 @@
                     .Where(x => x.ResponsibleSortingCenterId == sortingCenterId)
                     .Select(x=>x.Id)
                     .ToHashSet();
+        }
+
+        public HashSet<string> GetAllOfficesWithoutVirtual()
+        {
+            var offices = this.officeRep
+                    .AllAsNoTracking()
+                    .Include(x => x.Owner)
+                    .Include(x => x.ResponsibleSortingCenter)
+                    .Where(x => x.Name.ToLower() != "виртуален")
+                    .ToHashSet();
+
+            var result = new HashSet<string>();
+
+            foreach (var office in offices)
+            {
+                if (office.OfficeType == OfficeType.Office)
+                {
+                    result.Add($"Офис: {office.Name} ({office.PostCode}) - обслужващо РЦ: {office.ResponsibleSortingCenter.Name} ({office.ResponsibleSortingCenter.PostCode}) - собственик: {office.Owner?.FullName} ({office.Owner?.PersonalId})");
+                }
+                else
+                {
+                    result.Add($"Разпределителен център: {office.Name} ({office.PostCode}) - собственик: {office.Owner?.FullName} ({office.Owner?.PersonalId})");
+                }
+            }
+
+            return result;
         }
 
         public IEnumerable<KeyValuePair<string, string>> GeAllOfficesAndSortingCentersAsKeyValuePairs()

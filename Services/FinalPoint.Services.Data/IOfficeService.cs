@@ -17,6 +17,8 @@
 
         HashSet<int> GetAllOfficeIdsInRangeOfSortingCenterId(int sortingCenterId);
 
+        HashSet<string> GetAllOfficesWithoutVirtual();
+
         string GetOfficeAsStringById(int officeId);
 
         IEnumerable<KeyValuePair<string, string>> GeAllOfficesAndSortingCentersWithoutCurrOneAsKeyValuePairs(int officetoSkip);

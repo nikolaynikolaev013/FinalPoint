@@ -124,14 +124,18 @@
                 {
                         endpoints.MapControllerRoute(
                             "Add", "Add", new { controller = "AddDispose", action = "AddParcel" });
+
                         endpoints.MapControllerRoute(
                             "Dispose", "Dispose", new { controller = "AddDispose", action = "DisposeParcel" });
 
                         endpoints.MapControllerRoute(
-                                "Load", "Load/{line?}", new { controller = "LoadUnload", action = "Load" });
+                                    "Load", "Load", new { controller = "LoadUnload", action = "Load" });
 
                         endpoints.MapControllerRoute(
-                            "Unload", "Unload/{line?}", new { controller = "LoadUnload", action = "Unload" });
+                                    "Load", "Protocol/{protocolId?}", new { controller = "LoadUnload", action = "LoadProtocol" });
+
+                        endpoints.MapControllerRoute(
+                            "Unload", "Unload/{protocolId?}", new { controller = "LoadUnload", action = "Unload" });
 
                         endpoints.MapControllerRoute(
                                 "CheckedParcelResult", "CheckedParcelResult", new { controller = "LoadUnload", action = "CheckedParcelResult" });
@@ -139,7 +143,10 @@
                         endpoints.MapControllerRoute(
                                     "ReloadParcelsTable", "ReloadParcelsTable", new { controller = "LoadUnload", action = "ReloadParcelsTable" });
 
-                        endpoints.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+                        endpoints.MapControllerRoute(
+                            "Assets", "Assets", new { controller = "Home", action = "Assets" });
+
+                    endpoints.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
                         endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
                         endpoints.MapRazorPages();
                     });

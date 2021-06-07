@@ -13,6 +13,10 @@
     {
         Task<NewOrOpenProtocolViewModel> CheckOrCreateProtocol(NewProtocolCreateOrOpenDataInputDto input);
 
+        Task<NewOrOpenProtocolViewModel> LoadOldProtocol(NewProtocolCreateOrOpenDataInputDto input);
+
+        Protocol GetProtocolWithOfficesById(int protocolId);
+
         Task<bool> CloseProtocol(int protocolId);
 
         Task LoadNewProtocolParcels(ApplicationUser user, ProtocolType protocolType, int protocolId, int officeFromId, int officeToId);
@@ -31,13 +35,11 @@
 
         bool CheckIfParcelIsAlreadyCheckedOrAddedToAProtocol(int parcelId, int protocolId);
 
-        bool IsClosed(int protocolId);
-
         ICollection<ParcelsTableShowParcelViewModel> GetAllProtocolParcels(int protocolId);
 
         int GetNumberOfCheckedAndAddedParcels(int protocolId);
 
-        Protocol GetProtocolWithOfficesById(int protocolId);
+        ICollection<Protocol> GetLocalProtocolsByOfficeId(int id);
 
         ICollection<Protocol> GetOpenProtocols(ProtocolType protocolType, int recipentOfficeId, int senderOfficeId);
 

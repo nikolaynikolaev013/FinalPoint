@@ -47,7 +47,7 @@ namespace FinalPoint.Web.Controllers
             var protocolInput = await this.protocolService.CheckOrCreateProtocol(new ViewModels.DTOs.NewProtocolCreateOrOpenDataInputDto()
             {
                 Type = ProtocolType.Loading,
-                UserId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value,
+                User = this.User,
                 RecipentOfficeId = input.LineToLoad,
             });
 
@@ -69,7 +69,36 @@ namespace FinalPoint.Web.Controllers
                 },
             };
 
-            model.IsClosed = this.protocolService.IsClosed(model.Id);
+            model.IsClosed = protocolInput.Protocol.IsClosed;
+
+            return this.View("LoadUnloadProtocol", model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> LoadProtocol(int id)
+        {
+            var protocolInput = await this.protocolService.LoadOldProtocol(new ViewModels.DTOs.NewProtocolCreateOrOpenDataInputDto()
+            {
+                User = this.User,
+                Id = id,
+            });
+            var parcelsTableShowData = await this.FillUpParcelsTableShowData(protocolInput.Protocol.Id);
+
+            var model = new LoadUnloadProtocolViewModel()
+            {
+                ParcelTableShowViewData = parcelsTableShowData,
+                Type = protocolInput.Protocol.Type,
+                Id = protocolInput.Protocol.Id,
+                TranslatedType = protocolInput.TranslatedType,
+                Line = protocolInput.Protocol.OfficeTo.PostCode,
+                Date = protocolInput.Protocol.CreatedOn,
+                ParcelInsertViewModel = new ParcelInsertPartialViewModel()
+                {
+                    ButtonText = "Добавяне",
+                },
+            };
+
+            model.IsClosed = protocolInput.Protocol.IsClosed;
 
             return this.View("LoadUnloadProtocol", model);
         }
@@ -91,7 +120,7 @@ namespace FinalPoint.Web.Controllers
             var protocolInput = await this.protocolService.CheckOrCreateProtocol(new ViewModels.DTOs.NewProtocolCreateOrOpenDataInputDto()
             {
                 Type = ProtocolType.Unloading,
-                UserId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value,
+                User = this.User,
                 RecipentOfficeId = input.LineToLoad,
             });
 
@@ -113,7 +142,7 @@ namespace FinalPoint.Web.Controllers
                 },
             };
 
-            model.IsClosed = this.protocolService.IsClosed(model.Id);
+            model.IsClosed = protocolInput.Protocol.IsClosed;
 
             return this.View("LoadUnloadProtocol", model);
         }

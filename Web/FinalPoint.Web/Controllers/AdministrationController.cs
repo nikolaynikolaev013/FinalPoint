@@ -108,13 +108,13 @@ namespace FinalPoint.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> RemoveOffice(RemoveOfficeInputModel input)
         {
-            input.AvailableOfficesToRemove = this.officeService.GeAllOfficesAndSortingCentersAsKeyValuePairs();
-
             if (this.ModelState.IsValid)
             {
                 var removedOffice = await this.officeService.Remove(input.OfficeToRemove);
                 input.ResultMessage = $"Офис - {removedOffice.Name} - {removedOffice.PostCode} - беше прекратен успешно.";
             }
+
+            input.AvailableOfficesToRemove = this.officeService.GeAllOfficesAndSortingCentersAsKeyValuePairs();
 
             return this.View(input);
         }

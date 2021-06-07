@@ -34,5 +34,6 @@
     <Folder Include="CustomAttributes\" />
     <Folder Include="Parcel\" />
     <Folder Include="TrackParcel\" />
+    <Folder Include="Home\" />
   </ItemGroup>
 </Project>
