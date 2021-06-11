@@ -2,6 +2,7 @@
 {
     using System;
     using System.ComponentModel.DataAnnotations.Schema;
+
     using FinalPoint.Data.Common.Models;
     using FinalPoint.Data.Models.Enums;
 
@@ -19,7 +20,7 @@
         [ForeignKey(nameof(Protocol))]
         public int ProtocolId { get; set; }
 
-        public Protocol Protocol { get; set; }
+        public virtual Protocol Protocol { get; set; }
 
         public ParcelStatus Status { get; set; }
 

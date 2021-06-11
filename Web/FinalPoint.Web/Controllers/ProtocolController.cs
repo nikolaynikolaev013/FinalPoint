@@ -1,10 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
-using FinalPoint.Services.Data;
-using Microsoft.AspNetCore.Mvc;
-
-namespace FinalPoint.Web.Controllers
+﻿namespace FinalPoint.Web.Controllers
 {
+    using System.Threading.Tasks;
+
+    using FinalPoint.Services.Data;
+    using Microsoft.AspNetCore.Mvc;
+
     [Route("api/[controller]/{protocolId}")]
     [ApiController]
     public class ProtocolController : Controller
@@ -12,7 +12,8 @@ namespace FinalPoint.Web.Controllers
         private readonly IProtocolService protocolParcelService;
         private readonly IProtocolService protocolService;
 
-        public ProtocolController(IProtocolService protocolParcelService,
+        public ProtocolController(
+            IProtocolService protocolParcelService,
             IProtocolService protocolService)
         {
             this.protocolParcelService = protocolParcelService;

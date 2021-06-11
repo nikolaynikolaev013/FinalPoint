@@ -1,19 +1,18 @@
-﻿using System;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using FinalPoint.Services.Data;
-using FinalPoint.Web.ViewModels.TrackParcel;
-using Microsoft.AspNetCore.Mvc;
-
-namespace FinalPoint.Web.Controllers
+﻿namespace FinalPoint.Web.Controllers
 {
-    public class CheckParcelController : Controller
+    using System.Threading.Tasks;
+
+    using FinalPoint.Services.Data;
+    using FinalPoint.Web.ViewModels.TrackParcel;
+    using Microsoft.AspNetCore.Mvc;
+
+    public class ParcelApiController : Controller
     {
         private readonly IParcelService parcelService;
         private readonly IUserService userService;
         private readonly IProtocolService protocolService;
 
-        public CheckParcelController(
+        public ParcelApiController(
                     IParcelService parcelService,
                     IUserService userService,
                     IProtocolService protocolService)
@@ -25,7 +24,7 @@ namespace FinalPoint.Web.Controllers
 
         [HttpGet]
         [Route("/[controller]/{parcelId}/{firstName}/{lastName}/{phoneNumber}/{isDispose}")]
-        public async Task<IActionResult> SearchForParcel(int? parcelId, string firstName, string lastName, string phoneNumber, bool isDispose)
+        public IActionResult SearchForParcel(int? parcelId, string firstName, string lastName, string phoneNumber, bool isDispose)
         {
             var user = this.userService.GetUserByClaimsPrincipal(this.User);
 

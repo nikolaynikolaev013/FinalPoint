@@ -13,7 +13,7 @@ namespace FinalPoint.Web.Controllers
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
-    [Authorize(Roles = GlobalConstants.AdministratorRoleName + ", "+ GlobalConstants.OwnerRoleName)]
+    [Authorize(Roles = GlobalConstants.AdministratorRoleName + ", " + GlobalConstants.OwnerRoleName)]
     public class AdministrationController : Controller
     {
         private readonly IOfficeService officeService;
@@ -42,31 +42,25 @@ namespace FinalPoint.Web.Controllers
         public IActionResult FireEmployee()
         {
             FireEmployeeInputModel model = new FireEmployeeInputModel();
-            var currUserId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            model.AvailableEmployeesToDelete = this.userService.GetAllUsersWithoutCurrentAsKeyValuePair(currUserId);
+            this.FillUpAvailableEmployeesToDelete(model);
+
             return this.View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> FireEmployee(FireEmployeeInputModel input)
         {
-            var currUserId = this.User
-                .FindFirst(ClaimTypes.NameIdentifier)
-                .Value;
-
-            input.AvailableEmployeesToDelete = this.userService.GetAllUsersWithoutCurrentAsKeyValuePair(currUserId);
-
             if (this.ModelState.IsValid)
             {
                 var removedUser = await this.userService.RemoveUser(input.EmployeeToFire);
                 if (removedUser != null)
                 {
-                    input.ResultMessage = $"Служител - {removedUser.FirstName} {removedUser.MiddleName} {removedUser.LastName} - {removedUser?.PersonalId} - беше уволнен успешно.";
+                    input.ResultMessage = $"Служител - {removedUser.FirstName} {removedUser.MiddleName} {removedUser.LastName} - {removedUser.PersonalId} - беше уволнен успешно.";
                 }
             }
 
-            input.AvailableEmployeesToDelete = this.userService.GetAllUsersWithoutCurrentAsKeyValuePair(currUserId);
+            this.FillUpAvailableEmployeesToDelete(input);
 
             return this.View(input);
         }
@@ -81,7 +75,6 @@ namespace FinalPoint.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> AddOffice(AddOfficeInputModel input)
         {
-            
             if (this.ModelState.IsValid)
             {
                 await this.officeService.CreateAsync(input);
@@ -95,7 +88,6 @@ namespace FinalPoint.Web.Controllers
                 this.LoadAddOfficeData(input);
                 return this.View(input);
             }
-
 
             this.LoadAddOfficeData(input);
             return this.View(input);
@@ -127,6 +119,15 @@ namespace FinalPoint.Web.Controllers
             input.CitiesItems = this.cityService.GetAllCitiesAsKeyValuePairs();
             input.SortingCentersItems = this.officeService.GetAllSortingCentersAsKeyValuePairs();
             input.AllUsers = this.userService.GetAllUsersAsKeyValuePair();
+        }
+
+        private void FillUpAvailableEmployeesToDelete(FireEmployeeInputModel input)
+        {
+            var currUserId = this.User
+                            .FindFirst(ClaimTypes.NameIdentifier)
+                            .Value;
+
+            input.AvailableEmployeesToDelete = this.userService.GetAllUsersWithoutCurrentAsKeyValuePair(currUserId);
         }
     }
 }

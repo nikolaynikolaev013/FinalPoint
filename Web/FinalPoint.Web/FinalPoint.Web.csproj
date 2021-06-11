@@ -58,4 +58,7 @@
     <Content Remove="Views\Shared\CheckedParcelSuccessBlock.cshtml" />
     <Content Remove="Views\Shared\_ParcelSearchInputPartialView.cshtml" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Areas\Identity\IdentityHostingStartup.cs" />
+  </ItemGroup>
 </Project>

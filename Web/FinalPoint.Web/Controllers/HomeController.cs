@@ -1,9 +1,9 @@
 ﻿namespace FinalPoint.Web.Controllers
 {
     using System.Diagnostics;
+
     using FinalPoint.Services.Data;
     using FinalPoint.Web.ViewModels;
-    using FinalPoint.Web.ViewModels.GroupUngroup;
     using FinalPoint.Web.ViewModels.Home;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -13,8 +13,9 @@
         private readonly IUserService userService;
         private readonly IOfficeService officeService;
 
-        public HomeController(IUserService userService,
-                IOfficeService officeService)
+        public HomeController(
+            IUserService userService,
+            IOfficeService officeService)
         {
             this.userService = userService;
             this.officeService = officeService;

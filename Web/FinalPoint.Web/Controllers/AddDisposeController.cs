@@ -4,10 +4,10 @@ namespace FinalPoint.Web.Controllers
 {
     using System.Security.Claims;
     using System.Threading.Tasks;
+
     using FinalPoint.Data.Models;
     using FinalPoint.Services.Data;
     using FinalPoint.Web.ViewModels.AddDispose;
-    using FinalPoint.Web.ViewModels.TrackParcel;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
@@ -76,7 +76,7 @@ namespace FinalPoint.Web.Controllers
             input.SenderInputModel.AllClients = allClients;
             input.RecipentInputModel.AllClients = allClients;
 
-            input.AllOffices = this.officeService.GeAllOfficesAndSortingCentersWithoutCurrOneAsKeyValuePairs(currUser.WorkOfficeId);
+            input.AllOffices = this.officeService.GeAllOfficesAndSortingCentersWithoutCurrOneAsKeyValuePairs(0);
             input.CurrOfficeAsString = this.officeService.GetOfficeAsStringById(currUser.WorkOfficeId);
         }
     }

@@ -1,5 +1,4 @@
-﻿using System;
-namespace FinalPoint.Data.Models.Enums
+﻿namespace FinalPoint.Data.Models.Enums
 {
     public enum ParcelStatus
     {

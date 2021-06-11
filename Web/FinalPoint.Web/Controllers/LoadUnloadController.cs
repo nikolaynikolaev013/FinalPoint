@@ -2,17 +2,15 @@
 
 namespace FinalPoint.Web.Controllers
 {
-    using System;
     using System.Security.Claims;
     using System.Threading.Tasks;
+
     using FinalPoint.Data.Models.Enums;
     using FinalPoint.Services.Data;
-    using FinalPoint.Web.ViewModels.DTOs.LoadUnload;
     using FinalPoint.Web.ViewModels.LoadUnload;
     using FinalPoint.Web.ViewModels.Shared;
     using FinalPoint.Web.ViewModels.ViewComponents;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.ModelBinding;
 
     public class LoadUnloadController : Controller
     {
@@ -33,43 +31,14 @@ namespace FinalPoint.Web.Controllers
         // GET: /<controller>/
         public IActionResult Load()
         {
-            LoadUnloadIndexViewModel model = new LoadUnloadIndexViewModel();
-            var currUser = this.userService.GetUserByClaimsPrincipal(this.User);
-            model.Lines = this.officeService.GetLoadUnloadOffices(currUser.WorkOffice);
-            model.Type = ProtocolType.Loading;
-            model.TranslatedType = this.protocolService.TranslateType(model.Type);
+            LoadUnloadIndexViewModel model = this.LoadInitialLoadUnloadData(ProtocolType.Loading);
             return this.View("LoadUnload", model);
         }
 
         [HttpPost]
         public async Task<IActionResult> Load(LoadUnloadIndexViewModel input)
         {
-            var protocolInput = await this.protocolService.CheckOrCreateProtocol(new ViewModels.DTOs.NewProtocolCreateOrOpenDataInputDto()
-            {
-                Type = ProtocolType.Loading,
-                User = this.User,
-                RecipentOfficeId = input.LineToLoad,
-            });
-
-            var parcelsTableShowData = await this.FillUpParcelsTableShowData(protocolInput.Protocol.Id);
-
-            var model = new LoadUnloadProtocolViewModel()
-            {
-                ParcelTableShowViewData = parcelsTableShowData,
-                Type = protocolInput.Protocol.Type,
-                Message = protocolInput.Message,
-                TypeOfMessage = protocolInput.TypeOfMessage,
-                TranslatedType = protocolInput.TranslatedType,
-                Id = protocolInput.Protocol.Id,
-                Line = protocolInput.Protocol.OfficeTo.PostCode,
-                Date = protocolInput.Protocol.CreatedOn,
-                ParcelInsertViewModel = new ParcelInsertPartialViewModel()
-                {
-                    ButtonText = "Добавяне",
-                },
-            };
-
-            model.IsClosed = protocolInput.Protocol.IsClosed;
+            LoadUnloadProtocolViewModel model = await this.LoadInitialLoadUnoadProtocolData(input, ProtocolType.Loading);
 
             return this.View("LoadUnloadProtocol", model);
         }
@@ -105,11 +74,7 @@ namespace FinalPoint.Web.Controllers
 
         public IActionResult Unload()
         {
-            LoadUnloadIndexViewModel model = new LoadUnloadIndexViewModel();
-            model.Type = ProtocolType.Unloading;
-            var currUser = this.userService.GetUserByClaimsPrincipal(this.User);
-            model.Lines = this.officeService.GetLoadUnloadOffices(currUser.WorkOffice);
-            model.TranslatedType = this.protocolService.TranslateType(model.Type);
+            LoadUnloadIndexViewModel model = this.LoadInitialLoadUnloadData(ProtocolType.Unloading);
 
             return this.View("LoadUnload", model);
         }
@@ -117,32 +82,7 @@ namespace FinalPoint.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Unload(LoadUnloadIndexViewModel input)
         {
-            var protocolInput = await this.protocolService.CheckOrCreateProtocol(new ViewModels.DTOs.NewProtocolCreateOrOpenDataInputDto()
-            {
-                Type = ProtocolType.Unloading,
-                User = this.User,
-                RecipentOfficeId = input.LineToLoad,
-            });
-
-            var parcelsTableShowData = await this.FillUpParcelsTableShowData(protocolInput.Protocol.Id);
-
-            var model = new LoadUnloadProtocolViewModel()
-            {
-                ParcelTableShowViewData = parcelsTableShowData,
-                Type = protocolInput.Protocol.Type,
-                Message = protocolInput.Message,
-                TypeOfMessage = protocolInput.TypeOfMessage,
-                TranslatedType = protocolInput.TranslatedType,
-                Id = protocolInput.Protocol.Id,
-                Line = protocolInput.Protocol.OfficeTo.PostCode,
-                Date = protocolInput.Protocol.CreatedOn,
-                ParcelInsertViewModel = new ParcelInsertPartialViewModel()
-                {
-                    ButtonText = "Добавяне",
-                },
-            };
-
-            model.IsClosed = protocolInput.Protocol.IsClosed;
+            LoadUnloadProtocolViewModel model = await this.LoadInitialLoadUnoadProtocolData(input, ProtocolType.Unloading);
 
             return this.View("LoadUnloadProtocol", model);
         }
@@ -194,6 +134,47 @@ namespace FinalPoint.Web.Controllers
                 parcel.Parcel.Protocols = this.protocolService.GetAllParcelProtocolsByParcelId(parcel.Parcel.Id);
             }
 
+            return model;
+        }
+
+        private LoadUnloadIndexViewModel LoadInitialLoadUnloadData(ProtocolType protocolType)
+        {
+            LoadUnloadIndexViewModel model = new LoadUnloadIndexViewModel();
+            model.Type = protocolType;
+            var currUser = this.userService.GetUserByClaimsPrincipal(this.User);
+            model.Lines = this.officeService.GetLoadUnloadOffices(currUser.WorkOffice);
+            model.TranslatedType = this.protocolService.TranslateType(model.Type);
+            return model;
+        }
+
+        private async Task<LoadUnloadProtocolViewModel> LoadInitialLoadUnoadProtocolData(LoadUnloadIndexViewModel input, ProtocolType protocolType)
+        {
+            var protocolInput = await this.protocolService.CheckOrCreateProtocol(new ViewModels.DTOs.NewProtocolCreateOrOpenDataInputDto()
+            {
+                Type = protocolType,
+                User = this.User,
+                RecipentOfficeId = input.LineToLoad,
+            });
+
+            var parcelsTableShowData = await this.FillUpParcelsTableShowData(protocolInput.Protocol.Id);
+
+            var model = new LoadUnloadProtocolViewModel()
+            {
+                ParcelTableShowViewData = parcelsTableShowData,
+                Type = protocolInput.Protocol.Type,
+                Message = protocolInput.Message,
+                TypeOfMessage = protocolInput.TypeOfMessage,
+                TranslatedType = protocolInput.TranslatedType,
+                Id = protocolInput.Protocol.Id,
+                Line = protocolInput.Protocol.OfficeTo.PostCode,
+                Date = protocolInput.Protocol.CreatedOn,
+                ParcelInsertViewModel = new ParcelInsertPartialViewModel()
+                {
+                    ButtonText = "Добавяне",
+                },
+            };
+
+            model.IsClosed = protocolInput.Protocol.IsClosed;
             return model;
         }
     }

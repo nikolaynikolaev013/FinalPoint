@@ -11,7 +11,7 @@ function GetParcelResults() {
 
     $.ajax({
         method: "GET",
-        url: "/CheckParcel/" + parcelId + "/" + firstName + "/" + lastName + "/" + phoneNumber  + "/true",
+        url: "/ParcelApi/" + parcelId + "/" + firstName + "/" + lastName + "/" + phoneNumber  + "/true",
         success: function (res) {
             $("#parcelSearchResult").html(res);
 

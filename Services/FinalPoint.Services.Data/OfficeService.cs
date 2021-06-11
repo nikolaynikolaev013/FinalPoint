@@ -131,11 +131,14 @@
 
         public HashSet<string> GetAllOfficesWithoutVirtual()
         {
+            var virtualOffice = this.GetVirtualOffice();
+
             var offices = this.officeRep
                     .AllAsNoTracking()
                     .Include(x => x.Owner)
                     .Include(x => x.ResponsibleSortingCenter)
-                    .Where(x => x.Name.ToLower() != "виртуален")
+                    .Include(x=>x.City)
+                    .Where(x => x != virtualOffice)
                     .ToHashSet();
 
             var result = new HashSet<string>();
@@ -144,7 +147,7 @@
             {
                 if (office.OfficeType == OfficeType.Office)
                 {
-                    result.Add($"Офис: {office.Name} ({office.PostCode}) - обслужващо РЦ: {office.ResponsibleSortingCenter.Name} ({office.ResponsibleSortingCenter.PostCode}) - собственик: {office.Owner?.FullName} ({office.Owner?.PersonalId})");
+                    result.Add($"Офис: {office.City.Name} {office.Name} ({office.PostCode}) - обслужващо РЦ: {office.ResponsibleSortingCenter.Name} ({office.ResponsibleSortingCenter.PostCode}) - собственик: {office.Owner?.FullName} ({office.Owner?.PersonalId})");
                 }
                 else
                 {

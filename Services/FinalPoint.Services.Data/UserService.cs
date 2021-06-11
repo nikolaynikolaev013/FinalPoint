@@ -76,7 +76,9 @@
         {
             return this.usersRep
                     .AllAsNoTracking()
-                    .Select(x => $"{x.FullName} ({x.PersonalId}) - Офис: {x.WorkOffice.Name} ({x.WorkOffice.PostCode})")
+                    .Include(x => x.WorkOffice)
+                    .ThenInclude(x => x.City)
+                    .Select(x => $"{x.FullName} ({x.PersonalId}) - Офис: {x.WorkOffice.Name} ({x.WorkOffice.PostCode}) - {x.WorkOffice.City.Name}")
                     .ToHashSet();
         }
 

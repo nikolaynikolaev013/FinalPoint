@@ -1,7 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace FinalPoint.Data.Models.Enums
+﻿namespace FinalPoint.Data.Models.Enums
 {
+    using System.ComponentModel.DataAnnotations;
+
     public enum OfficeType
     {
         [Display(Name = "Офис")]

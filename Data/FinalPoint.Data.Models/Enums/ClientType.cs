@@ -1,9 +1,8 @@
-﻿using System;
-namespace FinalPoint.Data.Models.Enums
+﻿namespace FinalPoint.Data.Models.Enums
 {
     public enum ClientType
     {
         Подател = 10,
-        Получател = 20
+        Получател = 20,
     }
 }
