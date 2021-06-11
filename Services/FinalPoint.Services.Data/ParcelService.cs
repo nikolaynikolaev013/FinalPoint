@@ -243,39 +243,16 @@
                                    .ThenInclude(x => x.ResponsibleUser)
                                    .ToHashSet();
                 }
-                
-                    return parcels.Where(
+
+                parcels = parcels.Where(
                             x => x.CurrentOfficeId == officeFromId
-
-                        // && x.Protocols
-                        //    .OrderByDescending(x => x.CreatedOn)
-                        //    .FirstOrDefault()
-                        //    .Protocol
-                        //    .IsClosed == true
-
-                        && 
-
-                            (
-                            //    // If the parcel is in the current office
-                            //    // if the last protocol is closed
-                            //    (officeFromId == x.CurrentOfficeId
-                            //    && x.Protocols
-                            //    .OrderByDescending(x => x.CreatedOn)
-                            //    .FirstOrDefault()
-                            //    .Protocol.IsClosed == true)
-
-                            //    // If the parcel is in the current office
-                            //    // If there is no last protocol
-                            // //|| (currentOfficeId == x.CurrentOfficeId
-                            // //   && x.Protocols.OrderByDescending(x => x.CreatedOn)
-                            // //   .FirstOrDefault() == null)
-                            //// If the current office is an office
+                        && (
                              (currentOffice.OfficeType == OfficeType.Office
 
                             // if we are loading up to a sorting center
                             && officeTo.OfficeType == OfficeType.SortingCenter
 
-                            //if the sorting center we are loading to is the responsible sorting center of the curroffice
+                            // if the sorting center we are loading to is the responsible sorting center of the curroffice
                             && officeFrom.ResponsibleSortingCenterId == currentOffice.ResponsibleSortingCenterId)
                             
                             || (
@@ -287,15 +264,15 @@
                                 && officeTo.OfficeType == OfficeType.SortingCenter
 
                                 // If the last protocol of the parcel is closed
-                                && (x.Protocols
+                                && (x.Protocols?
                                 .OrderByDescending(x => x.CreatedOn)
-                                .FirstOrDefault()
-                                .Protocol.IsClosed == true
+                                .FirstOrDefault()?
+                                .Protocol?.IsClosed == true
 
                                      // If the parcel is in the current office
                                      // If there is no last protocol
                                     || (currentOfficeId == x.CurrentOfficeId
-                                       && x.Protocols.OrderByDescending(x => x.CreatedOn)
+                                       && x.Protocols?.OrderByDescending(x => x.CreatedOn)
                                        .FirstOrDefault() == null)))
                             || (
 
@@ -305,19 +282,23 @@
                             // if we are loading up to an office
                             && officeTo.OfficeType == OfficeType.Office
 
-                            && x.Protocols
-                                .OrderByDescending(x => x.CreatedOn)
-                                .FirstOrDefault()
-                                .Protocol.IsClosed == true
+                            //&& x.Protocols
+                            //    .OrderByDescending(x => x.CreatedOn)
+                            //    .FirstOrDefault()
+                            //    .Protocol.IsClosed == true
 
                             && officeIdsInRangeOfSortingCenter.Contains(x.ReceivingOfficeId)
 
                             && x.ReceivingOfficeId == officeToId))
                     )
                     .ToHashSet();
+
+                return parcels;
             }
             else if (protocolType == ProtocolType.Unloading)
             {
+
+
                 return this.parcelRep
                         .All()
                         .Where(x => x.CurrentOfficeId == virtualOffice.Id // If it is in the Virtual office

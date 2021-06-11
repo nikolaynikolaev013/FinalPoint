@@ -100,6 +100,7 @@
             return this.officeRep
                     .All()
                     .Where(x => x.Id == officeId)
+                    .Include(x => x.ResponsibleSortingCenter)
                     .FirstOrDefault();
         }
 
@@ -110,6 +111,7 @@
                 .Where(x => x.Name.ToLower() == "виртуален")
                 .FirstOrDefault();
         }
+
         public Office GetOfficeByPostcode(int officePostcode)
         {
             return this.officeRep
@@ -168,10 +170,12 @@
 
         public IEnumerable<KeyValuePair<string, string>> GeAllOfficesAndSortingCentersWithoutCurrOneAsKeyValuePairs(int officeIdToSkip)
         {
+            var virtualOffice = this.GetVirtualOffice();
+
             return this.officeRep
                       .AllAsNoTracking()
                       .Where(x => x.Id != officeIdToSkip
-                                && x.Name.ToLower() != "виртуален")
+                                && x != virtualOffice)
                       .Select(x => new
                       {
                           x.Id,
@@ -183,6 +187,8 @@
 
         public IEnumerable<KeyValuePair<string, string>> GetLoadUnloadOffices(Office currentOffice)
         {
+            var virtualOffice = this.GetVirtualOffice();
+
             if (currentOffice.OfficeType == OfficeType.Office)
             {
                 return this.officeRep
@@ -202,7 +208,8 @@
                       .AllAsNoTracking()
                       .Where(x=>
                       (x.ResponsibleSortingCenterId == currentOffice.Id || x.OfficeType == OfficeType.SortingCenter)
-                      && x.Name.ToLower() != "виртуален")
+                      && x != virtualOffice
+                      && x.Id != currentOffice.Id)
                       .Select(x => new
                       {
                           x.Id,

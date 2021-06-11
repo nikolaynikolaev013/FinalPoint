@@ -76,7 +76,7 @@ namespace FinalPoint.Web.Controllers
             input.SenderInputModel.AllClients = allClients;
             input.RecipentInputModel.AllClients = allClients;
 
-            input.AllOffices = this.officeService.GeAllOfficesAndSortingCentersAsKeyValuePairs();
+            input.AllOffices = this.officeService.GeAllOfficesAndSortingCentersWithoutCurrOneAsKeyValuePairs(currUser.WorkOfficeId);
             input.CurrOfficeAsString = this.officeService.GetOfficeAsStringById(currUser.WorkOfficeId);
         }
     }
