@@ -56,7 +56,7 @@
                                 x.FullName,
                                 x.PersonalId,
                             }).ToList()
-                   .Select(x => new KeyValuePair<string, string>(x.PersonalId.ToString(), x.FullName + " - " + x.PersonalId.ToString())); ;
+                   .Select(x => new KeyValuePair<string, string>(x.PersonalId.ToString(), x.FullName + " - " + x.PersonalId.ToString()));
         }
 
         public async Task SetUserNewWorkOfficeByUserPersonalId(int personalId, int newWorkOfficeId)

@@ -297,8 +297,6 @@
             }
             else if (protocolType == ProtocolType.Unloading)
             {
-
-
                 return this.parcelRep
                         .All()
                         .Where(x => x.CurrentOfficeId == virtualOffice.Id // If it is in the Virtual office

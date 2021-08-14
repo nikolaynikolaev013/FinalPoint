@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
     using FinalPoint.Data.Common.Repositories;
     using FinalPoint.Data.Models;
     using FinalPoint.Data.Models.Enums;
@@ -56,11 +57,12 @@
             await this.officeRep.AddAsync(newOffice);
             await this.officeRep.SaveChangesAsync();
 
-            if (newOffice.Owner.Id != null)
+            if (newOffice.Owner != null && newOffice.Owner.Id != null)
             {
                 await this.userService
                         .SetUserNewWorkOfficeByUserPersonalId(newOffice.Owner.PersonalId, newOffice.Id);
             }
+
             return newOffice;
         }
 
@@ -125,7 +127,7 @@
             return this.officeRep
                     .All()
                     .Where(x => x.ResponsibleSortingCenterId == sortingCenterId)
-                    .Select(x=>x.Id)
+                    .Select(x => x.Id)
                     .ToHashSet();
         }
 
@@ -235,6 +237,5 @@
                     x.Name,
                 }).ToList().Select(x => new KeyValuePair<string, string>(x.Id.ToString(), x.Name));
         }
-
     }
 }

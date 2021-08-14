@@ -25,10 +25,18 @@
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.312" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="MyTested.AspNetCore.Mvc.Universe" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Web\FinalPoint.Web\FinalPoint.Web.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="IntegrationTests\" />
+    <None Remove="MyTested.AspNetCore.Mvc.Universe" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="IntegrationTests\" />
+  </ItemGroup>
 </Project>

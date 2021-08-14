@@ -14,7 +14,6 @@ function GetParcelResults() {
         url: "/ParcelApi/" + parcelId + "/" + firstName + "/" + lastName + "/" + phoneNumber + "/false",
         success: function (res) {
             $("#parcelSearchResult").html(res);
-
             $(".confirmDelete").hide();
         }
     });
