@@ -24,7 +24,6 @@
             await SeedRoleAsync(roleManager, GlobalConstants.SortingCenterManagerRoleName);
             await SeedRoleAsync(roleManager, GlobalConstants.OfficeManagerRoleName);
             await SeedRoleAsync(roleManager, GlobalConstants.DriverRoleName);
-
         }
 
         private static async Task SeedRoleAsync(RoleManager<ApplicationRole> roleManager, string roleName)
