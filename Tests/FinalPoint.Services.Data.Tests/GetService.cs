@@ -36,7 +36,7 @@
 
             foreach (var user in fakeData.ApplicationUsers)
             {
-                data.Users.Add(user);
+                data.Cities.Add(user);
             }
 
             data.SaveChanges();

@@ -1,4 +1,4 @@
-﻿namespace FinalPoint.Services.Data
+﻿namespace FinalPoint.Services.Data.User
 {
     using System;
     using System.Collections.Generic;

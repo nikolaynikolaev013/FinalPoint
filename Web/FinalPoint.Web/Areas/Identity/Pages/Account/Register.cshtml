@@ -1,5 +1,6 @@
 @page
-@using FinalPoint.Services.Data
+@using FinalPoint.Services.Data.Office
+@using FinalPoint.Services.Data.UserRole
 
 @model RegisterModel
 @inject IOfficeService OfficeServices
@@ -14,7 +15,7 @@
 
     var allOffices = OfficeServices.GeAllOfficesAndSortingCentersAsKeyValuePairs().Select(x => new SelectListItem(x.Value, x.Key));
     var allRoles = UserRoleService.GetAllUserRolesAsKeyValuePairs()?.Select(x => new SelectListItem(x.Value, x.Key));
-        }
+}
 
 
 <h1 class="text-center text-secondary mb-4">@ViewData["Title"]</h1>

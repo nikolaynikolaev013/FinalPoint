@@ -25,4 +25,22 @@
     <ProjectReference Include="..\..\Web\FinalPoint.Web.ViewModels\FinalPoint.Web.ViewModels.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="City\" />
+    <None Remove="Client\" />
+    <None Remove="Office\" />
+    <None Remove="Parcel\" />
+    <None Remove="Protocol\" />
+    <None Remove="User\" />
+    <None Remove="UserRole\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="City\" />
+    <Folder Include="Client\" />
+    <Folder Include="Office\" />
+    <Folder Include="Parcel\" />
+    <Folder Include="Protocol\" />
+    <Folder Include="User\" />
+    <Folder Include="UserRole\" />
+  </ItemGroup>
 </Project>

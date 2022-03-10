@@ -3,6 +3,8 @@
     using System.Diagnostics;
 
     using FinalPoint.Services.Data;
+    using FinalPoint.Services.Data.Office;
+    using FinalPoint.Services.Data.User;
     using FinalPoint.Web.ViewModels;
     using FinalPoint.Web.ViewModels.Home;
     using Microsoft.AspNetCore.Authorization;

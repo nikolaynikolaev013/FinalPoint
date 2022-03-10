@@ -65,5 +65,10 @@ namespace FinalPoint.Data.Models
 
         public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; }
 
+        [NotMapped]
+        public int[] IgnoredOwnedOfficesPostcodes { get; set; }
+
+        [NotMapped]
+        public string IgnoredRole { get; set; }
     }
 }

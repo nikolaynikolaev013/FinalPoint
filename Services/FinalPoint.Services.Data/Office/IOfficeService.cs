@@ -1,4 +1,4 @@
-﻿namespace FinalPoint.Services.Data
+﻿namespace FinalPoint.Services.Data.Office
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
