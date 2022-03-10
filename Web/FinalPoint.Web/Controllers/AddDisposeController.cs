@@ -6,7 +6,10 @@ namespace FinalPoint.Web.Controllers
     using System.Threading.Tasks;
 
     using FinalPoint.Data.Models;
-    using FinalPoint.Services.Data;
+    using FinalPoint.Services.Data.Client;
+    using FinalPoint.Services.Data.Office;
+    using FinalPoint.Services.Data.Parcel;
+    using FinalPoint.Services.Data.User;
     using FinalPoint.Web.ViewModels.AddDispose;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;

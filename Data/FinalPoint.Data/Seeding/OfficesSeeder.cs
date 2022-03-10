@@ -1,11 +1,12 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using FinalPoint.Data.Models;
-
-namespace FinalPoint.Data.Seeding
+﻿namespace FinalPoint.Data.Seeding
 {
-    public class OfficesSeeder:ISeeder
+    using System;
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    using FinalPoint.Data.Models;
+
+    public class OfficesSeeder : ISeeder
     {
         public OfficesSeeder()
         {
@@ -13,21 +14,26 @@ namespace FinalPoint.Data.Seeding
 
         public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {
-            if (dbContext.Offices.Any())
+            for (int i = 0; i < SeedingConstants.Offices.Count(); i++)
             {
-                return;
+                var office = SeedingConstants.Offices[i];
+
+                if (dbContext.Offices.FirstOrDefault(x => x.PostCode == office.PostCode) != null)
+                {
+                    continue;
+                }
+
+                office.OfficeType = Models.Enums.OfficeType.Office;
+
+                office.ResponsibleSortingCenterId = dbContext
+                        .Offices
+                        .FirstOrDefault(x => x.PostCode == office.IgnoredResponsibleSortingCenterPostCode)?
+                        .Id;
+
+                office.CityId = dbContext.Cities.FirstOrDefault(x => x.Postcode == office.IgnoredCityPostCode).Id;
+
+                await dbContext.Offices.AddAsync(office);
             }
-            return;
-
-            await dbContext.Offices.AddAsync(new Office() {
-                PostCode = 909090,
-                Name = "Виртуален",
-                Address = "Виртуален",
-                City = new City { Name = "Варна", Postcode = 9000, },
-                OfficeType = Models.Enums.OfficeType.SortingCenter,
-            });
-
-            await dbContext.Offices.AddAsync(new Office() { PostCode = 9000, Name = "Варна НЛЦ", Address = "бул. Република 59", CityId = 0, OfficeType = Models.Enums.OfficeType.Office, ResponsibleSortingCenterId = 0 });
         }
     }
 }

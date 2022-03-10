@@ -27,7 +27,11 @@
                           {
                               new RolesSeeder(),
                               new SettingsSeeder(),
+                              new CitiesSeeder(),
+                              new SortingCentersSeeder(),
                               new OfficesSeeder(),
+                              new UsersSeeder(),
+                              new OfficeOwnersSeeder(),
                           };
 
             foreach (var seeder in seeders)

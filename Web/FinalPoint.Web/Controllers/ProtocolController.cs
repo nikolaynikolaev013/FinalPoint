@@ -3,27 +3,25 @@
     using System.Threading.Tasks;
 
     using FinalPoint.Services.Data;
+    using FinalPoint.Services.Data.Protocol;
     using Microsoft.AspNetCore.Mvc;
 
     [Route("api/[controller]/{protocolId}")]
     [ApiController]
     public class ProtocolController : Controller
     {
-        private readonly IProtocolService protocolParcelService;
         private readonly IProtocolService protocolService;
 
         public ProtocolController(
-            IProtocolService protocolParcelService,
             IProtocolService protocolService)
         {
-            this.protocolParcelService = protocolParcelService;
             this.protocolService = protocolService;
         }
 
         [HttpGet]
         public int GetNumberOfCheckedParcels(int protocolId)
         {
-            return this.protocolParcelService
+            return this.protocolService
                     .GetNumberOfCheckedAndAddedParcels(protocolId);
         }
 

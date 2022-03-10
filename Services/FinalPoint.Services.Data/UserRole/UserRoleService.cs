@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using FinalPoint.Data.Models;
-using Microsoft.AspNetCore.Identity;
-
-namespace FinalPoint.Services.Data
+﻿namespace FinalPoint.Services.Data.UserRole
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using FinalPoint.Data.Models;
+    using Microsoft.AspNetCore.Identity;
+
     public class UserRoleService : IUserRoleService
     {
         private readonly RoleManager<ApplicationRole> roleManager;

@@ -1,6 +1,4 @@
-﻿// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
-namespace FinalPoint.Web.Controllers
+﻿namespace FinalPoint.Web.Controllers
 {
     using System.Security.Claims;
     using System.Threading.Tasks;
@@ -8,6 +6,9 @@ namespace FinalPoint.Web.Controllers
     using FinalPoint.Common;
     using FinalPoint.Data.Models;
     using FinalPoint.Services.Data;
+    using FinalPoint.Services.Data.City;
+    using FinalPoint.Services.Data.Office;
+    using FinalPoint.Services.Data.User;
     using FinalPoint.Web.ViewModels.Administration;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
@@ -19,21 +20,17 @@ namespace FinalPoint.Web.Controllers
         private readonly IOfficeService officeService;
         private readonly ICityService cityService;
         private readonly IUserService userService;
-        private readonly UserManager<ApplicationUser> userManager;
 
         public AdministrationController(
             IOfficeService officeService,
             ICityService cityService,
-            IUserService userService,
-            UserManager<ApplicationUser> userManager)
+            IUserService userService)
         {
             this.officeService = officeService;
             this.cityService = cityService;
             this.userService = userService;
-            this.userManager = userManager;
         }
 
-        // GET: /<controller>/
         public IActionResult Index()
         {
             return this.View();

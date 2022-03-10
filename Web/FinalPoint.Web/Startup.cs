@@ -9,6 +9,13 @@
     using FinalPoint.Data.Repositories;
     using FinalPoint.Data.Seeding;
     using FinalPoint.Services.Data;
+    using FinalPoint.Services.Data.City;
+    using FinalPoint.Services.Data.Client;
+    using FinalPoint.Services.Data.Office;
+    using FinalPoint.Services.Data.Parcel;
+    using FinalPoint.Services.Data.Protocol;
+    using FinalPoint.Services.Data.User;
+    using FinalPoint.Services.Data.UserRole;
     using FinalPoint.Services.Mapping;
     using FinalPoint.Services.Messaging;
     using FinalPoint.Web.ViewModels;

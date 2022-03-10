@@ -1,8 +1,8 @@
-﻿// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
-namespace FinalPoint.Web.Controllers
+﻿namespace FinalPoint.Web.Controllers
 {
     using FinalPoint.Services.Data;
+    using FinalPoint.Services.Data.Protocol;
+    using FinalPoint.Services.Data.User;
     using Microsoft.AspNetCore.Mvc;
 
     public class SearchController : Controller

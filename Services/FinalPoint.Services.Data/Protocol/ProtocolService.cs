@@ -1,4 +1,4 @@
-﻿namespace FinalPoint.Services.Data
+﻿namespace FinalPoint.Services.Data.Protocol
 {
     using System;
     using System.Collections.Generic;
@@ -8,6 +8,9 @@
     using FinalPoint.Data.Common.Repositories;
     using FinalPoint.Data.Models;
     using FinalPoint.Data.Models.Enums;
+    using FinalPoint.Services.Data.Office;
+    using FinalPoint.Services.Data.Parcel;
+    using FinalPoint.Services.Data.User;
     using FinalPoint.Web.ViewModels.DTOs;
     using FinalPoint.Web.ViewModels.DTOs.LoadUnload;
     using FinalPoint.Web.ViewModels.Shared;

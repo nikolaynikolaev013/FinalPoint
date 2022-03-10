@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace FinalPoint.Services.Data
+﻿namespace FinalPoint.Services.Data.UserRole
 {
+    using System.Collections.Generic;
+
     public interface IUserRoleService
     {
         IEnumerable<KeyValuePair<string, string>> GetAllUserRolesAsKeyValuePairs();

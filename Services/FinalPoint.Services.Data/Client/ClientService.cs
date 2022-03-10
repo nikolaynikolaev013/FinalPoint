@@ -1,4 +1,4 @@
-﻿namespace FinalPoint.Services.Data
+﻿namespace FinalPoint.Services.Data.Client
 {
     using System.Collections.Generic;
     using System.Linq;

@@ -6,7 +6,9 @@ namespace FinalPoint.Web.Controllers
     using System.Threading.Tasks;
 
     using FinalPoint.Data.Models.Enums;
-    using FinalPoint.Services.Data;
+    using FinalPoint.Services.Data.Office;
+    using FinalPoint.Services.Data.Protocol;
+    using FinalPoint.Services.Data.User;
     using FinalPoint.Web.ViewModels.LoadUnload;
     using FinalPoint.Web.ViewModels.Shared;
     using FinalPoint.Web.ViewModels.ViewComponents;

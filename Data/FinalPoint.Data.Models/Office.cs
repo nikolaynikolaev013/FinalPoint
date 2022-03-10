@@ -24,7 +24,7 @@
         public OfficeType OfficeType { get; set; }
 
         [ForeignKey(nameof(ApplicationUser))]
-        public int? OwnerId { get; set; }
+        public string? OwnerId { get; set; }
 
         public virtual ApplicationUser Owner { get; set; }
 
@@ -55,5 +55,11 @@
 
         [InverseProperty("SendingOffice")]
         public virtual ICollection<Parcel> SentParcels { get; set; }
+
+        [NotMapped]
+        public int IgnoredCityPostCode { get; set; }
+
+        [NotMapped]
+        public int IgnoredResponsibleSortingCenterPostCode { get; set; }
     }
 }
