@@ -5,7 +5,6 @@ namespace FinalPoint.Data.Models
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Security.Claims;
     using FinalPoint.Data.Common.Models;
 
     using Microsoft.AspNetCore.Identity;
@@ -19,6 +18,7 @@ namespace FinalPoint.Data.Models
             this.Claims = new HashSet<IdentityUserClaim<string>>();
             this.Logins = new HashSet<IdentityUserLogin<string>>();
             this.OwnOffices = new HashSet<Office>();
+            this.IgnoredOwnedOfficesPostcodes = new int[0];
         }
 
         // Audit info

@@ -47,7 +47,9 @@ namespace FinalPoint.Data.Seeding
                     continue;
                 }
 
-                foreach (var ownedOfficePostcode in user.IgnoredOwnedOfficesPostcodes)
+                var userOffices = SeedingConstants.Users[i].IgnoredOwnedOfficesPostcodes;
+
+                foreach (var ownedOfficePostcode in userOffices)
                 {
                     var office = dbContext
                             .Offices
