@@ -59,12 +59,11 @@ namespace FinalPoint.Web.Controllers
                 await this.parcelService.CreateAsync(input);
 
                 this.ViewBag.isSuccess = true;
+                this.ModelState.Clear();
+                input = new AddParcelInputModel();
             }
 
-            this.ModelState.Clear();
-            input = new AddParcelInputModel();
             this.FillUpAddParcelInputModel(input);
-
             return this.View(input);
         }
 
