@@ -121,6 +121,31 @@
                     });
                 }
             });
+
+            @*$.ajax({
+                method: "GET",
+                url: "/CheckedParcelResult/" + parcelId + "/" + @Model.Id + "/" + isCheck,
+                success: function (res) {
+                    $("#responseMessage").html(res);
+
+                    $.ajax({
+                        method: "GET",
+                        url: "/ReloadParcelsTable/" + @Model.Id,
+                        success: function (res) {
+                            $("#parcelsTable").html(res);
+
+
+                            $.ajax({
+                            method: "GET",
+                                url: "api/Protocol/" + @Model.Id,
+                            success: function (res) {
+                                $("#numberOfCheckedParcels").html(res);
+                            }
+                        });
+                        }
+                    });
+                }
+            });*@
         });
 
         $('input[type=radio][name=addRemoveRadioBtns]').change(function () {

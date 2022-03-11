@@ -47,7 +47,7 @@
                 Weight = input.Weight,
                 NumberOfParts = input.NumberOfParts,
                 HasCashOnDelivery = input.HasCashOnDelivery,
-                CashOnDeliveryPrice = input.CashOnDeliveryPrice,
+                CashOnDeliveryPrice = (double)input.CashOnDeliveryPrice,
                 IsFragile = input.IsFragile,
                 DontPaletize = input.DontPaletize,
                 SendingEmployee = input.SendingEmployee,

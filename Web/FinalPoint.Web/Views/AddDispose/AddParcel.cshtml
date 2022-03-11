@@ -281,53 +281,31 @@
             let widthValue = widthEl.value == 0 ? 1.0 : widthEl.value;
             let heightValue = heightEl.value == 0 ? 1.0 : heightEl.value;
             let lengthValue = lengthEl.value == 0 ? 1.0 : lengthEl.value;
-            let weight = weightEl.Value == 0 ? 1.0 : weightEl.value;
+            let weightValue = weightEl.Value == 0 ? 1.0 : weightEl.value;
             let numberOfParts = numOfPartsEl.value;
 
             let volumeWeight = (widthValue * heightValue * lengthValue);
 
             let cashOnDeliveryValue = cashOnDeliveryPriceInput.value;
 
-            let finalPrice = 5.20;
+            let finalPrice = 0;
 
-            if (volumeWeight > weight) {
-                finalPrice += volumeWeight * 0.4;
-            } else {
-                finalPrice += weight * 0.4;
-            }
-
-            if (cashOnDeliveryCheckBox.checked && cashOnDeliveryValue > 0) {
-
-                cashOnDeliveryValue = parseFloat(cashOnDeliveryValue);
-                finalPrice += cashOnDeliveryValue / 20;
-
-            } else {
-                cashOnDeliveryValue = 0;
-            }
-
-            if (isFragileCheckBox.checked) {
-                finalPrice *= 1.05;
-            }
-
-            if (dontPaletizeCheckBox.checked) {
-                finalPrice *= 1.10;
-            }
-
-            if (numberOfParts > 1) {
-                finalPrice += (finalPrice * numberOfParts * 0.05)
-            }
+            $.ajax({
+                method: "GET",
+                url: `/AddDispose/CalculateDeliveryPrice?height=${heightValue}&length=${lengthValue}&width=${widthValue}&weight=${weightValue}&hasCashOnDelivery=${cashOnDeliveryCheckBox.checked}&isFragile=${isFragileCheckBox.checked}&dontPaletize=${dontPaletizeCheckBox.checked}& cashOnDeliveryPrice=${cashOnDeliveryValue}&numOfParts=${numberOfParts}`,
+                success: function (res) {
+                    finalPrice = res;
+                    deliveryPriceEl.textContent = finalPrice.toFixed(2);
+                    fullPriceEl.textContent = (finalPrice + Number(cashOnDeliveryValue)).toFixed(2);
+                }
+            });
 
             if (numberOfParts <= 0) {
                 numOfPartsEl.value = 1;
             }
-            if (weight < 0.1) {
+            if (weightEl.value < 0.1) {
                 weightEl.value = 1;
             }
-
-            deliveryPriceEl.textContent = finalPrice.toFixed(2);
-
-            fullPriceEl.textContent = (finalPrice + cashOnDeliveryValue).toFixed(2);
-
         }
 
         calculatePrice();
