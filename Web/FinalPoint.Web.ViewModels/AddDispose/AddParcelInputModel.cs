@@ -41,12 +41,12 @@
 
         [CustomRequired]
         [Display(Name = "Тегло")]
-        [Range(0, double.MaxValue)]
+        [Range(0, int.MaxValue)]
         public double Weight { get; set; }
 
         [CustomRequired]
         [Display(Name = "Части")]
-        [Range(0, double.MaxValue)]
+        [Range(0, int.MaxValue)]
         public int NumberOfParts { get; set; }
 
         [CustomRequired]
