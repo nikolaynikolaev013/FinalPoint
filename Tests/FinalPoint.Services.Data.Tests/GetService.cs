@@ -3,7 +3,11 @@
     using FinalPoint.Data;
     using FinalPoint.Data.Models;
     using FinalPoint.Data.Repositories;
+    using FinalPoint.Services.Data.City;
+    using FinalPoint.Services.Data.Client;
+    using FinalPoint.Services.Data.Office;
     using FinalPoint.Services.Data.Tests.Mocks;
+    using FinalPoint.Services.Data.User;
 
     public static class GetService
     {
@@ -36,7 +40,7 @@
 
             foreach (var user in fakeData.ApplicationUsers)
             {
-                data.Cities.Add(user);
+                data.Users.Add(user);
             }
 
             data.SaveChanges();

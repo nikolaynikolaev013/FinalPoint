@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FinalPoint.Data;
+using FinalPoint.Services.Data.User;
 using Xunit;
 
 namespace FinalPoint.Services.Data.Tests

@@ -29,15 +29,26 @@ namespace FinalPoint.Data.Seeding
                     continue;
                 }
 
-                var isOwner = user.IgnoredRole == GlobalConstants.OwnerRoleName;
+                Office workOffice = null;
 
-                user.WorkOfficeId = isOwner ?
+                if (user.IgnoredWorkOfficePostcode != null)
+                {
+                    workOffice = dbContext.Offices
+                        .FirstOrDefault(x => x.PostCode == user.IgnoredWorkOfficePostcode);
+                }
+                else if (user.IgnoredOwnedOfficesPostcodes.Any())
+                {
+                    workOffice = dbContext.Offices
+                            .FirstOrDefault(x => x.PostCode == user.IgnoredOwnedOfficesPostcodes.FirstOrDefault());
+                }
 
-                    dbContext.Offices
-                        .FirstOrDefault(x => x.PostCode == SeedingConstants.VirtualSortingCenterPostCode).Id
+                if (workOffice == null)
+                {
+                    workOffice = dbContext.Offices
+                        .FirstOrDefault(x => x.PostCode == SeedingConstants.VirtualSortingCenterPostCode);
+                }
 
-                    : dbContext.Offices
-                        .FirstOrDefault(x => x.PostCode == user.IgnoredOwnedOfficesPostcodes.FirstOrDefault()).Id;
+                user.WorkOfficeId = workOffice.Id;
 
                 await userManager.CreateAsync(user, SeedingConstants.UniversalUserPassword);
                 await userManager.AddToRoleAsync(user, user.IgnoredRole);

@@ -6,6 +6,7 @@
 
     using FinalPoint.Data;
     using FinalPoint.Data.Models.Enums;
+    using FinalPoint.Services.Data.Office;
     using FinalPoint.Web.ViewModels.Administration;
     using Xunit;
 

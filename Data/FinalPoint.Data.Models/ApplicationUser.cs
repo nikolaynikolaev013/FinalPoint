@@ -18,7 +18,7 @@ namespace FinalPoint.Data.Models
             this.Claims = new HashSet<IdentityUserClaim<string>>();
             this.Logins = new HashSet<IdentityUserLogin<string>>();
             this.OwnOffices = new HashSet<Office>();
-            this.IgnoredOwnedOfficesPostcodes = new int[0];
+            this.IgnoredOwnedOfficesPostcodes = new int[] { };
         }
 
         // Audit info
@@ -66,7 +66,10 @@ namespace FinalPoint.Data.Models
         public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; }
 
         [NotMapped]
-        public int[] IgnoredOwnedOfficesPostcodes { get; set; }
+        public IEnumerable<int> IgnoredOwnedOfficesPostcodes { get; set; }
+
+        [NotMapped]
+        public int? IgnoredWorkOfficePostcode { get; set; }
 
         [NotMapped]
         public string IgnoredRole { get; set; }

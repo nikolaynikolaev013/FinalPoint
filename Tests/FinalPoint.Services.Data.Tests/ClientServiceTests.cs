@@ -3,6 +3,7 @@
     using System.Threading.Tasks;
 
     using FinalPoint.Data;
+    using FinalPoint.Services.Data.Client;
     using FinalPoint.Web.ViewModels.AddDispose;
     using Xunit;
 

@@ -91,7 +91,7 @@ namespace FinalPoint.Data.Seeding
                         PostCode = 9000,
                         Name = "Варна НЛЦ",
                         Address = "бул. 'Република' 59",
-                        IgnoredCityPostCode = Cities.FirstOrDefault(x => x.Postcode == 1000).Postcode,
+                        IgnoredCityPostCode = Cities.FirstOrDefault(x => x.Postcode == 9000).Postcode,
                     },
                     new Office
                     {
@@ -125,6 +125,7 @@ namespace FinalPoint.Data.Seeding
                             Email = "nikolainikolaev013@gmail.com",
                             UserName = "90001",
                             PersonalId = 90001,
+                            DateOfBirth = new DateTime(1999, 05, 13),
                             IgnoredRole = GlobalConstants.OwnerRoleName,
                         },
                     new ApplicationUser()
@@ -136,6 +137,7 @@ namespace FinalPoint.Data.Seeding
                             UserName = "90081",
                             PersonalId = 90081,
                             IgnoredRole = GlobalConstants.OfficeOwnerRoleName,
+                            DateOfBirth = new DateTime(1999, 08, 20),
                             IgnoredOwnedOfficesPostcodes = new int[]
                             {
                                 9008,
@@ -151,6 +153,7 @@ namespace FinalPoint.Data.Seeding
                             UserName = "90091",
                             PersonalId = 90091,
                             IgnoredRole = GlobalConstants.OfficeOwnerRoleName,
+                            DateOfBirth = new DateTime(1979, 11, 13),
                             IgnoredOwnedOfficesPostcodes = new int[]
                             {
                                 9015,
@@ -165,10 +168,35 @@ namespace FinalPoint.Data.Seeding
                             UserName = "90151",
                             PersonalId = 90151,
                             IgnoredRole = GlobalConstants.OfficeOwnerRoleName,
+                            DateOfBirth = new DateTime(1999, 10, 13),
                             IgnoredOwnedOfficesPostcodes = new int[]
                             {
                                 1012,
                             },
+                        },
+                    new ApplicationUser()
+                        {
+                            FirstName = "Никол",
+                            MiddleName = "Хамуди",
+                            LastName = "Сиди",
+                            Email = "nikol_sidi@abv.bg",
+                            UserName = "90002",
+                            PersonalId = 90002,
+                            IgnoredRole = GlobalConstants.SortingCenterAdminRoleName,
+                            DateOfBirth = new DateTime(2000, 12, 04),
+                            IgnoredWorkOfficePostcode = 9000,
+                        },
+                    new ApplicationUser()
+                        {
+                            FirstName = "Зейн",
+                            MiddleName = "Хамуди",
+                            LastName = "Сиди",
+                            Email = "orangebg123@gmail.com",
+                            UserName = "10002",
+                            PersonalId = 10002,
+                            IgnoredRole = GlobalConstants.SortingCenterAdminRoleName,
+                            DateOfBirth = new DateTime(2008, 12, 19),
+                            IgnoredWorkOfficePostcode = 1000,
                         },
                 };
             }
