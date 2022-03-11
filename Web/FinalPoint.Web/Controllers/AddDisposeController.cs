@@ -2,6 +2,7 @@
 
 namespace FinalPoint.Web.Controllers
 {
+    using System;
     using System.Security.Claims;
     using System.Threading.Tasks;
 
@@ -50,7 +51,9 @@ namespace FinalPoint.Web.Controllers
             if (this.ModelState.IsValid)
             {
                 var user = this.userService.GetUserByClaimsPrincipal(this.User);
-                input.DeliveryPrice = 10;
+
+                input.DeliveryPrice = this.CalculateDeliveryPrice(input);
+
                 input.ChargeType = Data.Models.Enums.ParcelChargeType.Dimensions;
                 input.SendingOffice = user.WorkOffice;
                 input.CurrentOffice = user.WorkOffice;
@@ -59,18 +62,67 @@ namespace FinalPoint.Web.Controllers
                 await this.parcelService.CreateAsync(input);
 
                 this.ViewBag.isSuccess = true;
+                this.ModelState.Clear();
+                input = new AddParcelInputModel();
             }
 
-            this.ModelState.Clear();
-            input = new AddParcelInputModel();
             this.FillUpAddParcelInputModel(input);
-
             return this.View(input);
         }
+
 
         public IActionResult DisposeParcel()
         {
             return this.View();
+        }
+
+        [HttpGet]
+        [IgnoreAntiforgeryToken]
+        public decimal CalculateDeliveryPrice(
+            decimal height,
+            decimal length,
+            decimal width,
+            decimal weight,
+            bool hasCashOnDelivery,
+            bool isFragile,
+            bool dontPaletize,
+            decimal cashOnDeliveryPrice,
+            int numOfParts)
+        {
+            var finalPrice = 5.20m;
+
+            var volumeWeight = height * width * length;
+
+            if (volumeWeight > weight)
+            {
+                finalPrice += volumeWeight * 0.4m;
+            }
+            else
+            {
+                finalPrice += weight * 0.4m;
+            }
+
+            if (hasCashOnDelivery && cashOnDeliveryPrice > 0)
+            {
+                finalPrice += cashOnDeliveryPrice / 20.0m;
+            }
+
+            if (isFragile)
+            {
+                finalPrice *= 1.05m;
+            }
+
+            if (dontPaletize)
+            {
+                finalPrice *= 1.10m;
+            }
+
+            if (numOfParts > 1)
+            {
+                finalPrice += finalPrice * numOfParts * 0.05m;
+            }
+
+            return finalPrice;
         }
 
         private void FillUpAddParcelInputModel(AddParcelInputModel input)
@@ -83,6 +135,20 @@ namespace FinalPoint.Web.Controllers
 
             input.AllOffices = this.officeService.GeAllOfficesAndSortingCentersWithoutCurrOneAsKeyValuePairs(0);
             input.CurrOfficeAsString = this.officeService.GetOfficeAsStringById(currUser.WorkOfficeId);
+        }
+
+        private decimal CalculateDeliveryPrice(AddParcelInputModel input)
+        {
+            return this.CalculateDeliveryPrice(
+                (decimal)input.Height,
+                (decimal)input.Length,
+                (decimal)input.Width,
+                (decimal)input.Weight,
+                input.HasCashOnDelivery,
+                input.IsFragile,
+                input.DontPaletize,
+                input.CashOnDeliveryPrice,
+                input.NumberOfParts);
         }
     }
 }

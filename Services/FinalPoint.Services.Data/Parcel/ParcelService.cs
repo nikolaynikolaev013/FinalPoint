@@ -47,7 +47,7 @@
                 Weight = input.Weight,
                 NumberOfParts = input.NumberOfParts,
                 HasCashOnDelivery = input.HasCashOnDelivery,
-                CashOnDeliveryPrice = input.CashOnDeliveryPrice,
+                CashOnDeliveryPrice = (double)input.CashOnDeliveryPrice,
                 IsFragile = input.IsFragile,
                 DontPaletize = input.DontPaletize,
                 SendingEmployee = input.SendingEmployee,
@@ -77,7 +77,7 @@
 
             if (parcel != null && parcel.CurrentOfficeId == employee.WorkOfficeId)
             {
-                parcel.SendingEmployeeId = employee.WorkOfficeId;
+                parcel.DeliveringEmployeeId = employee.Id;
                 parcel.CurrentOfficeId = employee.WorkOfficeId;
 
                 this.parcelRep.Delete(parcel);

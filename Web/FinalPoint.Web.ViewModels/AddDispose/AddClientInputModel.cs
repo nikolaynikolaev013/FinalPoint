@@ -23,7 +23,6 @@
         [Display(Name = "Фамилно име", Prompt = "Въведете фамилното име на клиента")]
         public string LastName { get; set; }
 
-        [Phone]
         [Display(Name = "Телефонен номер", Prompt = "Въведете телефонния номер на клиента")]
         public string PhoneNumber { get; set; }
 

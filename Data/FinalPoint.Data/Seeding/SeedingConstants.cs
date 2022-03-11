@@ -202,6 +202,31 @@ namespace FinalPoint.Data.Seeding
             }
         }
 
+
+        public static Client[] Clients
+        {
+            get
+            {
+                return new Client[]
+                {
+                    new Client()
+                    {
+                        FirstName = "Мирела",
+                        LastName = "Георгиева",
+                        Address = "ж.к. Вл. Варненчик, бл.22",
+                        PhoneNumber = "0889874823",
+                    },
+                    new Client()
+                    {
+                        FirstName = "Иван",
+                        LastName = "Иванов",
+                        Address = "ж.к. Изгрев, 33",
+                        PhoneNumber = "0898782938",
+                    },
+                };
+            }
+        }
+
         public static string UniversalUserPassword
         {
             get

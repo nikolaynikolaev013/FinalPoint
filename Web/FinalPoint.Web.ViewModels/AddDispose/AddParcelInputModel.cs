@@ -41,12 +41,12 @@
 
         [CustomRequired]
         [Display(Name = "Тегло")]
-        [Range(0, double.MaxValue)]
+        [Range(0, int.MaxValue)]
         public double Weight { get; set; }
 
         [CustomRequired]
         [Display(Name = "Части")]
-        [Range(0, double.MaxValue)]
+        [Range(0, int.MaxValue)]
         public int NumberOfParts { get; set; }
 
         [CustomRequired]
@@ -54,7 +54,7 @@
         public bool HasCashOnDelivery { get; set; }
 
         [Display(Name = "Цена за наложен платеж:")]
-        public double? CashOnDeliveryPrice { get; set; }
+        public decimal CashOnDeliveryPrice { get; set; }
 
         [CustomRequired]
         [Display(Name = "Чупливо ")]

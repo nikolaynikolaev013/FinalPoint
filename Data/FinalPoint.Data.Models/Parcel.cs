@@ -21,12 +21,12 @@
         public string Description { get; set; }
 
         [ForeignKey(nameof(ApplicationUser))]
-        public int SendingEmployeeId { get; set; }
+        public string SendingEmployeeId { get; set; }
 
         public virtual ApplicationUser SendingEmployee { get; set; }
 
         [ForeignKey(nameof(ApplicationUser))]
-        public int? DeliveringEmployeeId { get; set; }
+        public string DeliveringEmployeeId { get; set; }
 
         public virtual ApplicationUser DeliveringEmployee { get; set; }
 
@@ -77,7 +77,6 @@
 
         public virtual Office CurrentOffice { get; set; }
 
-        //[InverseProperty("Parcel")]
         public virtual ICollection<ProtocolParcel> Protocols { get; set; }
     }
 

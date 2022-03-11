@@ -27,6 +27,7 @@
                           {
                               new RolesSeeder(),
                               new SettingsSeeder(),
+                              new ClientsSeeder(),
                               new CitiesSeeder(),
                               new SortingCentersSeeder(),
                               new OfficesSeeder(),

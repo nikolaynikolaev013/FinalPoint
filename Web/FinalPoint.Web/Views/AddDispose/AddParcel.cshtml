@@ -22,7 +22,6 @@
     </div>
 
 }
-<div asp-validation-summary="All" class="text-danger"></div>
 
 <form method="post">
     <div class="row">
@@ -77,7 +76,7 @@
                     <div class="row">
                         <div class="form-group d-flex col-md-6 p-0">
                             <label asp-for="Weight" class="col-md-3 p-0 pt-2"></label>
-                            <input asp-for="Weight" type="number" onchange="calculatePrice()" class="form-control col-md-4" />
+                            <input asp-for="Weight" type="number" step="any" onchange="calculatePrice()" class="form-control col-md-4" />
                             <div class="col-md-3 p-0 pt-2 pl-1">кг.</div>
                         </div>
                         <span asp-validation-for="Weight" class="text-danger"></span>
@@ -100,7 +99,7 @@
                     <div id="cashOnDeliveryPriceBlock" class="form-group" hidden>
                         <div class="row">
                             <label asp-for="CashOnDeliveryPrice" class="col-md-6"></label>
-                            <input asp-for="CashOnDeliveryPrice" type="number" onchange="calculatePrice()" class="col-md-4" class="form-control" />
+                            <input asp-for="CashOnDeliveryPrice" type="number" step="any" onchange="calculatePrice()" class="form-control col-md-4" />
                             <span asp-validation-for="CashOnDeliveryPrice" class="text-danger"></span>
                             <span class="col-md-2">лв.</span>
                         </div>
@@ -234,7 +233,6 @@
                     <div class="form-group">
                         <label asp-for="ReceivingOfficeId"></label>
                         <select asp-for="ReceivingOfficeId" asp-items="allOffices" data-live-search="true" class="selectpicker form-control">
-                            <span asp-validation-for="ReceivingOfficeId" class="text-danger"></span>
                         </select>
                         <span asp-validation-for="ReceivingOfficeId" class="text-danger"></span>
                     </div>
@@ -247,7 +245,8 @@
 </form>
 
 @section Scripts {
-    <script>let isFragileCheckBox = document.querySelector("#IsFragile");
+    <script>
+        let isFragileCheckBox = document.querySelector("#IsFragile");
         let dontPaletizeCheckBox = document.querySelector("#DontPaletize");
         let cashOnDeliveryCheckBox = document.querySelector("#HasCashOnDelivery");
         let cashOnDeliveryPriceEl = document.querySelector("#cashOnDeliveryPriceBlock")
@@ -258,7 +257,7 @@
         let lengthEl = document.querySelector("#Length");
 
         let weightEl = document.querySelector("#Weight");
-
+        let numOfPartsEl = document.querySelector("#NumberOfParts");
 
         let deliveryPriceEl = document.querySelector("#deliveryPrice");
         let fullPriceEl = document.querySelector("#fullPrice");
@@ -277,47 +276,39 @@
 
         })
 
-        calculatePrice();
 
         function calculatePrice() {
             let widthValue = widthEl.value == 0 ? 1.0 : widthEl.value;
             let heightValue = heightEl.value == 0 ? 1.0 : heightEl.value;
             let lengthValue = lengthEl.value == 0 ? 1.0 : lengthEl.value;
-            let weight = weightEl.Value == 0 ? 1.0 : weightEl.value;
+            let weightValue = weightEl.Value == 0 ? 1.0 : weightEl.value;
+            let numberOfParts = numOfPartsEl.value;
 
             let volumeWeight = (widthValue * heightValue * lengthValue);
 
             let cashOnDeliveryValue = cashOnDeliveryPriceInput.value;
 
-            let finalPrice = 5.20;
+            let finalPrice = 0;
 
-            if (volumeWeight > weight) {
-                finalPrice += volumeWeight * 0.4;
-            } else {
-                finalPrice += weight * 0.4;
+            $.ajax({
+                method: "GET",
+                url: `/AddDispose/CalculateDeliveryPrice?height=${heightValue}&length=${lengthValue}&width=${widthValue}&weight=${weightValue}&hasCashOnDelivery=${cashOnDeliveryCheckBox.checked}&isFragile=${isFragileCheckBox.checked}&dontPaletize=${dontPaletizeCheckBox.checked}& cashOnDeliveryPrice=${cashOnDeliveryValue}&numOfParts=${numberOfParts}`,
+                success: function (res) {
+                    finalPrice = res;
+                    deliveryPriceEl.textContent = finalPrice.toFixed(2);
+                    fullPriceEl.textContent = (finalPrice + Number(cashOnDeliveryValue)).toFixed(2);
+                }
+            });
+
+            if (numberOfParts <= 0) {
+                numOfPartsEl.value = 1;
             }
-
-            if (cashOnDeliveryCheckBox.checked
-                && cashOnDeliveryValue > 0) {
-                cashOnDeliveryValue = parseFloat(cashOnDeliveryValue);
-                finalPrice += cashOnDeliveryValue / 20;
-            } else {
-                cashOnDeliveryValue = 0;
+            if (weightEl.value < 0.1) {
+                weightEl.value = 1;
             }
-
-            if (isFragileCheckBox.checked) {
-                finalPrice *= 1.05;
-            }
-
-            if (dontPaletizeCheckBox.checked) {
-                finalPrice *= 1.10;
-            }
-
-            deliveryPriceEl.textContent = finalPrice.toFixed(2);
-
-            fullPriceEl.textContent = (finalPrice + cashOnDeliveryValue).toFixed(2);
-
         }
+
+        calculatePrice();
 
         function addNewClient(type) {
             let currClient = document.querySelector("#currClient" + type.toString());
