@@ -37,6 +37,8 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="5.0.6" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -45,4 +47,12 @@
     <ProjectReference Include="..\FinalPoint.Data.Models\FinalPoint.Data.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="RawDbService\" />
+    <None Remove="Microsoft.Extensions.Configuration.Json" />
+    <None Remove="Microsoft.Extensions.Configuration.FileExtensions" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="RawDbService\" />
+  </ItemGroup>
 </Project>

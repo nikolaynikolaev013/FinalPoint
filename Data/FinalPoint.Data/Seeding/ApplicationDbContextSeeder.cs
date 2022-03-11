@@ -3,7 +3,8 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-
+    using Microsoft.Data.SqlClient;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
 
@@ -22,6 +23,7 @@
             }
 
             var logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger(typeof(ApplicationDbContextSeeder));
+            var dbService = serviceProvider.GetService<IDbService>();
 
             var seeders = new List<ISeeder>
                           {
@@ -40,6 +42,30 @@
                 await seeder.SeedAsync(dbContext, serviceProvider);
                 await dbContext.SaveChangesAsync();
                 logger.LogInformation($"Seeder {seeder.GetType().Name} done.");
+            }
+
+            if (!await dbContext.Parcels.AnyAsync())
+            {
+                try
+                {
+                    var query = new SqlCommand("DBCC CHECKIDENT (Parcels, RESEED, 112392)");
+                    dbService.RunProcedure(query);
+                }
+                catch (Exception)
+                {
+                }
+            }
+
+            if (!await dbContext.Protocols.AnyAsync())
+            {
+                try
+                {
+                    var query = new SqlCommand("DBCC CHECKIDENT (Protocols, RESEED, 12392)");
+                    dbService.RunProcedure(query);
+                }
+                catch (Exception)
+                {
+                }
             }
         }
     }
