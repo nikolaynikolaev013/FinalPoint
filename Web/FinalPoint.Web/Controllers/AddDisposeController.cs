@@ -47,8 +47,6 @@ namespace FinalPoint.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> AddParcel(AddParcelInputModel input)
         {
-            this.FillUpAddParcelInputModel(input);
-
             if (this.ModelState.IsValid)
             {
                 var user = this.userService.GetUserByClaimsPrincipal(this.User);
@@ -62,6 +60,10 @@ namespace FinalPoint.Web.Controllers
 
                 this.ViewBag.isSuccess = true;
             }
+
+            this.ModelState.Clear();
+            input = new AddParcelInputModel();
+            this.FillUpAddParcelInputModel(input);
 
             return this.View(input);
         }
