@@ -77,7 +77,7 @@
 
             if (parcel != null && parcel.CurrentOfficeId == employee.WorkOfficeId)
             {
-                parcel.SendingEmployeeId = employee.WorkOfficeId;
+                parcel.DeliveringEmployeeId = employee.Id;
                 parcel.CurrentOfficeId = employee.WorkOfficeId;
 
                 this.parcelRep.Delete(parcel);
