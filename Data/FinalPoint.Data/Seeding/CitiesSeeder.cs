@@ -13,13 +13,13 @@ namespace FinalPoint.Data.Seeding
 
         public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {
-            if (dbContext.Cities.Any())
-            {
-                return;
-            }
-
             for (int i = 0; i < SeedingConstants.Cities.Count(); i++)
             {
+                if (dbContext.Cities.FirstOrDefault(x => x.Postcode == SeedingConstants.Cities[i].Postcode) != null)
+                {
+                    continue;
+                }
+
                 await dbContext.Cities.AddAsync(SeedingConstants.Cities[i]);
             }
         }
