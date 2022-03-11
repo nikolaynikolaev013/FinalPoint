@@ -4,11 +4,14 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
+@{
+    var user = this.UserManager.GetUserAsync(User)?.Result;
+}
 <ul class="navbar-nav">
     @if (this.SignInManager.IsSignedIn(this.User))
     {
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@this.UserManager.GetUserAsync(User)?.Result?.FullName [@this.UserManager.GetUserAsync(User)?.Result?.PersonalId]</a>
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@user?.FullName [@user?.PersonalId] - <span class="text-info">@user?.WorkOffice?.Name [@user?.WorkOffice?.PostCode] </span></a>
         </li>
         <li class="nav-item">
             <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@this.Url.Action("Index", "Home", new { area = string.Empty })">
