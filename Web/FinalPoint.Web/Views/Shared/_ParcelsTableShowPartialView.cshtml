@@ -10,30 +10,37 @@
                     <td class="p-1">
                         <div id="parcelSearchResult"></div>
                         <div class="accordion" id="accordionExample">
-                            <div class="card ">
-                                <button class="btn collapsed col-md-12 @(parcel.ProtocolParcel.Status == ParcelStatus.Checked ? "btn-success" : parcel.ProtocolParcel.Status == ParcelStatus.Added ? "btn-warning" : "btn-light")" type="button" data-toggle="collapse" data-target="#collapse_@parcel.Parcel.Id" aria-expanded="false" aria-controls="collapseTwo">
+                            <div class="card">
+                                <div class="row align-items-center @parcel.BackgroundColorClass">
 
-                                    <div class="row">
-                                        <div class="col-md-2 p-0 pl-3">
-                                            Пратка №: @parcel.ProtocolParcel.Parcel.Id
-                                        </div>
-                                        <div class="col-md-1 p-0">
-                                            @parcel.ProtocolParcel.Parcel.NumberOfParts @(parcel.ProtocolParcel.Parcel.NumberOfParts == 1 ? "част" : "части")
-                                        </div>
-                                        <div class="row col-md-7">
-                                            <div class="col-md-12">
-                                                От: @parcel.Parcel.SendingOfficeCityName - @parcel.Parcel.SendingOfficeName
+                                    <button class="col-md-11 btn collapsed" type="button" data-toggle="collapse" data-target="#collapse_@parcel.Parcel.Id" aria-expanded="false" aria-controls="collapseTwo">
+                                        <div class="row align-items-center text-dark">
+                                            <div class="col-md-2 p-0 pl-3">
+                                                Пратка №: @parcel.ProtocolParcel.Parcel.Id
                                             </div>
-                                            <div class="col-md-12">
-                                                Към: @parcel.Parcel.ReceivingOfficeCityName - @parcel.Parcel.ReceivingOfficeName
+                                            <div class="col-md-1 p-0">
+                                                @parcel.ProtocolParcel.Parcel.NumberOfParts @(parcel.ProtocolParcel.Parcel.NumberOfParts == 1 ? "част" : "части")
+                                            </div>
+                                            <div class="row col-md-7">
+                                                <div class="col-md-12">
+                                                    От: @parcel.Parcel.SendingOfficeCityName - @parcel.Parcel.SendingOfficeName
+                                                </div>
+                                                <div class="col-md-12">
+                                                    Към: @parcel.Parcel.ReceivingOfficeCityName - @parcel.Parcel.ReceivingOfficeName
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <i class="fas fa-@parcel.StatusIconName"></i>
+                                                @parcel.TranslatedStatus
                                             </div>
                                         </div>
-                                        <div class="col-md-2">
-                                            <i class="fas fa-@(parcel.ProtocolParcel.Status == ParcelStatus.Checked ? "check" : parcel.ProtocolParcel.Status == ParcelStatus.Added ? "plus" : "")"></i>
-                                            @parcel.TranslatedStatus
-                                        </div>
+                                    </button>
+                                    <div class="col-md-1">
+                                        <button class="btn btn-lg">
+                                            <i class="fas fa-upload text-dark" onclick="importParcelNumberToInput(@parcel.ProtocolParcel.Parcel.Id);"> </i>
+                                        </button>
                                     </div>
-                                </button>
+                                </div>
                                 <partial name="_ShowSingleParcelDescriptionPartialView" model="parcel.Parcel" />
                             </div>
                         </div>
@@ -43,3 +50,9 @@
         </table>
     </div>
 </div>
+
+<script>
+    function importParcelNumberToInput(parcelId) {
+        let input = document.querySelector("#parcelIdInput").value = parcelId;
+    }
+</script>

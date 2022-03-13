@@ -24,7 +24,7 @@
 
     }
 
-    <div class="row">
+    <div class="row mb-2">
         <div class="col-md-6">
             <p>
                 Протокол №: <span class="text-warning">@Model.Id</span> |
@@ -73,7 +73,6 @@
 
 @section Scripts{
     <script>
-
         function closeProtocol(protocolId){
             $.ajax({
                 method: "Put",
@@ -94,7 +93,6 @@
 
         $("#submitBtn").click(function () {
             let parcelId = $("#parcelIdInput").val();
-
             let isCheck = $('input[type=radio][name=addRemoveRadioBtns]:checked').attr('id') == "check" ? true : false;
 
             $.ajax({
@@ -115,37 +113,15 @@
                                 url: "api/Protocol/" + @Model.Id,
                             success: function (res) {
                                 $("#numberOfCheckedParcels").html(res);
+                                let inputFieldEl = document.querySelector("#parcelIdInput");
+                                inputFieldEl.value = "";
+                                inputFieldEl.focus();
                             }
                         });
                         }
                     });
                 }
             });
-
-            @*$.ajax({
-                method: "GET",
-                url: "/CheckedParcelResult/" + parcelId + "/" + @Model.Id + "/" + isCheck,
-                success: function (res) {
-                    $("#responseMessage").html(res);
-
-                    $.ajax({
-                        method: "GET",
-                        url: "/ReloadParcelsTable/" + @Model.Id,
-                        success: function (res) {
-                            $("#parcelsTable").html(res);
-
-
-                            $.ajax({
-                            method: "GET",
-                                url: "api/Protocol/" + @Model.Id,
-                            success: function (res) {
-                                $("#numberOfCheckedParcels").html(res);
-                            }
-                        });
-                        }
-                    });
-                }
-            });*@
         });
 
         $('input[type=radio][name=addRemoveRadioBtns]').change(function () {

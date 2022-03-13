@@ -48,7 +48,7 @@
             {
                 try
                 {
-                    var query = new SqlCommand("DBCC CHECKIDENT (Parcels, RESEED, 112392)");
+                    var query = new SqlCommand("DBCC CHECKIDENT (Parcels, RESEED, 112426)");
                     dbService.RunProcedure(query);
                 }
                 catch (Exception)

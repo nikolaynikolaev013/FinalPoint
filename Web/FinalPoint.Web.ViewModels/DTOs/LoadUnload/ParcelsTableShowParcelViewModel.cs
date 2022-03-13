@@ -15,5 +15,9 @@ namespace FinalPoint.Web.ViewModels.DTOs.LoadUnload
         public SingleParcelSearchShowPartialViewModel Parcel { get; set; }
 
         public string TranslatedStatus { get; set; }
+
+        public string BackgroundColorClass { get; set; }
+
+        public string StatusIconName { get; set; }
     }
 }

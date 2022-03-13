@@ -422,7 +422,15 @@
                     Parcel = this.parcelService.GetSingleParcelInfoByParcelId(protocolParcel.ParcelId),
                     ProtocolParcel = protocolParcel,
                     TranslatedStatus = this.TranslateStatus(protocolParcel.Status),
+                    BackgroundColorClass =
+                        protocolParcel.Status == ParcelStatus.Checked ? "btn-success"
+                        : protocolParcel.Status == ParcelStatus.Added ? "btn-warning" : "btn-light",
+
+                    StatusIconName =
+                        protocolParcel.Status == ParcelStatus.Checked ? "check"
+                        : protocolParcel.Status == ParcelStatus.Added ? "plus" : string.Empty,
                 };
+
                 output.Add(newParcel);
             }
 
