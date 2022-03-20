@@ -29,6 +29,10 @@
         [Display(Name = "Адрес", Prompt = "Въведете адреса на клиента")]
         public string Address { get; set; }
 
+        [Display(Name = "Имейл", Prompt = "Въведете имейла на клиента")]
+        [EmailAddress]
+        public string Email { get; set; }
+
         public IEnumerable<KeyValuePair<string, string>> AllClients { get; set; }
     }
 }

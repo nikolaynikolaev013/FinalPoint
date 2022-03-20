@@ -402,6 +402,18 @@
         {
             return this.parcelRep
                 .All()
+                .Include(x => x.SendingOffice)
+                .Include(x => x.ReceivingOffice)
+                .Where(x => x.Id == parcelId)
+                .FirstOrDefault();
+        }
+
+        public Parcel GetParcelWithDeletedById(int parcelId)
+        {
+            return this.parcelRep
+                .AllWithDeleted()
+                .Include(x => x.SendingOffice)
+                .Include(x => x.ReceivingOffice)
                 .Where(x => x.Id == parcelId)
                 .FirstOrDefault();
         }
@@ -423,7 +435,8 @@
         private async Task<int> AddClient(AddClientInputModel input)
         {
             if (!string.IsNullOrEmpty(input.FirstName) &&
-                !string.IsNullOrEmpty(input.LastName))
+                !string.IsNullOrEmpty(input.LastName) &&
+                !string.IsNullOrEmpty(input.Email))
             {
                 var newClient = await this.clientService.CreateAsync(input);
                 return newClient.Id;

@@ -80,6 +80,7 @@
             // Disable cascade delete
             var foreignKeys = entityTypes
                 .SelectMany(e => e.GetForeignKeys().Where(f => f.DeleteBehavior == DeleteBehavior.Cascade));
+
             foreach (var foreignKey in foreignKeys)
             {
                 foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
@@ -99,6 +100,11 @@
                 .WithMany(x => x.Employees)
                 .HasForeignKey(x => x.WorkOfficeId);
 
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseLazyLoadingProxies();
         }
 
         private static void SetIsDeletedQueryFilter<T>(ModelBuilder builder)

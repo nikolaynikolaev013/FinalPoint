@@ -1,7 +1,7 @@
 ﻿namespace FinalPoint.Web.Controllers
 {
     using System.Threading.Tasks;
-
+    using FinalPoint.Services.Data.Mail;
     using FinalPoint.Services.Data.Parcel;
     using FinalPoint.Services.Data.Protocol;
     using FinalPoint.Services.Data.User;
@@ -13,15 +13,18 @@
         private readonly IParcelService parcelService;
         private readonly IUserService userService;
         private readonly IProtocolService protocolService;
+        private readonly IMailService mailService;
 
         public ParcelApiController(
                     IParcelService parcelService,
                     IUserService userService,
-                    IProtocolService protocolService)
+                    IProtocolService protocolService,
+                    IMailService mailService)
         {
             this.parcelService = parcelService;
             this.userService = userService;
             this.protocolService = protocolService;
+            this.mailService = mailService;
         }
 
         [HttpGet]
@@ -50,6 +53,11 @@
         public async Task<IActionResult> DisposeParcel(int parcelId)
         {
             var result = await this.parcelService.DisposeParcel(parcelId, this.User);
+
+            if (result)
+            {
+                result = await this.mailService.SendDisposedParcelEmails(parcelId);
+            }
 
             return this.Ok(result);
         }

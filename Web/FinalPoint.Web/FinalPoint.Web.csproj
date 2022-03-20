@@ -33,6 +33,7 @@
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.312" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.1.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -53,12 +54,17 @@
     <Folder Include="Views\Search\" />
     <Folder Include="wwwroot\js\AddDispose\" />
     <Folder Include="wwwroot\js\Search\" />
+    <Folder Include="wwwroot\EmailTemplate\css\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="Views\Shared\CheckedParcelSuccessBlock.cshtml" />
     <Content Remove="Views\Shared\_ParcelSearchInputPartialView.cshtml" />
+    <Content Remove="wwwroot\EmailTemplate\css\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Areas\Identity\IdentityHostingStartup.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Microsoft.CodeAnalysis.Common" />
   </ItemGroup>
 </Project>

@@ -1,11 +1,13 @@
 ﻿namespace FinalPoint.Web.Controllers
 {
     using System.Diagnostics;
-
+    using System.Threading.Tasks;
     using FinalPoint.Services.Data;
+    using FinalPoint.Services.Data.Mail;
     using FinalPoint.Services.Data.Office;
     using FinalPoint.Services.Data.User;
     using FinalPoint.Web.ViewModels;
+    using FinalPoint.Web.ViewModels.DTOs;
     using FinalPoint.Web.ViewModels.Home;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;

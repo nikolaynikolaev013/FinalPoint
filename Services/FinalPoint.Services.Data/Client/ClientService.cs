@@ -24,6 +24,7 @@
                 FirstName = input.FirstName,
                 LastName = input.LastName,
                 Address = input.Address,
+                EmailAddress = input.Email,
                 PhoneNumber = input.PhoneNumber,
             };
 
@@ -31,6 +32,13 @@
             await this.clientRep.SaveChangesAsync();
 
             return newClient;
+        }
+
+        public Client GetClientById(int id)
+        {
+            return this.clientRep
+                    .All()
+                    .FirstOrDefault(x => x.Id == id);
         }
 
         public IEnumerable<KeyValuePair<string, string>> GetAllClientsAsKeyValuePairs()
