@@ -85,6 +85,8 @@
 
             this.officeRep.Delete(officeToDelete);
             await this.officeRep.SaveChangesAsync();
+            await this.cityService.DeleteIfNoOfficeAssociatedToIt(officeToDelete.CityId, officeId);
+
             return officeToDelete;
         }
 
