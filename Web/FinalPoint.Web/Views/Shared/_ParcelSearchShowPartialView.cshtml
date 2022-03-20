@@ -29,18 +29,14 @@
                                         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                             <h6 class="m-0 font-weight-bold text-success">Пратка №@parcel.Id</h6>
 
-                                            @if (Model.IsDispose)
-                                            {
                                                 @if (parcel.CurrentOfficeId == Model.CurrUserWorkOfficeId)
                                                 {
                                                     <span class="text-success">Налична <i class="fas fa-check"></i></span>
                                                 }
-                                                else
+                                                else if(Model.IsDispose)
                                                 {
                                                     <span class="text-danger">Налична в офис: @parcel.CurrentOfficeCityName - @parcel.CurrentOfficeName -           @parcel.CurrentOfficePostCode <i class="fas fa-times"></i></span>
                                                 }
-                                            }
-
                                         </div>
                                     </button>
                                     <partial name="_ShowSingleParcelDescriptionPartialView" model="parcel" />
