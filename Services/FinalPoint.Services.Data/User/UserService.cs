@@ -1,6 +1,5 @@
 ﻿namespace FinalPoint.Services.Data.User
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Security.Claims;
@@ -70,6 +69,19 @@
                 user.WorkOfficeId = newWorkOfficeId;
                 await this.usersRep.SaveChangesAsync();
             }
+        }
+
+        public async Task<bool> ChangeUserWorkOffice(string userId, int newWorkOfficeId)
+        {
+            var user = this.GetUserById(userId);
+
+            if (user != null)
+            {
+                user.WorkOfficeId = newWorkOfficeId;
+                await this.usersRep.SaveChangesAsync();
+                return true;
+            }
+            return false;
         }
 
         public ICollection<string> GetAllUsers()

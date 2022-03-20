@@ -1,39 +1,57 @@
-﻿@using FinalPoint.Data.Models
-@using Microsoft.AspNetCore.Identity
-@using FinalPoint.Common
-@{ ViewData["Title"] = "Начало"; }
-@inject UserManager<ApplicationUser> UserManager
+﻿@using FinalPoint.Web.ViewModels.Home
+@{
+    ViewData["Title"] = "Начало";
+    var allOffices = Model.AvailableOffices?.Select(x => new SelectListItem(x.Value, x.Key));
+   }
+
+@model HomeIndexInputModel
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
-            <h1 class="text-center text-secondary mb-4">Добре дошли, @this.UserManager.GetUserAsync(User)?.Result?.FullName</h1>
+            <h1 class="text-center text-secondary mb-4">Добре дошли, @Model.FullName</h1>
             <hr />
 
-            @if (!this.User.IsInRole(GlobalConstants.OwnerRoleName))
+            @if (Model.IsOwner)
             {
-            <div class="row offset-md-2">
-                <div class="col-md-5">
-                    <a asp-controller="AddDispose" asp-action="AddParcel">
-                        <div class="card border-left-info shadow mb-3" style="width: 18rem;">
-                            <div class="card-body">
-                                <h4 class="card-title text-secondary">Приемане на пратка</h4>
-                            </div>
-                        </div>
-                    </a>
-                </div>
+                <div class="text-center mb-4">
+                    <form method="post" class="text-align-center">
+                        <label asp-for="OfficeId"></label>
+                        <div>
+                            <select id="officeSelect" asp-for="OfficeId" asp-items="allOffices" data-live-search="true" class="selectpicker form-control col-md-8">
+                            </select>
 
-                <div class="col-md-5">
-                    <a asp-controller="AddDispose" asp-action="DisposeParcel">
-                        <div class="card border-left-info shadow mb-3" style="width: 18rem;">
-                            <div class="card-body">
-                                <h4 class="card-title text-secondary">Издаване на пратка</h4>
-                            </div>
+                            <button type="submit" id="delBtn" class="btn btn-primary col-md-3 form-control animate__animated animate__backInRight animate__faster">Напред ></button>
                         </div>
-                    </a>
+
+                        <span asp-validation-for="OfficeId" class="text-danger"></span>
+                    </form>
                 </div>
+             }
+
+            @if (!Model.IsOwner || !Model.IsFromVirtualOffice)
+            {
+        <div class="row offset-md-2">
+            <div class="col-md-5">
+                <a asp-controller="AddDispose" asp-action="AddParcel">
+                    <div class="card border-left-info shadow mb-3" style="width: 18rem;">
+                        <div class="card-body">
+                            <h4 class="card-title text-secondary">Приемане на пратка</h4>
+                        </div>
+                    </div>
+                </a>
             </div>
-            }
+
+            <div class="col-md-5">
+                <a asp-controller="AddDispose" asp-action="DisposeParcel">
+                    <div class="card border-left-info shadow mb-3" style="width: 18rem;">
+                        <div class="card-body">
+                            <h4 class="card-title text-secondary">Издаване на пратка</h4>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>            }
 
             <div class="row offset-md-2">
                 <div class="col-md-5">
@@ -58,26 +76,26 @@
             </div>
 
             @*<div class="row offset-md-2">
-                    <div class="col-md-5">
-                        <a href="#">
-                            <div class="card border-left-info shadow mb-3" style="width: 18rem;">
-                                <div class="card-body">
-                                    <h4 class="card-title text-secondary">Групиране</h4>
-                                </div>
-                            </div>
-                        </a>
+            <div class="col-md-5">
+                <a href="#">
+                    <div class="card border-left-info shadow mb-3" style="width: 18rem;">
+                        <div class="card-body">
+                            <h4 class="card-title text-secondary">Групиране</h4>
+                        </div>
                     </div>
+                </a>
+            </div>
 
-                    <div class="col-md-5">
-                        <a href="#">
-                            <div class="card border-left-info shadow mb-3" style="width: 18rem;">
-                                <div class="card-body">
-                                    <h4 class="card-title text-secondary">Разгрупиране</h4>
-                                </div>
-                            </div>
-                        </a>
+            <div class="col-md-5">
+                <a href="#">
+                    <div class="card border-left-info shadow mb-3" style="width: 18rem;">
+                        <div class="card-body">
+                            <h4 class="card-title text-secondary">Разгрупиране</h4>
+                        </div>
                     </div>
-                </div>*@
+                </a>
+            </div>
+        </div>*@
 
             <div class="row offset-md-2">
                 <div class="col-md-5">
@@ -90,22 +108,22 @@
                     </a>
                 </div>
 
-                @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName)
-                   || this.User.IsInRole(GlobalConstants.OwnerRoleName))
+                @if (Model.IsOwner
+                  || Model.IsAdministrator)
                 {
-    <div class="col-md-5">
-        <a asp-controller="Administration">
-            <div class="card border-left-info shadow mb-3" style="width: 18rem;">
-                <div class="card-body">
-                    <h4 class="card-title text-secondary">Администрация</h4>
-                </div>
-            </div>
-        </a>
-    </div>}
+                    <div class="col-md-5">
+                        <a asp-controller="Administration">
+                            <div class="card border-left-info shadow mb-3" style="width: 18rem;">
+                                <div class="card-body">
+                                    <h4 class="card-title text-secondary">Администрация</h4>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    }
             </div>
         </div>
+    </div>
+</div>
 
-        <style>
-            
-        </style>
             
