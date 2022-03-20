@@ -2,6 +2,11 @@
     GetParcelResults()
 });
 
+document.addEventListener("keyup", function (event) {
+    if (event.keyCode === 13) {
+        GetParcelResults();
+    }
+});
 
 function GetParcelResults() {
     let parcelId = CheckNullUndefined($("#parcelId").val()) ? $("#parcelId").val() : 0;
