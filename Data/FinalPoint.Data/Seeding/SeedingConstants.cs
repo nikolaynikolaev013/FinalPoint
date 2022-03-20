@@ -72,7 +72,6 @@ namespace FinalPoint.Data.Seeding
             }
         }
 
-
         public static IList<Office> SortingCenters
         {
             get
@@ -96,14 +95,14 @@ namespace FinalPoint.Data.Seeding
                     new Office
                     {
                         PostCode = 1000,
-                        Name = "Еконт ЛЛЦ Климент Охридски",
+                        Name = "Климент Охридски ЛЛЦ",
                         Address = "бул. 'Св. Климент Охридски' 148",
                         IgnoredCityPostCode = Cities.FirstOrDefault(x => x.Postcode == 1000).Postcode,
                     },
                     new Office
                     {
                         PostCode = 1200,
-                        Name = "София НЛЦ Искър",
+                        Name = "София Искър НЛЦ",
                         Address = "кв. Горубляне бул. 'Самоковско шосе' №2Л",
                         IgnoredCityPostCode = Cities.FirstOrDefault(x => x.Postcode == 1000).Postcode,
                     },
@@ -201,7 +200,6 @@ namespace FinalPoint.Data.Seeding
                 };
             }
         }
-
 
         public static Client[] Clients
         {

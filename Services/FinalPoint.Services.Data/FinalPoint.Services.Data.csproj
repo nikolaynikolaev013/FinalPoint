@@ -16,6 +16,15 @@
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.312" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="MailKit" Version="3.1.1" />
+    <PackageReference Include="MimeKit" Version="3.1.1" />
+    <PackageReference Include="RazorEngineCore" Version="2022.1.2" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.1.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Compilers" Version="4.1.0" />
+    <PackageReference Include="Microsoft.Net.Compilers.Toolset" Version="4.1.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +32,7 @@
     <ProjectReference Include="..\..\Data\FinalPoint.Data.Models\FinalPoint.Data.Models.csproj" />
     <ProjectReference Include="..\FinalPoint.Services.Mapping\FinalPoint.Services.Mapping.csproj" />
     <ProjectReference Include="..\..\Web\FinalPoint.Web.ViewModels\FinalPoint.Web.ViewModels.csproj" />
+    <ProjectReference Include="..\..\FinalPoint.Common\FinalPoint.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,6 +43,14 @@
     <None Remove="Protocol\" />
     <None Remove="User\" />
     <None Remove="UserRole\" />
+    <None Remove="Mail\" />
+    <None Remove="MailKit" />
+    <None Remove="MimeKit" />
+    <None Remove="RazorEngine" />
+    <None Remove="Microsoft.CodeAnalysis.Common" />
+    <None Remove="RazorEngineCore" />
+    <None Remove="Microsoft.CodeAnalysis.Compilers" />
+    <None Remove="Microsoft.Net.Compilers.Toolset" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="City\" />
@@ -42,5 +60,6 @@
     <Folder Include="Protocol\" />
     <Folder Include="User\" />
     <Folder Include="UserRole\" />
+    <Folder Include="Mail\" />
   </ItemGroup>
 </Project>

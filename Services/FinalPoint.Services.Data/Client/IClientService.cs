@@ -9,6 +9,8 @@
     {
         IEnumerable<KeyValuePair<string, string>> GetAllClientsAsKeyValuePairs();
 
+        public Client GetClientById(int id);
+
         public Task<Client> CreateAsync(AddClientInputModel input);
     }
 }

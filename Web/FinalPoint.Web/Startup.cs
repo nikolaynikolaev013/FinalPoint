@@ -1,5 +1,6 @@
 ﻿namespace FinalPoint.Web
 {
+    using System.IO;
     using System.Reflection;
 
     using FinalPoint.Data;
@@ -11,6 +12,7 @@
     using FinalPoint.Services.Data;
     using FinalPoint.Services.Data.City;
     using FinalPoint.Services.Data.Client;
+    using FinalPoint.Services.Data.Mail;
     using FinalPoint.Services.Data.Office;
     using FinalPoint.Services.Data.Parcel;
     using FinalPoint.Services.Data.Protocol;
@@ -19,6 +21,7 @@
     using FinalPoint.Services.Mapping;
     using FinalPoint.Services.Messaging;
     using FinalPoint.Web.ViewModels;
+    using FinalPoint.Web.ViewModels.DTOs;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -27,6 +30,7 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.FileProviders;
     using Microsoft.Extensions.Hosting;
 
     public class Startup
@@ -74,6 +78,8 @@
                     .Build();
             });
 
+            services.Configure<MailSettings>(this.configuration.GetSection("MailSettings"));
+
             services.AddSingleton(this.configuration);
 
             // Data repositories
@@ -92,6 +98,7 @@
             services.AddTransient<IProtocolService, ProtocolService>();
             services.AddTransient<IUserRoleService, UserRoleService>();
             services.AddTransient<IDbService, DbService>();
+            services.AddTransient<IMailService, MailService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -126,6 +133,12 @@
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")),
+                RequestPath = new PathString("/wwwroot"),
+            });
 
             app.UseEndpoints(
                 endpoints =>

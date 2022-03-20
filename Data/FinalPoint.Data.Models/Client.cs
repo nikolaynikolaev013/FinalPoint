@@ -24,6 +24,9 @@
 
         public string Address { get; set; }
 
+        [EmailAddress]
+        public string EmailAddress { get; set; }
+
         [InverseProperty("Sender")]
         public virtual ICollection<Parcel> SentParcels { get; set; }
 

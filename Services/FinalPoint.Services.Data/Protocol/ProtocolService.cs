@@ -8,6 +8,7 @@
     using FinalPoint.Data.Common.Repositories;
     using FinalPoint.Data.Models;
     using FinalPoint.Data.Models.Enums;
+    using FinalPoint.Services.Data.Mail;
     using FinalPoint.Services.Data.Office;
     using FinalPoint.Services.Data.Parcel;
     using FinalPoint.Services.Data.User;
@@ -24,19 +25,22 @@
         private readonly IUserService userService;
         private readonly IOfficeService officeService;
         private readonly IParcelService parcelService;
+        private readonly IMailService mailService;
 
         public ProtocolService(
             IDeletableEntityRepository<Protocol> protocolRep,
             IDeletableEntityRepository<ProtocolParcel> protocolParcelRep,
             IUserService userService,
             IOfficeService officeService,
-            IParcelService parcelService)
+            IParcelService parcelService,
+            IMailService mailService)
         {
             this.protocolRep = protocolRep;
             this.protocolParcelRep = protocolParcelRep;
             this.userService = userService;
             this.officeService = officeService;
             this.parcelService = parcelService;
+            this.mailService = mailService;
         }
 
         public async Task<NewOrOpenProtocolViewModel> CheckOrCreateProtocol(NewProtocolCreateOrOpenDataInputDto input)
@@ -106,8 +110,8 @@
         {
             return this.protocolRep
                         .AllAsNoTracking()
-                        .Include(x=>x.OfficeFrom)
-                        .Include(x=>x.OfficeTo)
+                        .Include(x => x.OfficeFrom)
+                        .Include(x => x.OfficeTo)
                         .Where(x => x.Id == protocolId)
                         .FirstOrDefault();
         }
@@ -122,10 +126,31 @@
             {
                 protocol.IsClosed = true;
                 await this.protocolRep.SaveChangesAsync();
+                await this.SendUpdateEmailToClients(protocolId);
+
                 return true;
             }
 
             return false;
+        }
+
+        public async Task<bool> SendUpdateEmailToClients(int protocolId)
+        {
+            var parcels = this.protocolParcelRep
+                .AllAsNoTracking()
+                .Include(x => x.Parcel)
+                .Where(x => x.ProtocolId == protocolId)
+                .ToHashSet();
+
+            foreach (var parcel in parcels)
+            {
+                if (parcel.Parcel.ReceivingOfficeId == parcel.Parcel.CurrentOfficeId)
+                {
+                    await this.mailService.SendUpdateParcelEmails(parcel.ParcelId);
+                }
+            }
+
+            return true;
         }
 
         public async Task LoadNewProtocolParcels(ApplicationUser user, ProtocolType protocolType, int protocolId, int officeFromId, int officeToId, bool withDisposed)

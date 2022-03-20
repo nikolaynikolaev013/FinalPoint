@@ -20,7 +20,7 @@
         public virtual ApplicationUser CreatedByEmployee { get; set; }
 
         [ForeignKey("OfficeFrom")]
-        public virtual int OfficeFromId { get; set; }
+        public int OfficeFromId { get; set; }
 
         public virtual Office OfficeFrom { get; set; }
 

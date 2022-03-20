@@ -7,11 +7,14 @@ namespace FinalPoint.Web.Controllers
     using System.Threading.Tasks;
 
     using FinalPoint.Data.Models;
+    using FinalPoint.Data.Models.Enums;
     using FinalPoint.Services.Data.Client;
+    using FinalPoint.Services.Data.Mail;
     using FinalPoint.Services.Data.Office;
     using FinalPoint.Services.Data.Parcel;
     using FinalPoint.Services.Data.User;
     using FinalPoint.Web.ViewModels.AddDispose;
+    using FinalPoint.Web.ViewModels.DTOs;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
@@ -21,6 +24,7 @@ namespace FinalPoint.Web.Controllers
         private readonly IClientService clientService;
         private readonly IParcelService parcelService;
         private readonly IUserService userService;
+        private readonly IMailService mailService;
         private readonly UserManager<ApplicationUser> userManager;
 
         public AddDisposeController(
@@ -28,12 +32,14 @@ namespace FinalPoint.Web.Controllers
             IClientService clientService,
             IParcelService parcelService,
             IUserService userService,
+            IMailService mailService,
             UserManager<ApplicationUser> userManager)
         {
             this.officeService = officeService;
             this.clientService = clientService;
             this.parcelService = parcelService;
             this.userService = userService;
+            this.mailService = mailService;
             this.userManager = userManager;
         }
 
@@ -52,14 +58,15 @@ namespace FinalPoint.Web.Controllers
             {
                 var user = this.userService.GetUserByClaimsPrincipal(this.User);
 
-                input.DeliveryPrice = this.CalculateDeliveryPrice(input);
+                (input.DeliveryPrice, input.ChargeType) = this.CalculateDeliveryPrice(input);
 
-                input.ChargeType = Data.Models.Enums.ParcelChargeType.Dimensions;
                 input.SendingOffice = user.WorkOffice;
                 input.CurrentOffice = user.WorkOffice;
                 input.SendingEmployee = user;
 
-                await this.parcelService.CreateAsync(input);
+                var newParcel = await this.parcelService.CreateAsync(input);
+
+                await this.mailService.SendNewParcelEmails(newParcel.Id);
 
                 this.ViewBag.isSuccess = true;
                 this.ModelState.Clear();
@@ -69,7 +76,6 @@ namespace FinalPoint.Web.Controllers
             this.FillUpAddParcelInputModel(input);
             return this.View(input);
         }
-
 
         public IActionResult DisposeParcel()
         {
@@ -93,7 +99,9 @@ namespace FinalPoint.Web.Controllers
 
             var volumeWeight = height * width * length;
 
-            if (volumeWeight > weight)
+            ParcelChargeType chargeType = this.DecideChargeType(volumeWeight, weight);
+
+            if (chargeType == ParcelChargeType.Dimensions)
             {
                 finalPrice += volumeWeight * 0.4m;
             }
@@ -137,9 +145,44 @@ namespace FinalPoint.Web.Controllers
             input.CurrOfficeAsString = this.officeService.GetOfficeAsStringById(currUser.WorkOfficeId);
         }
 
-        private decimal CalculateDeliveryPrice(AddParcelInputModel input)
+        private async Task<bool> SendRecipentEmail(string emailTo, Office sendingOffice)
         {
-            return this.CalculateDeliveryPrice(
+            var request = new MailRequestDto();
+            request.ToEmail = emailTo;
+            request.Body = $"Пратка за Вас беше приета в офис {sendingOffice.Name}";
+            request.Subject = "subject";
+
+            await this.mailService.SendEmailAsync(request);
+            return true;
+        }
+
+        private async Task<bool> SendSenderEmail(string emailTo, Office sendingOffice)
+        {
+            var request = new MailRequestDto();
+            request.ToEmail = emailTo;
+            request.Body = $"Вашата пратка беше приета в офис {sendingOffice.Name}";
+            request.Subject = "subject";
+
+            await this.mailService.SendEmailAsync(request);
+            return true;
+        }
+
+
+        private ParcelChargeType DecideChargeType(decimal volumeWeight, decimal weight)
+        {
+            if (volumeWeight > weight)
+            {
+                return ParcelChargeType.Dimensions;
+            }
+            else
+            {
+                return ParcelChargeType.Weight;
+            }
+        }
+
+        private (decimal, ParcelChargeType) CalculateDeliveryPrice(AddParcelInputModel input)
+        {
+            var finalPrice = this.CalculateDeliveryPrice(
                 (decimal)input.Height,
                 (decimal)input.Length,
                 (decimal)input.Width,
@@ -149,6 +192,10 @@ namespace FinalPoint.Web.Controllers
                 input.DontPaletize,
                 input.CashOnDeliveryPrice,
                 input.NumberOfParts);
+
+            var volume = input.Height * input.Length * input.Width;
+
+            return (finalPrice, this.DecideChargeType((decimal)volume, (decimal)input.Weight));
         }
     }
 }

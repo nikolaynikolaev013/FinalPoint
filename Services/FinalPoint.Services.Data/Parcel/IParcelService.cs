@@ -28,6 +28,8 @@
 
         Parcel GetParcelById(int parcelId);
 
+        Parcel GetParcelWithDeletedById(int parcelId);
+
         SingleParcelSearchShowPartialViewModel GetSingleParcelInfoByParcelId(int parcelId);
 
         Parcel GetParcelWithOfficesAndCitiesById(int parcelId);
