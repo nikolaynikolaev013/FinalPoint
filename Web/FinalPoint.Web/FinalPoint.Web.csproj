@@ -60,6 +60,8 @@
     <Content Remove="Views\Shared\CheckedParcelSuccessBlock.cshtml" />
     <Content Remove="Views\Shared\_ParcelSearchInputPartialView.cshtml" />
     <Content Remove="wwwroot\EmailTemplate\css\" />
+    <Content Remove="appsettings.json" />
+    <Content Remove="appsettings.Development.json" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Areas\Identity\IdentityHostingStartup.cs" />
