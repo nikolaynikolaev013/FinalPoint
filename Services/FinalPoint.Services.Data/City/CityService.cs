@@ -7,6 +7,7 @@
     using FinalPoint.Data.Common.Repositories;
     using FinalPoint.Data.Models;
     using FinalPoint.Web.ViewModels.Administration;
+    using Microsoft.EntityFrameworkCore;
 
     public class CityService : ICityService
     {
@@ -26,6 +27,24 @@
             await this.citiesRep.AddAsync(newCity);
             await this.citiesRep.SaveChangesAsync();
             return newCity.Id;
+        }
+
+        public async Task<bool> DeleteIfNoOfficeAssociatedToIt(int cityId, int officeOffsetId)
+        {
+            var city = this.citiesRep
+                .All()
+                .Include(x => x.Offices.Where(x => x.IsDeleted == false))
+                .FirstOrDefault(x => x.Id == cityId);
+
+            if (city.Offices?.Count == 0
+                    || (city.Offices?.Count == 1 && city.Offices?.FirstOrDefault().Id == officeOffsetId))
+            {
+                this.citiesRep.Delete(city);
+                await this.citiesRep.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
         }
 
         public IEnumerable<KeyValuePair<string, string>> GetAllCitiesAsKeyValuePairs()
