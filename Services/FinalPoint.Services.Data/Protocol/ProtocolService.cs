@@ -26,7 +26,6 @@
         private readonly IOfficeService officeService;
         private readonly IParcelService parcelService;
         private readonly IMailService mailService;
-        private readonly IMapper mapper;
 
         public ProtocolService(
             IDeletableEntityRepository<Protocol> protocolRep,
@@ -34,8 +33,7 @@
             IUserService userService,
             IOfficeService officeService,
             IParcelService parcelService,
-            IMailService mailService,
-            IMapper mapper)
+            IMailService mailService)
         {
             this.protocolRep = protocolRep;
             this.protocolParcelRep = protocolParcelRep;
@@ -43,7 +41,6 @@
             this.officeService = officeService;
             this.parcelService = parcelService;
             this.mailService = mailService;
-            this.mapper = mapper;
         }
 
         public async Task<NewOrOpenProtocolViewModel> CheckOrCreateProtocol(NewProtocolCreateOrOpenDataInputDto input)
@@ -186,7 +183,8 @@
 
             if (parcel != null)
             {
-                responseModel = this.mapper.Map<CheckParcelResponseModel>(parcel);
+                //TODO AutoMapper
+                //responseModel = this.mapper.Map<CheckParcelResponseModel>(parcel);
 
                 if (proposedProtocolParcels.Contains(parcelId))
                 {
