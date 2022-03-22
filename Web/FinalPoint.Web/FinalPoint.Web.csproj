@@ -68,5 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Microsoft.CodeAnalysis.Common" />
+    <None Remove="AutoMapper" />
+    <None Remove="AutoMapper.Extensions.Microsoft.DependencyInjection" />
   </ItemGroup>
 </Project>

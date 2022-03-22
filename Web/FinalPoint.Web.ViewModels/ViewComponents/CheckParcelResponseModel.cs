@@ -1,9 +1,12 @@
 ﻿using System;
+using AutoMapper;
 using FinalPoint.Data.Models.Enums;
+using FinalPoint.Services.Mapping;
+using FinalPoint.Web.ViewModels.DTOs;
 
 namespace FinalPoint.Web.ViewModels.ViewComponents
 {
-    public class CheckParcelResponseModel
+    public class CheckParcelResponseModel : IHaveCustomMappings
     {
         public CheckParcelResponseModel()
         {
@@ -28,5 +31,15 @@ namespace FinalPoint.Web.ViewModels.ViewComponents
         public string AnimationClass { get; set; }
 
         public string OfficeNameTo { get; set; }
+
+        public void CreateMappings(IProfileExpression configuration)
+        {
+            configuration.CreateMap<ParcelCheckResultDto, CheckParcelResponseModel>()
+                .ForMember(x => x.Description, x => x.MapFrom(y => y.Description))
+                .ForMember(x => x.NumberOfParts, x => x.MapFrom(y => y.NumberOfParts))
+                .ForMember(x => x.OfficeNameFrom, x => x.MapFrom(y => y.SendingOffice))
+                .ForMember(x => x.OfficeNameTo, x => x.MapFrom(y => y.ReceivingOffice))
+                .ForMember(x => x.ParcelId, x => x.MapFrom(y => y.Id));
+        }
     }
 }

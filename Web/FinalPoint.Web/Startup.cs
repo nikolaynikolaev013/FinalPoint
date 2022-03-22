@@ -2,7 +2,7 @@
 {
     using System.IO;
     using System.Reflection;
-
+    using AutoMapper;
     using FinalPoint.Data;
     using FinalPoint.Data.Common;
     using FinalPoint.Data.Common.Repositories;

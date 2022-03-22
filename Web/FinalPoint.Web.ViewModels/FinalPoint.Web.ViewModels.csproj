@@ -32,7 +32,6 @@
     <Folder Include="AddDispose\" />
     <Folder Include="ViewComponents\" />
     <Folder Include="CustomAttributes\" />
-    <Folder Include="Parcel\" />
     <Folder Include="TrackParcel\" />
     <Folder Include="Home\" />
     <Folder Include="Email\" />

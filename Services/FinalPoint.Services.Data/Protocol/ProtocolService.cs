@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using AutoMapper;
     using FinalPoint.Data.Common.Repositories;
     using FinalPoint.Data.Models;
     using FinalPoint.Data.Models.Enums;
@@ -26,6 +26,7 @@
         private readonly IOfficeService officeService;
         private readonly IParcelService parcelService;
         private readonly IMailService mailService;
+        private readonly IMapper mapper;
 
         public ProtocolService(
             IDeletableEntityRepository<Protocol> protocolRep,
@@ -33,7 +34,8 @@
             IUserService userService,
             IOfficeService officeService,
             IParcelService parcelService,
-            IMailService mailService)
+            IMailService mailService,
+            IMapper mapper)
         {
             this.protocolRep = protocolRep;
             this.protocolParcelRep = protocolParcelRep;
@@ -41,6 +43,7 @@
             this.officeService = officeService;
             this.parcelService = parcelService;
             this.mailService = mailService;
+            this.mapper = mapper;
         }
 
         public async Task<NewOrOpenProtocolViewModel> CheckOrCreateProtocol(NewProtocolCreateOrOpenDataInputDto input)
@@ -177,13 +180,14 @@
         public async Task<CheckParcelResponseModel> TryAddParcelInProtocol(int parcelId, int protocolId, int responsibleUserPersonalId)
         {
             var responseModel = new CheckParcelResponseModel();
-
             var proposedProtocolParcels = this.GetProtocolParcelIds(protocolId);
 
             var parcel = this.parcelService.GetParcelAsParcelCheckResultDtoById(parcelId);
 
             if (parcel != null)
             {
+                responseModel = this.mapper.Map<CheckParcelResponseModel>(parcel);
+
                 if (proposedProtocolParcels.Contains(parcelId))
                 {
                     if (this.CheckIfParcelIsAlreadyCheckedOrAddedToAProtocol(parcelId, protocolId))
@@ -207,12 +211,6 @@
                     responseModel.Status = ParcelStatus.Added;
                     await this.AddParcelToProtocol(parcelId, protocolId, responsibleUserPersonalId, ParcelStatus.Added);
                 }
-
-                responseModel.Description = parcel.Description;
-                responseModel.NumberOfParts = parcel.NumberOfParts;
-                responseModel.OfficeNameFrom = parcel.SendingOffice;
-                responseModel.OfficeNameTo = parcel.ReceivingOffice;
-                responseModel.ParcelId = parcel.Id;
             }
             else
             {
