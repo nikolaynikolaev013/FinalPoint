@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using AutoMapper;
     using FinalPoint.Data.Common.Repositories;
     using FinalPoint.Data.Models;
     using FinalPoint.Web.ViewModels.AddDispose;
@@ -11,23 +11,19 @@
     public class ClientService : IClientService
     {
         private readonly IDeletableEntityRepository<Client> clientRep;
+        private readonly IMapper mapper;
 
-        public ClientService(IDeletableEntityRepository<Client> clientRep)
+        public ClientService(
+            IDeletableEntityRepository<Client> clientRep,
+            IMapper mapper)
         {
             this.clientRep = clientRep;
+            this.mapper = mapper;
         }
 
         public async Task<Client> CreateAsync(AddClientInputModel input)
         {
-            var newClient = new Client()
-            {
-                FirstName = input.FirstName,
-                LastName = input.LastName,
-                Address = input.Address,
-                EmailAddress = input.Email,
-                PhoneNumber = input.PhoneNumber,
-            };
-
+            var newClient = this.mapper.Map<Client>(input);
             await this.clientRep.AddAsync(newClient);
             await this.clientRep.SaveChangesAsync();
 
@@ -48,7 +44,7 @@
                 .Select(x => new
                 {
                     ClientInfo = x.FirstName + " " + x.LastName + " - " + "\n" + x.PhoneNumber,
-                    x.Id
+                    x.Id,
                 })
                 .ToList()
                 .Select(x => new KeyValuePair<string, string>(x.Id.ToString(), x.ClientInfo));

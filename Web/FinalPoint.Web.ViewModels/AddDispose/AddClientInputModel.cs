@@ -2,11 +2,18 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using AutoMapper;
+    using FinalPoint.Data.Models;
     using FinalPoint.Data.Models.Enums;
+    using FinalPoint.Services.Mapping;
     using FinalPoint.Web.ViewModels.CustomAttributes;
 
-    public class AddClientInputModel
+    public class AddClientInputModel : IMapFrom<AddClientInputModel>, IMapTo<Client>, IHaveCustomMappings
     {
+        public AddClientInputModel()
+        {
+        }
+
         public AddClientInputModel(ClientType type)
         {
             this.AllClients = new HashSet<KeyValuePair<string, string>>();
@@ -34,5 +41,15 @@
         public string Email { get; set; }
 
         public IEnumerable<KeyValuePair<string, string>> AllClients { get; set; }
+
+        public void CreateMappings(IProfileExpression configuration)
+        {
+            configuration.CreateMap<AddClientInputModel, Client>()
+                .ForMember(x => x.FirstName, x => x.MapFrom(y => y.FirstName))
+                .ForMember(x => x.LastName, x => x.MapFrom(y => y.LastName))
+                .ForMember(x => x.Address, x => x.MapFrom(y => y.Address))
+                .ForMember(x => x.EmailAddress, x => x.MapFrom(y => y.Email))
+                .ForMember(x => x.PhoneNumber, x => x.MapFrom(y => y.PhoneNumber));
+        }
     }
 }

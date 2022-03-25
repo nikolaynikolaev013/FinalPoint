@@ -3,7 +3,9 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using AutoMapper;
     using FinalPoint.Data.Common.Models;
+    using FinalPoint.Services.Mapping;
 
     public class Client : BaseDeletableModel<int>
     {
@@ -14,6 +16,7 @@
         }
 
         [Required]
+
         public string FirstName { get; set; }
 
         [Required]

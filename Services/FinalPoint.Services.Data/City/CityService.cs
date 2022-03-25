@@ -13,10 +13,7 @@
     {
         private readonly IDeletableEntityRepository<City> citiesRep;
 
-        public CityService(IDeletableEntityRepository<City> citiesRep)
-        {
-            this.citiesRep = citiesRep;
-        }
+        public CityService(IDeletableEntityRepository<City> citiesRep) => this.citiesRep = citiesRep;
 
         public async Task<int> CreateAsync(AddCityInputModel model)
         {

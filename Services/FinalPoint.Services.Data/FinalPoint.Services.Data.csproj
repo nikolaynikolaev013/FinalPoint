@@ -27,11 +27,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Data\FinalPoint.Data.Common\FinalPoint.Data.Common.csproj" />
-    <ProjectReference Include="..\..\Data\FinalPoint.Data.Models\FinalPoint.Data.Models.csproj" />
     <ProjectReference Include="..\FinalPoint.Services.Mapping\FinalPoint.Services.Mapping.csproj" />
     <ProjectReference Include="..\..\Web\FinalPoint.Web.ViewModels\FinalPoint.Web.ViewModels.csproj" />
     <ProjectReference Include="..\..\FinalPoint.Common\FinalPoint.Common.csproj" />
+    <ProjectReference Include="..\..\Data\FinalPoint.Data.Common\FinalPoint.Data.Common.csproj" />
+    <ProjectReference Include="..\..\Data\FinalPoint.Data.Models\FinalPoint.Data.Models.csproj" />
   </ItemGroup>
 
   <ItemGroup>

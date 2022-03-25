@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using AutoMapper;
     using FinalPoint.Data.Common.Repositories;
     using FinalPoint.Data.Models;
     using FinalPoint.Data.Models.Enums;
@@ -17,15 +17,18 @@
         private readonly IDeletableEntityRepository<Office> officeRep;
         private readonly ICityService cityService;
         private readonly IUserService userService;
+        private readonly IMapper mapper;
 
         public OfficeService(
             IDeletableEntityRepository<Office> officeRep,
             ICityService cityService,
-            IUserService userService)
+            IUserService userService,
+            IMapper mapper)
         {
             this.officeRep = officeRep;
             this.cityService = cityService;
             this.userService = userService;
+            this.mapper = mapper;
         }
 
         public async Task<Office> CreateAsync(AddOfficeInputModel model)
@@ -37,14 +40,9 @@
                 model.CityId = newCityId;
             }
 
-            var owner = this.userService.GetUserByPersonalId(model.OwnerId);
+            var newOffice = this.mapper.Map<Office>(model);
 
-            var newOffice = new FinalPoint.Data.Models.Office();
-            newOffice.PostCode = model.PostCode;
-            newOffice.Name = model.Name;
-            newOffice.OfficeType = model.OfficeType;
-            newOffice.CityId = model.CityId;
-            newOffice.Address = model.Address;
+            var owner = this.userService.GetUserByPersonalId(model.OwnerId);
             newOffice.Owner = owner;
 
             if (model.OfficeType == OfficeType.Office)
@@ -227,7 +225,6 @@
                           City = x.City.Name,
                       }).ToList().Select(x => new KeyValuePair<string, string>(x.Id.ToString(), $"{x.City} - {x.Name} - {x.PostCode}"));
             }
-            
         }
 
         public IEnumerable<KeyValuePair<string, string>> GetAllSortingCentersAsKeyValuePairs()
