@@ -54,12 +54,10 @@
     <Folder Include="Views\Search\" />
     <Folder Include="wwwroot\js\AddDispose\" />
     <Folder Include="wwwroot\js\Search\" />
-    <Folder Include="wwwroot\EmailTemplate\css\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="Views\Shared\CheckedParcelSuccessBlock.cshtml" />
     <Content Remove="Views\Shared\_ParcelSearchInputPartialView.cshtml" />
-    <Content Remove="wwwroot\EmailTemplate\css\" />
     <Content Remove="appsettings.json" />
     <Content Remove="appsettings.Development.json" />
   </ItemGroup>
@@ -71,5 +69,10 @@
     <None Remove="AutoMapper" />
     <None Remove="AutoMapper.Extensions.Microsoft.DependencyInjection" />
     <None Remove="Microsoft.CodeAnalysis.CSharp.Workspaces" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="wwwroot\EmailTemplates\index.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>

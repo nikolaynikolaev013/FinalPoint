@@ -13,13 +13,13 @@
         private readonly IParcelService parcelService;
         private readonly IUserService userService;
         private readonly IProtocolService protocolService;
-        private readonly IMailService mailService;
+        private readonly IEmailService mailService;
 
         public ParcelApiController(
                     IParcelService parcelService,
                     IUserService userService,
                     IProtocolService protocolService,
-                    IMailService mailService)
+                    IEmailService mailService)
         {
             this.parcelService = parcelService;
             this.userService = userService;

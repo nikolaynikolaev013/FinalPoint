@@ -99,7 +99,7 @@
             services.AddTransient<IProtocolService, ProtocolService>();
             services.AddTransient<IUserRoleService, UserRoleService>();
             services.AddTransient<IDbService, DbService>();
-            services.AddTransient<IMailService, MailService>();
+            services.AddTransient<IEmailService, EmailService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -4,14 +4,13 @@
     using System.Linq;
     using System.Security.Claims;
     using System.Threading.Tasks;
+
     using FinalPoint.Common;
     using FinalPoint.Data.Models;
-    using FinalPoint.Services.Data;
     using FinalPoint.Services.Data.Mail;
     using FinalPoint.Services.Data.Office;
     using FinalPoint.Services.Data.User;
     using FinalPoint.Web.ViewModels;
-    using FinalPoint.Web.ViewModels.DTOs;
     using FinalPoint.Web.ViewModels.Home;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
@@ -22,15 +21,18 @@
         private readonly IUserService userService;
         private readonly IOfficeService officeService;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly IEmailService emailService;
 
         public HomeController(
             IUserService userService,
             IOfficeService officeService,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            IEmailService emailService)
         {
             this.userService = userService;
             this.officeService = officeService;
             this.userManager = userManager;
+            this.emailService = emailService;
         }
 
         public IActionResult Index()

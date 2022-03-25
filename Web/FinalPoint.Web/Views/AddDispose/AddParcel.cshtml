@@ -299,12 +299,11 @@
             let volumeWeight = (widthValue * heightValue * lengthValue);
 
             let cashOnDeliveryValue = cashOnDeliveryPriceInput.value;
-
             let finalPrice = 0;
 
             $.ajax({
                 method: "GET",
-                url: `/AddDispose/CalculateDeliveryPrice?height=${heightValue}&length=${lengthValue}&width=${widthValue}&weight=${weightValue}&hasCashOnDelivery=${cashOnDeliveryCheckBox.checked}&isFragile=${isFragileCheckBox.checked}&dontPaletize=${dontPaletizeCheckBox.checked}& cashOnDeliveryPrice=${cashOnDeliveryValue}&numOfParts=${numberOfParts}`,
+                url: `/AddDispose/CalculateDeliveryPrice?height=${heightValue}&length=${lengthValue}&width=${widthValue}&weight=${weightValue}&hasCashOnDelivery=${cashOnDeliveryCheckBox.checked}&isFragile=${isFragileCheckBox.checked}&dontPaletize=${dontPaletizeCheckBox.checked}&cashOnDeliveryPrice=${cashOnDeliveryValue}&numOfParts=${numberOfParts}`,
                 success: function (res) {
                     finalPrice = res;
                     deliveryPriceEl.textContent = finalPrice.toFixed(2);

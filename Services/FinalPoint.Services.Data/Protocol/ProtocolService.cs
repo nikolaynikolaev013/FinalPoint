@@ -25,7 +25,7 @@
         private readonly IUserService userService;
         private readonly IOfficeService officeService;
         private readonly IParcelService parcelService;
-        private readonly IMailService mailService;
+        private readonly IEmailService mailService;
 
         public ProtocolService(
             IDeletableEntityRepository<Protocol> protocolRep,
@@ -33,7 +33,8 @@
             IUserService userService,
             IOfficeService officeService,
             IParcelService parcelService,
-            IMailService mailService)
+            IEmailService mailService
+            )
         {
             this.protocolRep = protocolRep;
             this.protocolParcelRep = protocolParcelRep;
@@ -116,7 +117,7 @@
                         .FirstOrDefault();
         }
 
-        public async Task<bool> CloseProtocol(int protocolId)
+        public async Task<bool> CloseProtocol(int protocolId, string basePath)
         {
             var protocol = this.protocolRep
                         .All()
@@ -126,7 +127,7 @@
             {
                 protocol.IsClosed = true;
                 await this.protocolRep.SaveChangesAsync();
-                await this.SendUpdateEmailToClients(protocolId);
+                await this.SendUpdateEmailToClients(protocolId, basePath);
 
                 return true;
             }
@@ -134,7 +135,7 @@
             return false;
         }
 
-        public async Task<bool> SendUpdateEmailToClients(int protocolId)
+        public async Task<bool> SendUpdateEmailToClients(int protocolId, string baseUrl)
         {
             var parcels = this.protocolParcelRep
                 .AllAsNoTracking()
