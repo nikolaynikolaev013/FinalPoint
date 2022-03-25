@@ -34,9 +34,9 @@
     <Folder Include="CustomAttributes\" />
     <Folder Include="TrackParcel\" />
     <Folder Include="Home\" />
-    <Folder Include="Email\" />
+    <Folder Include="DTOs\Email\" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="Email\" />
+    <None Remove="DTOs\Email\" />
   </ItemGroup>
 </Project>
