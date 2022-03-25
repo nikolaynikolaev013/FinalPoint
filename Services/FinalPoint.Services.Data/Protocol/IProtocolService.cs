@@ -17,7 +17,7 @@
 
         Protocol GetProtocolWithOfficesById(int protocolId);
 
-        Task<bool> CloseProtocol(int protocolId);
+        Task<bool> CloseProtocol(int protocolId, string basePath);
 
         Task LoadNewProtocolParcels(ApplicationUser user, ProtocolType protocolType, int protocolId, int officeFromId, int officeToId, bool withDisposed);
 

@@ -24,7 +24,7 @@ namespace FinalPoint.Web.Controllers
         private readonly IClientService clientService;
         private readonly IParcelService parcelService;
         private readonly IUserService userService;
-        private readonly IMailService mailService;
+        private readonly IEmailService mailService;
         private readonly UserManager<ApplicationUser> userManager;
 
         public AddDisposeController(
@@ -32,7 +32,7 @@ namespace FinalPoint.Web.Controllers
             IClientService clientService,
             IParcelService parcelService,
             IUserService userService,
-            IMailService mailService,
+            IEmailService mailService,
             UserManager<ApplicationUser> userManager)
         {
             this.officeService = officeService;
