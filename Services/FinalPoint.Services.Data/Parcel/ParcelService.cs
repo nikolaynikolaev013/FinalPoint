@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Security.Claims;
     using System.Threading.Tasks;
+
     using AutoMapper;
     using FinalPoint.Data.Common.Repositories;
     using FinalPoint.Data.Models;
@@ -41,7 +42,7 @@
 
         public async Task<Parcel> CreateAsync(AddParcelInputModel input)
         {
-            Parcel newParcel = mapper.Map<Parcel>(input);
+            Parcel newParcel = this.mapper.Map<Parcel>(input);
 
             newParcel.SenderId = await this.AddClient(input.SenderInputModel);
             newParcel.RecipentId = await this.AddClient(input.RecipentInputModel);
@@ -125,34 +126,9 @@
 
                             && (isDispose == true ? (x.ReceivingOfficeId == employee.WorkOfficeId) : true))
 
-                .Select(x => new SingleParcelSearchShowPartialViewModel()
-                {
-                    DateReceived = x.CreatedOn,
-                    Id = x.Id,
-                    Description = x.Description,
-                    Width = x.Width,
-                    Height = x.Height,
-                    Length = x.Length,
-                    Weight = x.Weight,
-                    HasCashOnDelivery = x.HasCashOnDelivery,
-                    CashOnDeliveryPrice = x.CashOnDeliveryPrice,
-                    IsFragile = x.IsFragile,
-                    DontPaletize = x.DontPaletize,
-                    DeliveryPrice = x.DeliveryPrice,
-                    SendingEmployeeFullName = x.SendingEmployee.FullName,
-                    SendingOfficeCityName = x.SendingOffice.City.Name,
-                    SendingOfficeName = x.SendingOffice.Name,
-                    SendingOfficePostcode = x.SendingOffice.PostCode,
-                    SenderFullnameAndPhoneNumber = $"{x.Sender.FirstName} {x.Sender.LastName} - {x.Sender.PhoneNumber}",
-                    ReceivingOfficeCityName = x.ReceivingOffice.City.Name,
-                    ReceivingOfficePostcode = x.ReceivingOffice.PostCode,
-                    ReceivingOfficeName = x.ReceivingOffice.Name,
-                    RecipentFullnameAndPhoneNumber = $"{x.Recipent.FirstName} {x.Recipent.LastName} - {x.Recipent.PhoneNumber}",
-                    ReceivingOfficeId = x.ReceivingOffice.Id,
-                    CurrentOfficeId = x.CurrentOffice.Id,
-                    CurrentOfficeName = x.CurrentOffice.Name,
-                    CurrentOfficePostCode = x.CurrentOffice.PostCode,
-                }).OrderByDescending(x => x.CurrentOfficeId == x.ReceivingOfficeId)
+                .AsEnumerable()
+                .Select(x => this.mapper.Map<Parcel, SingleParcelSearchShowPartialViewModel>(x))
+                .OrderByDescending(x => x.CurrentOfficeId == x.ReceivingOfficeId)
                 .ToList();
         }
 
@@ -169,34 +145,8 @@
                 .ThenInclude(x => x.City)
                 .Include(x => x.Recipent)
                 .Where(x => x.Id == parcelId)
-                .Select(x => new SingleParcelSearchShowPartialViewModel()
-                {
-                    DateReceived = x.CreatedOn,
-                    Id = x.Id,
-                    Description = x.Description,
-                    Width = x.Width,
-                    Height = x.Height,
-                    Length = x.Length,
-                    Weight = x.Weight,
-                    HasCashOnDelivery = x.HasCashOnDelivery,
-                    CashOnDeliveryPrice = x.CashOnDeliveryPrice,
-                    IsFragile = x.IsFragile,
-                    DontPaletize = x.DontPaletize,
-                    DeliveryPrice = x.DeliveryPrice,
-                    SendingEmployeeFullName = x.SendingEmployee.FullName,
-                    SendingOfficeCityName = x.SendingOffice.City.Name,
-                    SendingOfficeName = x.SendingOffice.Name,
-                    SendingOfficePostcode = x.SendingOffice.PostCode,
-                    SenderFullnameAndPhoneNumber = $"{x.Sender.FirstName} {x.Sender.LastName} - {x.Sender.PhoneNumber}",
-                    ReceivingOfficeCityName = x.ReceivingOffice.City.Name,
-                    ReceivingOfficePostcode = x.ReceivingOffice.PostCode,
-                    ReceivingOfficeName = x.ReceivingOffice.Name,
-                    RecipentFullnameAndPhoneNumber = $"{x.Recipent.FirstName} {x.Recipent.LastName} - {x.Recipent.PhoneNumber}",
-                    ReceivingOfficeId = x.ReceivingOffice.Id,
-                    CurrentOfficeId = x.CurrentOffice.Id,
-                    CurrentOfficeName = x.CurrentOffice.Name,
-                    CurrentOfficePostCode = x.CurrentOffice.PostCode,
-                })
+                .AsEnumerable()
+                .Select(x => this.mapper.Map<Parcel, SingleParcelSearchShowPartialViewModel>(x))
                 .FirstOrDefault();
         }
 
@@ -373,13 +323,8 @@
             return this.parcelRep
                 .All()
                 .Where(x => x.Id == parcelId)
-                .Select(x=>new ParcelCheckResultDto{
-                    Description = x.Description,
-                    NumberOfParts = x.NumberOfParts,
-                    SendingOffice = x.SendingOffice.Name,
-                    ReceivingOffice = x.ReceivingOffice.Name,
-                    Id = x.Id,
-                })
+                .AsEnumerable()
+                .Select(x => this.mapper.Map<Parcel, ParcelCheckResultDto>(x))
                 .FirstOrDefault();
         }
 
