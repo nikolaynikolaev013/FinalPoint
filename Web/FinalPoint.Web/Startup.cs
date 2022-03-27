@@ -81,6 +81,9 @@
 
             services.Configure<MailSettings>(this.configuration.GetSection("MailSettings"));
 
+            var mapper = AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);
+
+            services.AddSingleton(mapper);
             services.AddSingleton(this.configuration);
 
             // Data repositories
@@ -105,7 +108,6 @@
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);
 
             // Seed data on application startup
             using (var serviceScope = app.ApplicationServices.CreateScope())

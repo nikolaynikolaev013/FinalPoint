@@ -26,6 +26,7 @@
         private readonly IOfficeService officeService;
         private readonly IParcelService parcelService;
         private readonly IEmailService mailService;
+        private readonly IMapper mapper;
 
         public ProtocolService(
             IDeletableEntityRepository<Protocol> protocolRep,
@@ -33,8 +34,8 @@
             IUserService userService,
             IOfficeService officeService,
             IParcelService parcelService,
-            IEmailService mailService
-            )
+            IEmailService mailService,
+            IMapper mapper)
         {
             this.protocolRep = protocolRep;
             this.protocolParcelRep = protocolParcelRep;
@@ -42,6 +43,7 @@
             this.officeService = officeService;
             this.parcelService = parcelService;
             this.mailService = mailService;
+            this.mapper = mapper;
         }
 
         public async Task<NewOrOpenProtocolViewModel> CheckOrCreateProtocol(NewProtocolCreateOrOpenDataInputDto input)
@@ -57,13 +59,9 @@
 
             if (openProtocol == null)
             {
-                openProtocol = new Protocol()
-                {
-                    Type = input.Type,
-                    CreatedByEmployee = currUser,
-                    OfficeFromId = (int)currUser.WorkOfficeId,
-                    OfficeToId = input.RecipentOfficeId,
-                };
+                openProtocol = this.mapper.Map<Protocol>(input);
+                openProtocol.CreatedByEmployee = currUser;
+                openProtocol.OfficeFromId = currUser.WorkOfficeId;
 
                 await this.protocolRep.AddAsync(openProtocol);
                 await this.protocolRep.SaveChangesAsync();
@@ -184,8 +182,7 @@
 
             if (parcel != null)
             {
-                //TODO AutoMapper
-                //responseModel = this.mapper.Map<CheckParcelResponseModel>(parcel);
+                responseModel = this.mapper.Map<CheckParcelResponseModel>(parcel);
 
                 if (proposedProtocolParcels.Contains(parcelId))
                 {
@@ -605,6 +602,5 @@
 
             return resultMessage;
         }
-
     }
 }
