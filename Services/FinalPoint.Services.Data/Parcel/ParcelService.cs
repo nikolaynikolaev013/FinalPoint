@@ -5,7 +5,7 @@
     using System.Linq;
     using System.Security.Claims;
     using System.Threading.Tasks;
-
+    using AutoMapper;
     using FinalPoint.Data.Common.Repositories;
     using FinalPoint.Data.Models;
     using FinalPoint.Data.Models.Enums;
@@ -23,40 +23,25 @@
         private readonly IClientService clientService;
         private readonly IOfficeService officeService;
         private readonly IUserService userService;
+        private readonly IMapper mapper;
 
         public ParcelService(
             IDeletableEntityRepository<Parcel> parcelRep,
             IClientService clientService,
             IOfficeService officeService,
-            IUserService userService)
+            IUserService userService,
+            IMapper mapper)
         {
             this.parcelRep = parcelRep;
             this.clientService = clientService;
             this.officeService = officeService;
             this.userService = userService;
+            this.mapper = mapper;
         }
 
         public async Task<Parcel> CreateAsync(AddParcelInputModel input)
         {
-            Parcel newParcel = new Parcel()
-            {
-                Description = input.Description,
-                Width = input.Width,
-                Height = input.Height,
-                Length = input.Length,
-                Weight = input.Weight,
-                NumberOfParts = input.NumberOfParts,
-                HasCashOnDelivery = input.HasCashOnDelivery,
-                CashOnDeliveryPrice = (double)input.CashOnDeliveryPrice,
-                IsFragile = input.IsFragile,
-                DontPaletize = input.DontPaletize,
-                SendingEmployee = input.SendingEmployee,
-                CurrentOffice = input.CurrentOffice,
-                SendingOffice = input.SendingOffice,
-                ReceivingOfficeId = input.ReceivingOfficeId,
-                ChargeType = input.ChargeType,
-                DeliveryPrice = input.DeliveryPrice,
-            };
+            Parcel newParcel = mapper.Map<Parcel>(input);
 
             newParcel.SenderId = await this.AddClient(input.SenderInputModel);
             newParcel.RecipentId = await this.AddClient(input.RecipentInputModel);
