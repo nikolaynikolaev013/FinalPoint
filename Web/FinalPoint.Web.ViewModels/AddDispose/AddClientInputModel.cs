@@ -49,7 +49,8 @@
                 .ForMember(x => x.LastName, x => x.MapFrom(y => y.LastName))
                 .ForMember(x => x.Address, x => x.MapFrom(y => y.Address))
                 .ForMember(x => x.EmailAddress, x => x.MapFrom(y => y.Email))
-                .ForMember(x => x.PhoneNumber, x => x.MapFrom(y => y.PhoneNumber));
+                .ForMember(x => x.PhoneNumber, x => x.MapFrom(y => y.PhoneNumber))
+                .ForAllOtherMembers(x => x.Ignore());
         }
     }
 }

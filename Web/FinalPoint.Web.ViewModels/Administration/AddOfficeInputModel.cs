@@ -8,7 +8,7 @@
     using FinalPoint.Services.Mapping;
     using FinalPoint.Web.ViewModels.CustomAttributes;
 
-    public class AddOfficeInputModel : IHaveCustomMappings
+    public class AddOfficeInputModel : IMapFrom<AddOfficeInputModel>, IMapTo<Office>, IHaveCustomMappings
     {
         [CustomRequired]
         [Range(1000, int.MaxValue, ErrorMessage = "Полето трябва да съдържа поне 4 цифри")]
@@ -51,12 +51,15 @@
 
         public void CreateMappings(IProfileExpression configuration)
         {
-            configuration.CreateMap<Office, AddOfficeInputModel>()
+            configuration.CreateMap<AddOfficeInputModel, Office>()
+                .ForAllMembers(x => x.Ignore());
+            configuration.CreateMap<AddOfficeInputModel, Office>()
                 .ForMember(x => x.PostCode, x => x.MapFrom(y => y.PostCode))
                 .ForMember(x => x.Name, x => x.MapFrom(y => y.Name))
                 .ForMember(x => x.OfficeType, x => x.MapFrom(y => y.OfficeType))
                 .ForMember(x => x.CityId, x => x.MapFrom(y => y.CityId))
-                .ForMember(x => x.Address, x => x.MapFrom(y => y.Address));
+                .ForMember(x => x.Address, x => x.MapFrom(y => y.Address))
+                .ForAllOtherMembers(x => x.Ignore());
         }
     }
 }
