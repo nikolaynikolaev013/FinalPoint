@@ -6,7 +6,7 @@ using FinalPoint.Web.ViewModels.DTOs;
 
 namespace FinalPoint.Web.ViewModels.ViewComponents
 {
-    public class CheckParcelResponseModel : IHaveCustomMappings
+    public class CheckParcelResponseModel : IMapFrom<ParcelCheckResultDto>, IMapTo<CheckParcelResponseModel>, IHaveCustomMappings
     {
         public CheckParcelResponseModel()
         {

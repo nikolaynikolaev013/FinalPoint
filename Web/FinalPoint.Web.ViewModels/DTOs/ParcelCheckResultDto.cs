@@ -5,7 +5,7 @@ using FinalPoint.Services.Mapping;
 
 namespace FinalPoint.Web.ViewModels.DTOs
 {
-    public class ParcelCheckResultDto : IMapTo<Parcel>, IMapFrom<ParcelCheckResultDto>, IHaveCustomMappings
+    public class ParcelCheckResultDto : IMapTo<ParcelCheckResultDto>, IMapFrom<Parcel>, IHaveCustomMappings
     {
         public ParcelCheckResultDto()
         {
@@ -29,7 +29,7 @@ namespace FinalPoint.Web.ViewModels.DTOs
                 .ForMember(x => x.NumberOfParts, x => x.MapFrom(y => y.NumberOfParts))
                 .ForMember(x => x.SendingOffice, x => x.MapFrom(y => y.SendingOffice.Name))
                 .ForMember(x => x.ReceivingOffice, x => x.MapFrom(y => y.ReceivingOffice.Name))
-                .ForAllMembers(x => x.Ignore());
+                .ForAllOtherMembers(x => x.Ignore());
         }
     }
 }

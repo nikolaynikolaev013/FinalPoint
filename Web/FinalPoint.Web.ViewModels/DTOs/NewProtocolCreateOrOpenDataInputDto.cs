@@ -1,10 +1,12 @@
 ﻿namespace FinalPoint.Web.ViewModels.DTOs
 {
     using System.Security.Claims;
-
+    using AutoMapper;
+    using FinalPoint.Data.Models;
     using FinalPoint.Data.Models.Enums;
+    using FinalPoint.Services.Mapping;
 
-    public class NewProtocolCreateOrOpenDataInputDto
+    public class NewProtocolCreateOrOpenDataInputDto : IMapTo<Protocol>, IMapFrom<NewProtocolCreateOrOpenDataInputDto>, IHaveCustomMappings
     {
         public NewProtocolCreateOrOpenDataInputDto()
         {
@@ -23,5 +25,13 @@
         public string Message { get; set; }
 
         public string TypeOfMessage { get; set; }
+
+        public void CreateMappings(IProfileExpression configuration)
+        {
+            configuration.CreateMap<NewProtocolCreateOrOpenDataInputDto, Protocol>()
+                .ForMember(x => x.Type, x => x.MapFrom(y => y.Type))
+                .ForMember(x => x.OfficeToId, x => x.MapFrom(y => y.RecipentOfficeId))
+                .ForAllOtherMembers(x => x.Ignore());
+        }
     }
 }

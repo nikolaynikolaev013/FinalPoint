@@ -323,8 +323,14 @@
             return this.parcelRep
                 .All()
                 .Where(x => x.Id == parcelId)
-                .AsEnumerable()
-                .Select(x => this.mapper.Map<Parcel, ParcelCheckResultDto>(x))
+                .Select(x => new ParcelCheckResultDto
+                {
+                    Description = x.Description,
+                    NumberOfParts = x.NumberOfParts,
+                    SendingOffice = x.SendingOffice.Name,
+                    ReceivingOffice = x.ReceivingOffice.Name,
+                    Id = x.Id,
+                })
                 .FirstOrDefault();
         }
 
