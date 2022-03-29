@@ -9,6 +9,7 @@
     using FinalPoint.Services.Data.City;
     using FinalPoint.Services.Data.Office;
     using FinalPoint.Services.Data.User;
+    using FinalPoint.Web.ViewModels;
     using FinalPoint.Web.ViewModels.Administration;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
@@ -31,9 +32,9 @@
             this.userService = userService;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(Result model)
         {
-            return this.View();
+            return this.View(model);
         }
 
         public IActionResult FireEmployee()
@@ -76,14 +77,9 @@
             {
                 await this.officeService.CreateAsync(input);
 
-                this.ModelState.Clear();
-                input.ResultMessage = $"Офис {input.Name} беше регистриран успешно!";
-                input.PostCode = 0;
-                input.Name = string.Empty;
-                input.Address = string.Empty;
+                var result = new Result() { Success = true, Message = input.ResultMessage = $"Офис {input.Name} беше регистриран успешно!" };
 
-                this.LoadAddOfficeData(input);
-                return this.View(input);
+                return this.RedirectToAction("Index", result);
             }
 
             this.LoadAddOfficeData(input);
