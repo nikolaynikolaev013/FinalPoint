@@ -23,7 +23,7 @@
 
 }
 
-<form method="post">
+<form method="post" id="form">
     <div class="row">
         <div class="col-md-6">
             <div class="card shadow mb-4">
@@ -153,44 +153,57 @@
                     <div class="form-group">
                         <label asp-for="SenderInputModel.ClientId">@Model.SenderInputModel.Type</label>
                         <a onclick="addNewClient(10)" class="text-info">(Създаване на нов потребител)</a>
-                        <select asp-for="SenderInputModel.ClientId" asp-items="allClients" data-live-search="true" class="selectpicker form-control">
-                        </select>
+                        <div class="input-group">
+                            <select asp-for="SenderInputModel.ClientId" asp-items="allClients" data-live-search="true" class="selectpicker form-control">
+                            </select>
+                            <div class="input-group-addon input-group-button">
+                                <button type="button" class="btn btn-info" onclick="addNewClient(10, true)"><i class="fas fa-pen"></i></button>
+                            </div>
+                        </div>
                         <span asp-validation-for="SenderInputModel.ClientId" class="text-danger"></span>
                     </div>
                 </div>
-
                 <div id="addClient10" hidden>
-                    <div class="card-body" id="currClient">
-                        <h6>@Model.SenderInputModel.Type <a onclick="addNewClient(10)" class="text-secondary">(Избиране от вече създаден клиент)</a></h6>
+                    <div class="card-body addClientFields" hidden>
+                        <h6>@Model.SenderInputModel.Type <a onclick="addNewClient(10)" class="text-info">(Избиране от вече създаден клиент)</a></h6>
+                        <div class="form-group" hidden>
+                            <input name="id" class="id form-control" />
+                        </div>
                         <div class="form-group">
                             <label asp-for="SenderInputModel.FirstName" class="text-info"></label>
-                            <input asp-for="SenderInputModel.FirstName" class="form-control" />
+                            <input asp-for="SenderInputModel.FirstName" class="firstName form-control" />
                             <span asp-validation-for="SenderInputModel.FirstName" class="text-danger"></span>
                         </div>
 
                         <div class="form-group">
                             <label asp-for="SenderInputModel.LastName" class="text-info"></label>
-                            <input asp-for="SenderInputModel.LastName" class="form-control" />
+                            <input asp-for="SenderInputModel.LastName" class="lastName form-control" />
                             <span asp-validation-for="SenderInputModel.LastName" class="text-danger"></span>
                         </div>
 
                         <div class="form-group">
                             <label asp-for="SenderInputModel.Email" class="text-info"></label>
-                            <input asp-for="SenderInputModel.Email" class="form-control" />
+                            <input asp-for="SenderInputModel.Email" class="email form-control" />
                             <span asp-validation-for="SenderInputModel.Email" class="text-danger"></span>
                         </div>
 
                         <div class="form-group">
                             <label asp-for="SenderInputModel.PhoneNumber" class="text-info"></label>
-                            <input asp-for="SenderInputModel.PhoneNumber" class="form-control" />
+                            <input asp-for="SenderInputModel.PhoneNumber" class="phoneNumber form-control" />
                             <span asp-validation-for="SenderInputModel.PhoneNumber" class="text-danger"></span>
                         </div>
 
                         <div class="form-group">
                             <label asp-for="SenderInputModel.Address" class="text-info"></label>
-                            <input asp-for="SenderInputModel.Address" class="form-control" />
+                            <input asp-for="SenderInputModel.Address" class="address form-control" />
                             <span asp-validation-for="SenderInputModel.Address" class="text-danger"></span>
                         </div>
+
+                        <p class="text-danger errorField text-center" hidden></p>
+                    </div>
+                    <div class="card-body row m-0 addClientEditPanel" hidden>
+                        <button type="button" class="btn btn-danger col-md-4 m-auto" onclick="addNewClient(10)">Назад</button>
+                        <button type="button" class="btn btn-info col-md-4 m-auto" onclick="saveClientData(10)">Запази</button>
                     </div>
                 </div>
 
@@ -199,44 +212,58 @@
                     <div class="form-group">
                         <label asp-for="RecipentInputModel.ClientId">@Model.RecipentInputModel.Type</label>
                         <a onclick="addNewClient(20)" class="text-info">(Създаване на нов потребител)</a>
-                        <select asp-for="RecipentInputModel.ClientId" asp-items="allClients" data-live-search="true" class="selectpicker form-control">
-                        </select>
+                        <div class="input-group">
+                            <select asp-for="RecipentInputModel.ClientId" asp-items="allClients" data-live-search="true" class="selectpicker form-control">
+                            </select>
+                            <div class="input-group-addon input-group-button">
+                                <button type="button" class="btn btn-info" onclick="addNewClient(20, true)"><i class="fas fa-pen"></i></button>
+                            </div>
+                        </div>
                         <span asp-validation-for="SenderInputModel.ClientId" class="text-danger"></span>
                     </div>
                 </div>
 
                 <div id="addClient20" hidden>
-                    <div class="card-body" id="currClient">
-                        <h6>@Model.RecipentInputModel.Type <a onclick="addNewClient(20)" class="text-secondary">(Избиране от вече създаден клиент)</a></h6>
+                    <div class="card-body addClientFields" hidden>
+                        <h6>@Model.RecipentInputModel.Type <a onclick="addNewClient(20)" class="text-info">(Избиране от вече създаден клиент)</a></h6>
+                        <div class="form-group" hidden>
+                            <input name="id" class="id form-control" />
+                        </div>
                         <div class="form-group">
                             <label asp-for="RecipentInputModel.FirstName" class="text-info"></label>
-                            <input asp-for="RecipentInputModel.FirstName" class="form-control" />
+                            <input asp-for="RecipentInputModel.FirstName" class="firstName form-control" />
                             <span asp-validation-for="RecipentInputModel.FirstName" class="text-danger"></span>
                         </div>
 
                         <div class="form-group">
                             <label asp-for="RecipentInputModel.LastName" class="text-info"></label>
-                            <input asp-for="RecipentInputModel.LastName" class="form-control" />
+                            <input asp-for="RecipentInputModel.LastName" class="lastName form-control" />
                             <span asp-validation-for="RecipentInputModel.LastName" class="text-danger"></span>
                         </div>
 
                         <div class="form-group">
                             <label asp-for="RecipentInputModel.Email" class="text-info"></label>
-                            <input asp-for="RecipentInputModel.Email" class="form-control" />
+                            <input asp-for="RecipentInputModel.Email" class="email form-control" />
                             <span asp-validation-for="RecipentInputModel.Email" class="text-danger"></span>
                         </div>
 
                         <div class="form-group">
                             <label asp-for="RecipentInputModel.PhoneNumber" class="text-info"></label>
-                            <input asp-for="RecipentInputModel.PhoneNumber" class="form-control" />
+                            <input asp-for="RecipentInputModel.PhoneNumber" class="phoneNumber form-control" />
                             <span asp-validation-for="RecipentInputModel.PhoneNumber" class="text-danger"></span>
                         </div>
 
                         <div class="form-group">
                             <label asp-for="RecipentInputModel.Address" class="text-info"></label>
-                            <input asp-for="RecipentInputModel.Address" class="form-control" />
+                            <input asp-for="RecipentInputModel.Address" class="address form-control" />
                             <span asp-validation-for="RecipentInputModel.Address" class="text-danger"></span>
                         </div>
+
+                    </div>
+                    <p class="text-danger errorField text-center" hidden></p>
+                    <div class="card-body row m-0 addClientEditPanel" hidden>
+                        <button type="button" class="btn btn-danger col-md-4 m-auto" onclick="addNewClient(20)">Назад</button>
+                        <button type="button" class="btn btn-info col-md-4 m-auto" onclick="saveClientData(20)">Запази</button>
                     </div>
                 </div>
 
@@ -321,16 +348,99 @@
 
         calculatePrice();
 
-        function addNewClient(type) {
+        function addNewClient(type, isEdit = false) {
             let currClient = document.querySelector("#currClient" + type.toString());
             let addClient = document.querySelector("#addClient" + type.toString());
+            let addClientFields = document.querySelector("#addClient" + type.toString() + " .addClientFields");
+            let addClientEditPanel = document.querySelector("#addClient" + type.toString() + " .addClientEditPanel");
+            let errorField = addClientFields.querySelector(".errorField");
 
             if (!currClient.hidden) {
                 currClient.hidden = true;
+                addClientFields.hidden = false;
                 addClient.hidden = false;
+
+                if (isEdit) {
+                    let idField = addClientFields.querySelector(".id");
+                    let firstNameField = addClientFields.querySelector(".firstName");
+                    let lastNameField = addClientFields.querySelector(".lastName");
+                    let phoneNumberField = addClientFields.querySelector(".phoneNumber");
+                    let emailField = addClientFields.querySelector(".email");
+                    let addressField = addClientFields.querySelector(".address");
+                    let id = currClient.querySelector("select").value;
+
+                    $.ajax({
+                        method: "GET",
+                        url: `/AddDispose/GetClientDetailsById?id=` + id,
+                        success: function (clientDetails) {
+                            firstNameField.value = clientDetails.firstName;
+                            lastNameField.value = clientDetails.lastName;
+                            phoneNumberField.value = clientDetails.phoneNumber;
+                            emailField.value = clientDetails.email;
+                            addressField.value = clientDetails.address;
+                            idField.value = clientDetails.id
+                        }
+                    });
+                    addClientEditPanel.hidden = false;
+                }
             } else {
                 currClient.hidden = false;
+                addClientFields.hidden = true;
                 addClient.hidden = true;
+                addClientEditPanel.hidden = true;
+                errorField.hidden = true;
             }
-        }</script>
+
+
+        }
+
+        function saveClientData(type)
+        {
+            let addClientFields = document.querySelector("#addClient" + type.toString() + " .addClientFields");
+
+            let idField = addClientFields.querySelector(".id");
+            let firstNameField = addClientFields.querySelector(".firstName");
+            let lastNameField = addClientFields.querySelector(".lastName");
+            let phoneNumberField = addClientFields.querySelector(".phoneNumber");
+            let emailField = addClientFields.querySelector(".email");
+            let addressField = addClientFields.querySelector(".address");
+
+            $.ajax({
+                method: "POST",
+                url: `/AddDispose/EditClientDetails`,
+                data: {
+                    id: idField.value,
+                    firstName: firstNameField.value,
+                    lastName: lastNameField.value,
+                    phoneNumber: phoneNumberField.value,
+                    email: emailField.value,
+                    address: addressField.value,
+                },
+                success: function (res) {
+
+                    if (res.success) {
+                        let currClient = document.querySelector("#currClient" + type.toString());
+                        let selectedItem = currClient.querySelector(".filter-option-inner-inner");
+                        let selectItemsInDropdown = document.querySelectorAll('option[value="' + idField.value + '"]');
+
+                        let newSelectItemValue = `${firstNameField.value} ${lastNameField.value} - ${phoneNumberField.value}`;
+
+                        for (const dropdownItem of selectItemsInDropdown) {
+                            dropdownItem.textContent = newSelectItemValue;
+                        }
+
+                        selectedItem.textContent = newSelectItemValue;
+
+                        addNewClient(type);
+                    } else {
+                        let errorField = addClientFields.querySelector(".errorField");
+                        errorField.hidden = false;
+                        errorField.textContent  = res.message;
+
+                    }
+                }
+            });
+        }
+
+    </script>
 }

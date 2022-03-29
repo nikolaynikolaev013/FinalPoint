@@ -374,7 +374,8 @@
                 !string.IsNullOrEmpty(input.LastName) &&
                 !string.IsNullOrEmpty(input.Email))
             {
-                var newClient = await this.clientService.CreateAsync(input);
+                var newClientInfo = this.mapper.Map<Client>(input);
+                var newClient = await this.clientService.CreateAsync(newClientInfo);
                 return newClient.Id;
             }
             else
