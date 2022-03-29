@@ -1,10 +1,8 @@
-﻿@model String
-@{
-}
+﻿@model Result
 
-@if (Model != null)
+@if (Model != null && Model.Message != null)
 {
-    <div class="alert alert-success animate__animated animate__jello" role="alert">
-        @Model
+    <div class="alert alert-@(Model.Success ? "success" : "danger") animate__animated animate__jello" role="alert">
+        @Model.Message
     </div>
 }
