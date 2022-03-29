@@ -35,8 +35,10 @@
     <Folder Include="TrackParcel\" />
     <Folder Include="Home\" />
     <Folder Include="DTOs\Email\" />
+    <Folder Include="DTOs\AddDisposeParcel\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="DTOs\Email\" />
+    <None Remove="DTOs\AddDisposeParcel\" />
   </ItemGroup>
 </Project>

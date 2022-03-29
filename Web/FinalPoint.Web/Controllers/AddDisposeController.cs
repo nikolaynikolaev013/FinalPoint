@@ -5,7 +5,7 @@ namespace FinalPoint.Web.Controllers
     using System;
     using System.Security.Claims;
     using System.Threading.Tasks;
-
+    using AutoMapper;
     using FinalPoint.Data.Models;
     using FinalPoint.Data.Models.Enums;
     using FinalPoint.Services.Data.Client;
@@ -13,8 +13,10 @@ namespace FinalPoint.Web.Controllers
     using FinalPoint.Services.Data.Office;
     using FinalPoint.Services.Data.Parcel;
     using FinalPoint.Services.Data.User;
+    using FinalPoint.Web.ViewModels;
     using FinalPoint.Web.ViewModels.AddDispose;
     using FinalPoint.Web.ViewModels.DTOs;
+    using FinalPoint.Web.ViewModels.DTOs.AddDisposeParcel;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
@@ -26,6 +28,7 @@ namespace FinalPoint.Web.Controllers
         private readonly IUserService userService;
         private readonly IEmailService mailService;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly IMapper mapper;
 
         public AddDisposeController(
             IOfficeService officeService,
@@ -33,7 +36,8 @@ namespace FinalPoint.Web.Controllers
             IParcelService parcelService,
             IUserService userService,
             IEmailService mailService,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            IMapper mapper)
         {
             this.officeService = officeService;
             this.clientService = clientService;
@@ -41,6 +45,7 @@ namespace FinalPoint.Web.Controllers
             this.userService = userService;
             this.mailService = mailService;
             this.userManager = userManager;
+            this.mapper = mapper;
         }
 
         public IActionResult AddParcel()
@@ -133,6 +138,22 @@ namespace FinalPoint.Web.Controllers
             return finalPrice;
         }
 
+        [HttpGet]
+        [IgnoreAntiforgeryToken]
+        public ClientDetailsDto GetClientDetailsById(int id)
+        {
+            var client = this.clientService.GetClientById(id);
+            return this.mapper.Map<ClientDetailsDto>(client);
+        }
+
+        [HttpPost]
+        [IgnoreAntiforgeryToken]
+        public async Task<Result> EditClientDetails(ClientDetailsDto clientDetails)
+        {
+            var clientModel = this.mapper.Map<Client>(clientDetails);
+            return await this.clientService.EditClientInfo(clientModel);
+        }
+
         private void FillUpAddParcelInputModel(AddParcelInputModel input)
         {
             var currUser = this.userService.GetUserById(this.User.FindFirst(ClaimTypes.NameIdentifier).Value);
@@ -144,29 +165,6 @@ namespace FinalPoint.Web.Controllers
             input.AllOffices = this.officeService.GeAllOfficesAndSortingCentersWithoutCurrOneAsKeyValuePairs(0);
             input.CurrOfficeAsString = this.officeService.GetOfficeAsStringById(currUser.WorkOfficeId);
         }
-
-        private async Task<bool> SendRecipentEmail(string emailTo, Office sendingOffice)
-        {
-            var request = new MailRequestDto();
-            request.ToEmail = emailTo;
-            request.Body = $"Пратка за Вас беше приета в офис {sendingOffice.Name}";
-            request.Subject = "subject";
-
-            await this.mailService.SendEmailAsync(request);
-            return true;
-        }
-
-        private async Task<bool> SendSenderEmail(string emailTo, Office sendingOffice)
-        {
-            var request = new MailRequestDto();
-            request.ToEmail = emailTo;
-            request.Body = $"Вашата пратка беше приета в офис {sendingOffice.Name}";
-            request.Subject = "subject";
-
-            await this.mailService.SendEmailAsync(request);
-            return true;
-        }
-
 
         private ParcelChargeType DecideChargeType(decimal volumeWeight, decimal weight)
         {

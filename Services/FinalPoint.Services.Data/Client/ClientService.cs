@@ -4,8 +4,10 @@
     using System.Linq;
     using System.Threading.Tasks;
     using AutoMapper;
+    using FinalPoint.Common;
     using FinalPoint.Data.Common.Repositories;
     using FinalPoint.Data.Models;
+    using FinalPoint.Web.ViewModels;
     using FinalPoint.Web.ViewModels.AddDispose;
 
     public class ClientService : IClientService
@@ -21,19 +23,63 @@
             this.mapper = mapper;
         }
 
-        public async Task<Client> CreateAsync(AddClientInputModel input)
+        public async Task<Client> CreateAsync(Client input)
         {
-            var newClient = this.mapper.Map<Client>(input);
+
+            if (input.EmailAddress != null)
+            {
+                var existingClient = this.clientRep
+                    .AllAsNoTracking()
+                    .Where(x => x.EmailAddress == input.EmailAddress)
+                    .FirstOrDefault();
+
+                if (existingClient != null)
+                {
+                    return existingClient;
+                }
+            }
+
+            var newClient = input;
             await this.clientRep.AddAsync(newClient);
             await this.clientRep.SaveChangesAsync();
 
             return newClient;
         }
 
+        public async Task<Result> EditClientInfo(Client input)
+        {
+            if (string.IsNullOrEmpty(input.LastName)
+                || string.IsNullOrEmpty(input.FirstName)
+                || string.IsNullOrEmpty(input.PhoneNumber))
+            {
+                return new Result() { Success = false, Message = GlobalErrorMessages.PleaseFillAllFields };
+            }
+
+            var existingClient = this.clientRep
+                .All()
+                .AsEnumerable()
+                .FirstOrDefault(x => x.Id == input.Id);
+
+            if (existingClient == null)
+            {
+                return new Result() { Success = false };
+            }
+
+            existingClient.FirstName = input.FirstName;
+            existingClient.LastName = input.LastName;
+            existingClient.PhoneNumber = input.PhoneNumber;
+            existingClient.EmailAddress = input.EmailAddress;
+            existingClient.Address = input.Address;
+
+            await this.clientRep.SaveChangesAsync();
+            return new Result() { Success = true };
+        }
+
         public Client GetClientById(int id)
         {
             return this.clientRep
                     .All()
+                    .AsEnumerable()
                     .FirstOrDefault(x => x.Id == id);
         }
 
