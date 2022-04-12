@@ -8,6 +8,7 @@
     using FinalPoint.Data.Models;
     using FinalPoint.Data.Models.Enums;
     using FinalPoint.Services.Data.City;
+    using FinalPoint.Services.Data.Theme;
     using FinalPoint.Services.Data.User;
     using FinalPoint.Web.ViewModels.Administration;
     using Microsoft.EntityFrameworkCore;
@@ -17,17 +18,20 @@
         private readonly IDeletableEntityRepository<Office> officeRep;
         private readonly ICityService cityService;
         private readonly IUserService userService;
+        private readonly IThemeService themeService;
         private readonly IMapper mapper;
 
         public OfficeService(
             IDeletableEntityRepository<Office> officeRep,
             ICityService cityService,
             IUserService userService,
+            IThemeService themeService,
             IMapper mapper)
         {
             this.officeRep = officeRep;
             this.cityService = cityService;
             this.userService = userService;
+            this.themeService = themeService;
             this.mapper = mapper;
         }
 
@@ -86,6 +90,22 @@
             await this.cityService.DeleteIfNoOfficeAssociatedToIt(officeToDelete.CityId, officeId);
 
             return officeToDelete;
+        }
+
+        public async Task<bool> ChangeOfficeTheme(int officeId, int themeId)
+        {
+            var theme = this.themeService.GetThemeById(themeId);
+            var office = this.GetOfficeById(officeId);
+
+            if (theme == null || office == null)
+            {
+                return false;
+            }
+
+            office.Theme = theme;
+            await this.officeRep.SaveChangesAsync();
+
+            return true;
         }
 
         public string GetOfficeAsStringById(int officeId)

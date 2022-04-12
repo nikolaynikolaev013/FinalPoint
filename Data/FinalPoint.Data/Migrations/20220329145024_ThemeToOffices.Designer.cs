@@ -4,6 +4,7 @@ using FinalPoint.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinalPoint.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220329145024_ThemeToOffices")]
+    partial class ThemeToOffices
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -298,7 +300,7 @@ namespace FinalPoint.Data.Migrations
                     b.Property<int?>("ResponsibleSortingCenterId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ThemeId")
+                    b.Property<int>("ThemeId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -722,7 +724,9 @@ namespace FinalPoint.Data.Migrations
 
                     b.HasOne("FinalPoint.Data.Models.Theme", "Theme")
                         .WithMany()
-                        .HasForeignKey("ThemeId");
+                        .HasForeignKey("ThemeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("City");
 

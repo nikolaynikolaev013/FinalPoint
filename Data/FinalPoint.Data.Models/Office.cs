@@ -28,6 +28,11 @@
 
         public virtual ApplicationUser Owner { get; set; }
 
+        [ForeignKey(nameof(Theme))]
+        public int? ThemeId { get; set; }
+
+        public virtual Theme Theme { get; set; }
+
         [ForeignKey(nameof(City))]
         public int CityId { get; set; }
 

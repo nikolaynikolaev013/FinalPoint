@@ -16,6 +16,7 @@
     using FinalPoint.Services.Data.Office;
     using FinalPoint.Services.Data.Parcel;
     using FinalPoint.Services.Data.Protocol;
+    using FinalPoint.Services.Data.Theme;
     using FinalPoint.Services.Data.User;
     using FinalPoint.Services.Data.UserRole;
     using FinalPoint.Services.Mapping;
@@ -85,6 +86,7 @@
 
             services.AddSingleton(mapper);
             services.AddSingleton(this.configuration);
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             // Data repositories
             services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
@@ -103,6 +105,7 @@
             services.AddTransient<IUserRoleService, UserRoleService>();
             services.AddTransient<IDbService, DbService>();
             services.AddTransient<IEmailService, EmailService>();
+            services.AddTransient<IThemeService, ThemeService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

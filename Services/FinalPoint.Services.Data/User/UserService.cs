@@ -120,6 +120,15 @@
                     .FirstOrDefault();
         }
 
+        public int GetUserOfficeByClaimsPrincipal(ClaimsPrincipal user)
+        {
+            return this.usersRep
+                .AllAsNoTracking()
+                .Where(x => x.Id == user.FindFirst(ClaimTypes.NameIdentifier).Value)
+                .Select(x => x.WorkOfficeId)
+                .FirstOrDefault();
+        }
+
         public async Task<ApplicationUser> RemoveUser(int userPersonalId)
         {
             var userToDelete = this.GetUserByPersonalId(userPersonalId);
