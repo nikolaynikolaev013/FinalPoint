@@ -54,6 +54,8 @@
     <Folder Include="Views\Search\" />
     <Folder Include="wwwroot\js\AddDispose\" />
     <Folder Include="wwwroot\js\Search\" />
+    <Folder Include="Business\" />
+    <Folder Include="Business\Interfaces\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="Views\Shared\CheckedParcelSuccessBlock.cshtml" />
@@ -69,6 +71,8 @@
     <None Remove="AutoMapper" />
     <None Remove="AutoMapper.Extensions.Microsoft.DependencyInjection" />
     <None Remove="Microsoft.CodeAnalysis.CSharp.Workspaces" />
+    <None Remove="Business\" />
+    <None Remove="Business\Interfaces\" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="wwwroot\EmailTemplates\index.html">

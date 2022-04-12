@@ -2,8 +2,7 @@
 using System.Reflection;
 using System.Threading.Tasks;
 using FinalPoint.Common;
-using FinalPoint.Services.Data.Client;
-using FinalPoint.Services.Data.Parcel;
+using FinalPoint.Web.Business.Interfaces;
 using FinalPoint.Web.ViewModels.DTOs;
 using FinalPoint.Web.ViewModels.DTOs.Email;
 using MailKit.Net.Smtp;
@@ -12,7 +11,7 @@ using Microsoft.Extensions.Options;
 using MimeKit;
 using RazorEngineCore;
 
-namespace FinalPoint.Services.Data.Mail
+namespace FinalPoint.Web.Business.Services
 {
     public class EmailService : IEmailService
     {

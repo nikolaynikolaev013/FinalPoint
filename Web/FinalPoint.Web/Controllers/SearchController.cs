@@ -1,8 +1,6 @@
 ﻿namespace FinalPoint.Web.Controllers
 {
-    using FinalPoint.Services.Data;
-    using FinalPoint.Services.Data.Protocol;
-    using FinalPoint.Services.Data.User;
+    using FinalPoint.Web.Business.Interfaces;
     using Microsoft.AspNetCore.Mvc;
 
     public class SearchController : Controller

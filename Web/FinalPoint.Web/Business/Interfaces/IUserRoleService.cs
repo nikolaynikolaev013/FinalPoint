@@ -1,4 +1,4 @@
-﻿namespace FinalPoint.Services.Data.UserRole
+﻿namespace FinalPoint.Web.Business.Interfaces
 {
     using System.Collections.Generic;
 

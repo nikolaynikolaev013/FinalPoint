@@ -1,4 +1,4 @@
-﻿namespace FinalPoint.Services.Data.City
+﻿namespace FinalPoint.Web.Business.Interfaces
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;

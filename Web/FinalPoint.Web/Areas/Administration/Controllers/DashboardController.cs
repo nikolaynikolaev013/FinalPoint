@@ -1,6 +1,6 @@
 ﻿namespace FinalPoint.Web.Areas.Administration.Controllers
 {
-    using FinalPoint.Services.Data;
+    using FinalPoint.Web.Business.Interfaces;
     using FinalPoint.Web.ViewModels.Administration.Dashboard;
 
     using Microsoft.AspNetCore.Mvc;

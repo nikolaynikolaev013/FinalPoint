@@ -1,4 +1,4 @@
-﻿namespace FinalPoint.Services.Data.User
+﻿namespace FinalPoint.Web.Business.Services
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -7,6 +7,7 @@
 
     using FinalPoint.Data.Common.Repositories;
     using FinalPoint.Data.Models;
+    using FinalPoint.Web.Business.Interfaces;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
 

@@ -1,9 +1,10 @@
-﻿namespace FinalPoint.Services.Data.UserRole
+﻿namespace FinalPoint.Web.Business.Services
 {
     using System.Collections.Generic;
     using System.Linq;
 
     using FinalPoint.Data.Models;
+    using FinalPoint.Web.Business.Interfaces;
     using Microsoft.AspNetCore.Identity;
 
     public class UserRoleService : IUserRoleService
