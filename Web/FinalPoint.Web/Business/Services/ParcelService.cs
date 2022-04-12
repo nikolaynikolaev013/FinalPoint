@@ -1,4 +1,4 @@
-﻿namespace FinalPoint.Services.Data.Parcel
+﻿namespace FinalPoint.Web.Business.Services
 {
     using System;
     using System.Collections.Generic;
@@ -10,9 +10,7 @@
     using FinalPoint.Data.Common.Repositories;
     using FinalPoint.Data.Models;
     using FinalPoint.Data.Models.Enums;
-    using FinalPoint.Services.Data.Client;
-    using FinalPoint.Services.Data.Office;
-    using FinalPoint.Services.Data.User;
+    using FinalPoint.Web.Business.Interfaces;
     using FinalPoint.Web.ViewModels.AddDispose;
     using FinalPoint.Web.ViewModels.DTOs;
     using FinalPoint.Web.ViewModels.Shared;

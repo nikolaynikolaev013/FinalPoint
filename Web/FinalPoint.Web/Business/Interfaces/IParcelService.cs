@@ -1,4 +1,4 @@
-﻿namespace FinalPoint.Services.Data.Parcel
+﻿namespace FinalPoint.Web.Business.Interfaces
 {
     using System.Collections.Generic;
     using System.Security.Claims;

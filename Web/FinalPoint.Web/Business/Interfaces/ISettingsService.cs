@@ -1,4 +1,4 @@
-﻿namespace FinalPoint.Services.Data
+﻿namespace FinalPoint.Web.Business.Interfaces
 {
     using System.Collections.Generic;
 

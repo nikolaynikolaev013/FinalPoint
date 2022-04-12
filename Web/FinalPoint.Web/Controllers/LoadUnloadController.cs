@@ -6,9 +6,7 @@ namespace FinalPoint.Web.Controllers
     using System.Threading.Tasks;
 
     using FinalPoint.Data.Models.Enums;
-    using FinalPoint.Services.Data.Office;
-    using FinalPoint.Services.Data.Protocol;
-    using FinalPoint.Services.Data.User;
+    using FinalPoint.Web.Business.Interfaces;
     using FinalPoint.Web.ViewModels.LoadUnload;
     using FinalPoint.Web.ViewModels.Shared;
     using FinalPoint.Web.ViewModels.ViewComponents;
@@ -30,7 +28,6 @@ namespace FinalPoint.Web.Controllers
             this.userService = userService;
         }
 
-        // GET: /<controller>/
         public IActionResult Load()
         {
             LoadUnloadIndexViewModel model = this.LoadInitialLoadUnloadData(ProtocolType.Loading);

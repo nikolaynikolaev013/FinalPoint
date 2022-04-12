@@ -1,4 +1,4 @@
-﻿namespace FinalPoint.Services.Data.Mail
+﻿namespace FinalPoint.Web.Business.Interfaces
 {
     using System.Threading.Tasks;
     using FinalPoint.Web.ViewModels.DTOs;
