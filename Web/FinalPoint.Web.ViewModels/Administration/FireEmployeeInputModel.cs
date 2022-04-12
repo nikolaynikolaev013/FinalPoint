@@ -7,7 +7,6 @@ namespace FinalPoint.Web.ViewModels.Administration
 {
     public class FireEmployeeInputModel
     {
-
         public string ResultMessage { get; set; }
 
         [CustomRequired]

@@ -11,8 +11,6 @@
     using FinalPoint.Data.Models;
     using FinalPoint.Data.Repositories;
     using FinalPoint.Data.Seeding;
-    using FinalPoint.Services.Data;
-    using FinalPoint.Services.Messaging;
 
     using CommandLine;
 
@@ -20,6 +18,9 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
+    using FinalPoint.Web.Business.Interfaces;
+    using FinalPoint.Web.Business.Services;
+    using FinalPoint.Services.Messaging;
 
     public static class Program
     {
@@ -80,7 +81,6 @@
             services.AddScoped<IDbQueryRunner, DbQueryRunner>();
 
             // Application services
-            services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<ISettingsService, SettingsService>();
         }
     }

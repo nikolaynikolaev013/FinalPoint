@@ -30,6 +30,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\FinalPoint.Data\FinalPoint.Data.csproj" />
     <ProjectReference Include="..\..\Services\FinalPoint.Services.Data\FinalPoint.Services.Data.csproj" />
+    <ProjectReference Include="..\..\Web\FinalPoint.Web\FinalPoint.Web.csproj" />
   </ItemGroup>
 
   <ItemGroup>

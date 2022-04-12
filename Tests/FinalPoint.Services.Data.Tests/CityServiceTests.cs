@@ -4,7 +4,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using FinalPoint.Data;
-    using FinalPoint.Services.Data.City;
+    using FinalPoint.Web.Business.Services;
     using FinalPoint.Web.ViewModels.Administration;
     using Xunit;
 

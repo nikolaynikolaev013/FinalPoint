@@ -1,4 +1,4 @@
-﻿namespace FinalPoint.Services.Data.Office
+﻿namespace FinalPoint.Web.Business.Services
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -7,9 +7,7 @@
     using FinalPoint.Data.Common.Repositories;
     using FinalPoint.Data.Models;
     using FinalPoint.Data.Models.Enums;
-    using FinalPoint.Services.Data.City;
-    using FinalPoint.Services.Data.Theme;
-    using FinalPoint.Services.Data.User;
+    using FinalPoint.Web.Business.Interfaces;
     using FinalPoint.Web.ViewModels.Administration;
     using Microsoft.EntityFrameworkCore;
 

@@ -1,9 +1,7 @@
 ﻿namespace FinalPoint.Web.Controllers
 {
     using System.Threading.Tasks;
-
-    using FinalPoint.Services.Data;
-    using FinalPoint.Services.Data.Protocol;
+    using FinalPoint.Web.Business.Interfaces;
     using Microsoft.AspNetCore.Mvc;
 
     [Route("api/[controller]/{protocolId}")]

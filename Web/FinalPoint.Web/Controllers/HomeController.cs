@@ -7,9 +7,7 @@
 
     using FinalPoint.Common;
     using FinalPoint.Data.Models;
-    using FinalPoint.Services.Data.Mail;
-    using FinalPoint.Services.Data.Office;
-    using FinalPoint.Services.Data.User;
+    using FinalPoint.Web.Business.Interfaces;
     using FinalPoint.Web.ViewModels;
     using FinalPoint.Web.ViewModels.Home;
     using Microsoft.AspNetCore.Authorization;

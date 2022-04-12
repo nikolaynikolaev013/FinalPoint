@@ -1,4 +1,4 @@
-﻿namespace FinalPoint.Services.Data.City
+﻿namespace FinalPoint.Web.Business.Services
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -6,6 +6,7 @@
 
     using FinalPoint.Data.Common.Repositories;
     using FinalPoint.Data.Models;
+    using FinalPoint.Web.Business.Interfaces;
     using FinalPoint.Web.ViewModels.Administration;
     using Microsoft.EntityFrameworkCore;
 

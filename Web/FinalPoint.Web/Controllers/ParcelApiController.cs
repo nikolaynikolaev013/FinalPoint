@@ -1,10 +1,7 @@
 ﻿namespace FinalPoint.Web.Controllers
 {
     using System.Threading.Tasks;
-    using FinalPoint.Services.Data.Mail;
-    using FinalPoint.Services.Data.Parcel;
-    using FinalPoint.Services.Data.Protocol;
-    using FinalPoint.Services.Data.User;
+    using FinalPoint.Web.Business.Interfaces;
     using FinalPoint.Web.ViewModels.TrackParcel;
     using Microsoft.AspNetCore.Mvc;
 

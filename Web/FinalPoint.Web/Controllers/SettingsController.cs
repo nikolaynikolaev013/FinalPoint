@@ -5,7 +5,7 @@
 
     using FinalPoint.Data.Common.Repositories;
     using FinalPoint.Data.Models;
-    using FinalPoint.Services.Data;
+    using FinalPoint.Web.Business.Interfaces;
     using FinalPoint.Web.ViewModels.Settings;
 
     using Microsoft.AspNetCore.Mvc;

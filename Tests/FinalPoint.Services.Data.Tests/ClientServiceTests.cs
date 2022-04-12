@@ -3,7 +3,8 @@
     using System.Threading.Tasks;
 
     using FinalPoint.Data;
-    using FinalPoint.Services.Data.Client;
+    using FinalPoint.Data.Models;
+    using FinalPoint.Web.Business.Services;
     using FinalPoint.Web.ViewModels.AddDispose;
     using Xunit;
 
@@ -26,7 +27,7 @@
             // Arrange
             var testClient = this.fakeData.Clients[0];
 
-            var model = new AddClientInputModel(FinalPoint.Data.Models.Enums.ClientType.Подател)
+            var model = new Client()
             {
                 Address = testClient.Address,
                 FirstName = testClient.FirstName,
