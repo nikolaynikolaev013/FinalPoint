@@ -5,6 +5,7 @@
     using System.Threading.Tasks;
     using AutoMapper;
     using FinalPoint.Common;
+    using FinalPoint.Data.Models;
     using FinalPoint.Web.Business.Interfaces;
     using FinalPoint.Web.ViewModels;
     using FinalPoint.Web.ViewModels.Administration;
@@ -32,7 +33,7 @@
             this.officeService = officeService;
             this.cityService = cityService;
             this.userService = userService;
-            this.themeService = themeService; HttpContext.Session.GetString
+            this.themeService = themeService; 
             this.mapper = mapper;
         }
 
