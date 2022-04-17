@@ -26,6 +26,8 @@
 
         Task SetUserNewWorkOfficeByUserPersonalId(int personalId, int newWorkOfficeId);
 
+        int GetUserOfficeByClaimsPrincipal(ClaimsPrincipal user);
+
         Task<bool> ChangeUserWorkOffice(string userId, int newWorkOfficeId);
     }
 }

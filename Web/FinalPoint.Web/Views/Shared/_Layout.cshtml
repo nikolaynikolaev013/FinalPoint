@@ -1,10 +1,20 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http;
+@{
+
+    string theme = null;
+
+    if (theme == null)
+    {
+        theme = "sb";
+    }
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - FinalPoint</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-sb.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-@(theme).min.css" />
     <link rel="stylesheet" href="~/css/TimelineStyles.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
@@ -34,7 +44,8 @@
                         {
                             foreach (var item in (List<KeyValuePair<string, string>>)ViewData["Breadcrumb"])
                             {
-            <li class="breadcrumb-item"><a href="@item.Value" class="text-info">@item.Key</a></li>}
+                                <li class="breadcrumb-item"><a href="@item.Value" class="text-info">@item.Key</a></li>
+                            }
                         }
                         <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
                     </ol>

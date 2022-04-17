@@ -50,6 +50,7 @@
     <None Remove="RazorEngineCore" />
     <None Remove="Microsoft.CodeAnalysis.Compilers" />
     <None Remove="Microsoft.Net.Compilers.Toolset" />
+    <None Remove="Theme\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="City\" />
@@ -60,5 +61,6 @@
     <Folder Include="User\" />
     <Folder Include="UserRole\" />
     <Folder Include="Email\" />
+    <Folder Include="Theme\" />
   </ItemGroup>
 </Project>

@@ -1,0 +1,98 @@
+﻿@model SettingsInputModel
+@{
+    ViewData["Title"] = "Настройки";
+
+    ViewData["Breadcrumb"] = new List<KeyValuePair<string, string>>() {
+        new KeyValuePair<string, string>("Начало", "/"),
+        new KeyValuePair<string, string>("Администрация", "/Administration"),
+        };
+}
+
+<h1 class="text-center text-secondary mb-4">@ViewData["Title"]</h1>
+
+<hr />
+<h4 class="text-center">Избор на тема:</h4>
+
+<div class="container">
+    <div class="row mt-2">
+        <div class="col-12">
+            <div class="form-group row">
+                <form method="POST">
+                    <div class="col-12">
+                        <div class="card-deck w-50">
+                            @foreach (var theme in Model.AvailableThemes)
+                            {
+                            <div id="@theme.Name" class="card mb-4">
+                                <img class="card-img-top" src="@theme.ImgSrc" alt="Card image cap">
+                                <div class="card-body" role="button">
+                                    <h5 class="card-title">
+                                        <input asp-for="SelectedThemeId" value="@theme.Id" id="@theme.Id" type="radio">
+                                        <label for="@theme.Id">@theme.Name</label>
+                                    </h5>
+                                    <p class="card-text">
+                                        @theme.Name
+                                    </p>
+                                </div>
+                            </div>
+                            }
+
+                        </div>
+                        <button type="submit" class="btn btn-primary">submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('input:radio').change(function () {//Clicking input radio
+            var radioClicked = $(this).attr('id');
+            unclickRadio();
+            removeActive();
+            clickRadio(radioClicked);
+            makeActive(radioClicked);
+        });
+        $(".card").click(function () {//Clicking the card
+            var inputElement = $(this).find('input[type=radio]').attr('id');
+            unclickRadio();
+            removeActive();
+            makeActive(inputElement);
+            clickRadio(inputElement);
+        });
+    });
+
+
+    function unclickRadio() {
+        $("input:radio").prop("checked", false);
+    }
+
+    function clickRadio(inputElement) {
+        $("#" + inputElement).prop("checked", true);
+    }
+
+    function removeActive() {
+        $(".card").removeClass("active");
+    }
+
+    function makeActive(element) {
+        $("#" + element + "-card").addClass("active");
+    }
+</script>
+<style>
+    .active {
+        border-color: #28a745 !important;
+        background-color: #f2f2f2;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.18), 0 3px 6px rgba(0, 0, 0, 0.23);
+    }
+
+    .card {
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15), 0 2px 5px rgba(0, 0, 0, 0.2);
+        -webkit-transition: all 0.5s ease;
+        -moz-transition: all 0.5s ease;
+        -o-transition: all 0.5s ease;
+        transition: all 0.5s ease;
+    }
+
+</style>

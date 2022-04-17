@@ -10,7 +10,9 @@
         Task<Office> CreateAsync(AddOfficeInputModel model);
 
         Task<Office> Remove(int officePostcodeToSkip);
-        
+
+        Task<bool> ChangeOfficeTheme(int officeId, int themeId);
+
         Office GetOfficeById(int officeId);
 
         Office GetOfficeByPostcode(int officePostcode);

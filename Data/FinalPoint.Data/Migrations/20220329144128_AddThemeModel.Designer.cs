@@ -4,6 +4,7 @@ using FinalPoint.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinalPoint.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220329144128_AddThemeModel")]
+    partial class AddThemeModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -144,9 +146,6 @@ namespace FinalPoint.Data.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ThemeId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -168,8 +167,6 @@ namespace FinalPoint.Data.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("ThemeId");
 
                     b.HasIndex("WorkOfficeId");
 
@@ -298,9 +295,6 @@ namespace FinalPoint.Data.Migrations
                     b.Property<int?>("ResponsibleSortingCenterId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ThemeId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CityId");
@@ -310,8 +304,6 @@ namespace FinalPoint.Data.Migrations
                     b.HasIndex("OwnerId");
 
                     b.HasIndex("ResponsibleSortingCenterId");
-
-                    b.HasIndex("ThemeId");
 
                     b.ToTable("Offices");
                 });
@@ -691,10 +683,6 @@ namespace FinalPoint.Data.Migrations
 
             modelBuilder.Entity("FinalPoint.Data.Models.ApplicationUser", b =>
                 {
-                    b.HasOne("FinalPoint.Data.Models.Theme", null)
-                        .WithMany("Offices")
-                        .HasForeignKey("ThemeId");
-
                     b.HasOne("FinalPoint.Data.Models.Office", "WorkOffice")
                         .WithMany("Employees")
                         .HasForeignKey("WorkOfficeId")
@@ -720,17 +708,11 @@ namespace FinalPoint.Data.Migrations
                         .WithMany()
                         .HasForeignKey("ResponsibleSortingCenterId");
 
-                    b.HasOne("FinalPoint.Data.Models.Theme", "Theme")
-                        .WithMany()
-                        .HasForeignKey("ThemeId");
-
                     b.Navigation("City");
 
                     b.Navigation("Owner");
 
                     b.Navigation("ResponsibleSortingCenter");
-
-                    b.Navigation("Theme");
                 });
 
             modelBuilder.Entity("FinalPoint.Data.Models.Parcel", b =>
@@ -935,11 +917,6 @@ namespace FinalPoint.Data.Migrations
             modelBuilder.Entity("FinalPoint.Data.Models.Protocol", b =>
                 {
                     b.Navigation("Parcels");
-                });
-
-            modelBuilder.Entity("FinalPoint.Data.Models.Theme", b =>
-                {
-                    b.Navigation("Offices");
                 });
 #pragma warning restore 612, 618
         }
