@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "Начало";
     var allOffices = Model.AvailableOffices?.Select(x => new SelectListItem(x.Value, x.Key));
-   }
+}
 
 @model HomeIndexInputModel
 
@@ -27,38 +27,38 @@
                         <span asp-validation-for="OfficeId" class="text-danger"></span>
                     </form>
                 </div>
-             }
+            }
 
             @if (!Model.IsOwner || !Model.IsFromVirtualOffice)
             {
-        <div class="row offset-md-2">
-            <div class="col-md-5">
-                <a asp-controller="AddDispose" asp-action="AddParcel">
-                    <div class="card border-left-info shadow mb-3" style="width: 18rem;">
-                        <div class="card-body">
-                            <h4 class="card-title text-secondary">Приемане на пратка</h4>
-                        </div>
+                <div class="row offset-md-2">
+                    <div class="col-md-5">
+                        <a asp-controller="AddDispose" asp-action="AddParcel">
+                            <div class="card border-left-info shadow mb-3" style="width: 18rem;">
+                                <div class="card-body">
+                                    <h4 class="card-title text-secondary hover-underline-animation">Приемане на пратка</h4>
+                                </div>
+                            </div>
+                        </a>
                     </div>
-                </a>
-            </div>
 
-            <div class="col-md-5">
-                <a asp-controller="AddDispose" asp-action="DisposeParcel">
-                    <div class="card border-left-info shadow mb-3" style="width: 18rem;">
-                        <div class="card-body">
-                            <h4 class="card-title text-secondary">Издаване на пратка</h4>
-                        </div>
+                    <div class="col-md-5">
+                        <a asp-controller="AddDispose" asp-action="DisposeParcel">
+                            <div class="card border-left-info shadow mb-3" style="width: 18rem;">
+                                <div class="card-body">
+                                    <h4 class="card-title text-secondary hover-underline-animation">Издаване на пратка</h4>
+                                </div>
+                            </div>
+                        </a>
                     </div>
-                </a>
-            </div>
-        </div>            }
+                </div>}
 
             <div class="row offset-md-2">
                 <div class="col-md-5">
                     <a asp-controller="Load">
                         <div class="card border-left-info shadow mb-3" style="width: 18rem;">
                             <div class="card-body">
-                                <h4 class="card-title text-secondary">Товарене</h4>
+                                <h4 class="card-title text-secondary hover-underline-animation">Товарене</h4>
                             </div>
                         </div>
                     </a>
@@ -68,7 +68,7 @@
                     <a asp-controller="Unload">
                         <div class="card border-left-info shadow mb-3" style="width: 18rem;">
                             <div class="card-body">
-                                <h4 class="card-title text-secondary">Разтоварване</h4>
+                                <h4 class="card-title text-secondary hover-underline-animation">Разтоварване</h4>
                             </div>
                         </div>
                     </a>
@@ -76,54 +76,58 @@
             </div>
 
             @*<div class="row offset-md-2">
-            <div class="col-md-5">
-                <a href="#">
-                    <div class="card border-left-info shadow mb-3" style="width: 18rem;">
-                        <div class="card-body">
-                            <h4 class="card-title text-secondary">Групиране</h4>
-                        </div>
+                    <div class="col-md-5">
+                        <a href="#">
+                            <div class="card border-left-info shadow mb-3" style="width: 18rem;">
+                                <div class="card-body">
+                                    <h4 class="card-title text-secondary">Групиране</h4>
+                                </div>
+                            </div>
+                        </a>
                     </div>
-                </a>
-            </div>
 
-            <div class="col-md-5">
-                <a href="#">
-                    <div class="card border-left-info shadow mb-3" style="width: 18rem;">
-                        <div class="card-body">
-                            <h4 class="card-title text-secondary">Разгрупиране</h4>
-                        </div>
+                    <div class="col-md-5">
+                        <a href="#">
+                            <div class="card border-left-info shadow mb-3" style="width: 18rem;">
+                                <div class="card-body">
+                                    <h4 class="card-title text-secondary">Разгрупиране</h4>
+                                </div>
+                            </div>
+                        </a>
                     </div>
-                </a>
-            </div>
-        </div>*@
+                </div>*@
 
             <div class="row offset-md-2">
                 <div class="col-md-5">
                     <a asp-controller="Search">
                         <div class="card border-left-info shadow mb-3" style="width: 18rem;">
                             <div class="card-body">
-                                <h4 class="card-title text-secondary">Търсене</h4>
+                                <h4 class="card-title text-secondary hover-underline-animation">Търсене</h4>
                             </div>
                         </div>
                     </a>
                 </div>
 
                 @if (Model.IsOwner
-                  || Model.IsAdministrator)
+                 || Model.IsAdministrator)
                 {
                     <div class="col-md-5">
                         <a asp-controller="Administration">
                             <div class="card border-left-info shadow mb-3" style="width: 18rem;">
                                 <div class="card-body">
-                                    <h4 class="card-title text-secondary">Администрация</h4>
+                                    <h4 class="card-title text-secondary hover-underline-animation">Администрация</h4>
                                 </div>
                             </div>
                         </a>
                     </div>
-                    }
+                }
             </div>
         </div>
     </div>
 </div>
 
-            
+
+
+<style>
+   
+</style>

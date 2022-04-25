@@ -95,7 +95,8 @@
             var theme = this.themeService.GetThemeById(themeId);
             var office = this.GetOfficeById(officeId);
 
-            if (theme == null || office == null)
+            if (theme == null
+                || office == null)
             {
                 return false;
             }
@@ -103,7 +104,8 @@
             office.Theme = theme;
             await this.officeRep.SaveChangesAsync();
 
-            return true;
+            var isThemeChanged = this.themeService.UpdateTheme();
+            return isThemeChanged;
         }
 
         public string GetOfficeAsStringById(int officeId)

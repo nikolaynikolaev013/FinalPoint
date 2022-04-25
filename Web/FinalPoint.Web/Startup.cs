@@ -72,6 +72,10 @@
                     .Build();
             });
 
+            services.AddMvc()
+                .AddSessionStateTempDataProvider();
+            services.AddSession();
+
             services.Configure<MailSettings>(this.configuration.GetSection("MailSettings"));
 
             var mapper = AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);
@@ -98,6 +102,7 @@
             services.AddTransient<IDbService, DbService>();
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IThemeService, ThemeService>();
+            services.AddTransient<IHttpFacade, HttpFacade>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -128,6 +133,8 @@
             app.UseCookiePolicy();
 
             app.UseRouting();
+
+            app.UseSession();
 
             app.UseAuthentication();
             app.UseAuthorization();
