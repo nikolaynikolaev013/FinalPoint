@@ -20,8 +20,8 @@
 
         public const string DriverRoleName = "Driver";
 
-        public const string VirtualSortingCenterIdNumber = "13";
+        public const string VirtualSortingCenterIdNumber = "1";
 
-        public const string VirtualSortingCenterPostcode = "90001";
+        public const string VirtualSortingCenterPostcode = "909090";
     }
 }

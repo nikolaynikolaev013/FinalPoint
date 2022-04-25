@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using AutoMapper;
+    using FinalPoint.Common;
     using FinalPoint.Data.Common.Repositories;
     using FinalPoint.Data.Models;
     using FinalPoint.Data.Models.Enums;
@@ -322,7 +323,7 @@
             }
             else
             {
-                if (!await this.parcelService.UpdateParcelCurrentOfficeByOfficePostcode(parcelId, 90001))
+                if (!await this.parcelService.UpdateParcelCurrentOfficeByOfficeId(parcelId, int.Parse(GlobalConstants.VirtualSortingCenterIdNumber)))
                 {
                     return;
                 }
