@@ -4,7 +4,9 @@
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Threading.Tasks;
+    using FinalPoint.Common;
     using FinalPoint.Data.Models;
+    using FinalPoint.Web.Business.Interfaces;
     using FinalPoint.Web.ViewModels.CustomAttributes;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authorization;
@@ -17,15 +19,18 @@
     public class LoginModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IHttpFacade httpFacade;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
         public LoginModel(
             SignInManager<ApplicationUser> signInManager,
             ILogger<LoginModel> logger,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            IHttpFacade httpFacade)
         {
             _userManager = userManager;
+            this.httpFacade = httpFacade;
             _signInManager = signInManager;
             _logger = logger;
         }
@@ -45,7 +50,7 @@
             [CustomRequired]
             [PersonalId]
             [Display(Name = "Персонален код")]
-            public string PerosnalId { get; set; }
+            public string PersonalId { get; set; }
 
             [CustomRequired]
             [DataType(DataType.Password)]
@@ -83,9 +88,10 @@
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(Input.PerosnalId, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                var result = await _signInManager.PasswordSignInAsync(Input.PersonalId, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    this.httpFacade.AddToHttpContext(SessionKeys.PersonalId, Input.PersonalId);
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }

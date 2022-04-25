@@ -14,7 +14,7 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
-    [Authorize(Roles = GlobalConstants.AdministratorRoleName + ", " + GlobalConstants.OwnerRoleName)]
+    [Authorize(Roles = GlobalConstants.AdministratorRoleName + ", " + GlobalConstants.OwnerRoleName + ", " + GlobalConstants.OfficeOwnerRoleName)]
     public class AdministrationController : Controller
     {
         private readonly IOfficeService officeService;
@@ -122,6 +122,8 @@
         [HttpPost]
         public async Task<IActionResult> Settings(SettingsInputModel input)
         {
+            Result vm = null;
+
             if (this.ModelState.IsValid)
             {
                 var officeId = this.userService.GetUserOfficeByClaimsPrincipal(this.User);
@@ -130,24 +132,26 @@
 
                 if (result)
                 {
-                    var vm = new Result() { Success = true, Message = "Темата беше зададена успешно." };
-
-                    return this.RedirectToAction("Index", vm);
+                    vm = new Result() { Success = true, Message = "Темата беше зададена успешно." };
                 }
             }
 
-            var model = this.CreateSettingsViewModel();
+            if (vm == null)
+            {
+                vm = new Result() { Success = false, Message = "За съжаление имахме проблем. Моля опитайте да излезете и да влезете отново в акаунта си и опитайте отново." };
+            }
 
-            return this.View(model);
+            return this.RedirectToAction("Index", vm);
         }
 
         private SettingsInputModel CreateSettingsViewModel()
         {
             var model = new SettingsInputModel();
             model.AvailableThemes = this.themeService
-                    .GetAllThemes()
-                    .Select(x => this.mapper.Map<Theme, AdministrationThemeDto>(x))
+                    .GetAllThemesAsKeyValuePair()
                     .ToList();
+
+            
             return model;
         }
 
