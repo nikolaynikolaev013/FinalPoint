@@ -40,7 +40,7 @@
                     </div>
 
                     <div class="form-group">
-                        <div class="row pl-3">
+                        <div class="row pl-3 my-2 align-items-center justify-content-center">
                             <div class="pl-3 pr-3 pb-2 rounded border col-md-3">
                                 <div class="row">
                                     <label asp-for="Width"></label>
@@ -50,7 +50,7 @@
                                     <span asp-validation-for="Width" class="text-danger"></span>
                                 </div>
                             </div>
-                            <div class="pl-2 pr-2 p-2 m-3"> x </div>
+                            <div class="col-md-1">x</div>
                             <div class="pl-3 pr-3 pb-2 rounded border col-md-3">
                                 <div class="row">
                                     <label asp-for="Height"></label>
@@ -60,7 +60,7 @@
                                     <span asp-validation-for="Height" class="text-danger"></span>
                                 </div>
                             </div>
-                            <div class="pl-2 pr-2 p-2 m-3"> x </div>
+                            <div class="col-md-1">x</div>
                             <div class="pl-3 pr-3 pb-2 rounded border col-md-3">
                                 <div class="row">
                                     <label asp-for="Length"></label>
@@ -73,22 +73,22 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div>
                         <div class="form-group d-flex col-md-6 p-0">
                             <label asp-for="Weight" class="col-md-3 p-0 pt-2"></label>
-                            <input asp-for="Weight" type="number" step="any" onchange="calculatePrice()" class="form-control col-md-4" />
-                            <div class="col-md-3 p-0 pt-2 pl-1">кг.</div>
+                            <input asp-for="Weight" type="number" step="any" onchange="calculatePrice()" class="form-control col-xs-2" />
+                            <div class="col-md-3 p-0 pt-2 pl-1"> кг.</div>
                         </div>
                         <span asp-validation-for="Weight" class="text-danger"></span>
 
                         <div class="form-group d-flex col-md-6 p-0">
                             <label asp-for="NumberOfParts" class="col-md-3 p-0 pt-2"></label>
-                            <input asp-for="NumberOfParts" type="number" onchange="calculatePrice()" class="form-control col-md-4" />
+                            <input asp-for="NumberOfParts" type="number" onchange="calculatePrice()" class="form-control col-xs-2" />
                         </div>
                         <span asp-validation-for="NumberOfParts" class="text-danger"></span>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group my-2">
                         <div class="checkbox">
                             <label asp-for="HasCashOnDelivery"></label>
                             <input asp-for="HasCashOnDelivery" onchange="calculatePrice()" />
@@ -97,16 +97,16 @@
                     </div>
 
                     <div id="cashOnDeliveryPriceBlock" class="form-group" hidden>
-                        <div class="row">
+                        <div class="form-group d-flex col-md-10">
                             <label asp-for="CashOnDeliveryPrice" class="col-md-6"></label>
-                            <input asp-for="CashOnDeliveryPrice" type="number" step="any" onchange="calculatePrice()" class="form-control col-md-4" />
+                            <input asp-for="CashOnDeliveryPrice" type="number" step="any" onchange="calculatePrice()" class="form-control col-xs-2" />
                             <span asp-validation-for="CashOnDeliveryPrice" class="text-danger"></span>
-                            <span class="col-md-2">лв.</span>
+                            <span class="col-md-3 p-0 pt-2 pl-1">лв.</span>
                         </div>
                         <span asp-validation-for="CashOnDeliveryPrice" class="text-danger"></span>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group my-2">
                         <div class="checkbox">
                             <label asp-for="IsFragile"></label>
                             <input asp-for="IsFragile" onchange="calculatePrice()" />
@@ -114,7 +114,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group my-2">
                         <div class="checkbox">
                             <label asp-for="DontPaletize"></label>
                             <input asp-for="DontPaletize" onchange="calculatePrice()" />
@@ -279,7 +279,10 @@
             </div>
         </div>
 
-        <button type="submit" class="btn btn-success col-md-6 offset-md-3 form-control">Приемане</button>
+    </div>
+
+    <div class="row">
+        <button type="submit" class="btn btn-success col-md-6 m-auto">Приемане</button>
     </div>
 </form>
 

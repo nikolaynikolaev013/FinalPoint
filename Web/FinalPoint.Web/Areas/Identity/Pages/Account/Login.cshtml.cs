@@ -20,6 +20,7 @@
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IHttpFacade httpFacade;
+        private readonly IThemeService themeService;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
@@ -27,10 +28,12 @@
             SignInManager<ApplicationUser> signInManager,
             ILogger<LoginModel> logger,
             UserManager<ApplicationUser> userManager,
-            IHttpFacade httpFacade)
+            IHttpFacade httpFacade,
+            IThemeService themeService)
         {
             _userManager = userManager;
             this.httpFacade = httpFacade;
+            this.themeService = themeService;
             _signInManager = signInManager;
             _logger = logger;
         }
@@ -92,6 +95,8 @@
                 if (result.Succeeded)
                 {
                     this.httpFacade.AddToHttpContext(SessionKeys.PersonalId, Input.PersonalId);
+                    this.themeService.UpdateTheme();
+
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }

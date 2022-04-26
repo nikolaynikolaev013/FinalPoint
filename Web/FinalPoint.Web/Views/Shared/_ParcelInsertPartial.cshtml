@@ -12,17 +12,20 @@
                     </span>
 
                     <div class="input-group-append">
-                        <button id="submitBtn" class="btn btn-outline-secondary" type="button">@Model?.ButtonText</button>
+                        <button id="submitBtn" class="btn btn-secondary" type="button">@Model?.ButtonText</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="row mb-3">
-            <input name="addRemoveRadioBtns" id="check" class="btn btn-outline-secondary m-1 ml-3" type="radio" checked/>
-            <label for="check" class="mr-2">Добавяне</label>
-
-            <input name="addRemoveRadioBtns" id="remove" class="btn btn-outline-secondary m-1 ml-1" type="radio"/>
-            <label for="remove" class="mr-2">Премахване</label>
+        <div class="row mb-3 col-lg-7">
+            <div class="form-group col-sm-3">
+                <input name="addRemoveRadioBtns" id="check" class="btn btn-outline-secondary" type="radio" checked />
+                <label for="check" class="mr-2">Добавяне</label>
+            </div>
+            <div class="form-group col-sm-3">
+                <input name="addRemoveRadioBtns" id="remove" class="btn btn-outline-secondary" type="radio" />
+                <label for="remove" class="mr-2">Премахване</label>
+            </div>
         </div>
     </div>

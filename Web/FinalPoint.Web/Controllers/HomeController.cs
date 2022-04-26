@@ -19,18 +19,18 @@
         private readonly IUserService userService;
         private readonly IOfficeService officeService;
         private readonly UserManager<ApplicationUser> userManager;
-        private readonly IEmailService emailService;
+        private readonly IThemeService themeService;
 
         public HomeController(
             IUserService userService,
             IOfficeService officeService,
             UserManager<ApplicationUser> userManager,
-            IEmailService emailService)
+            IThemeService themeService)
         {
             this.userService = userService;
             this.officeService = officeService;
             this.userManager = userManager;
-            this.emailService = emailService;
+            this.themeService = themeService;
         }
 
         public IActionResult Index()
@@ -44,7 +44,12 @@
         {
             if (this.ModelState.IsValid)
             {
-                await this.userService.ChangeUserWorkOffice(this.User.FindFirstValue(ClaimTypes.NameIdentifier), input.OfficeId);
+                var result = await this.userService.ChangeUserWorkOffice(this.User.FindFirstValue(ClaimTypes.NameIdentifier), input.OfficeId);
+
+                if (result)
+                {
+                    this.themeService.UpdateTheme();
+                }
             }
 
             input = this.PopulateIndexViewModel();

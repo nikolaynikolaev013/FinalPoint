@@ -16,27 +16,27 @@
 
 <partial name="_ResponseMessagePartial" model="@Model.ResultMessage" />
 
-<div class="row">
-    <form method="post" class="col-md-6 offset-md-3">
-        <div class="form-group">
+<div class="row my-2 align-items-center justify-content-center text-center">
+    <form method="post" class="col-md-6 m-auto">
+        <div class="form-group m-2">
             <label asp-for="PostCode"></label>
             <input asp-for="PostCode" class="form-control" />
             <span asp-validation-for="PostCode" class="text-danger"></span>
         </div>
 
-        <div class="form-group">
+        <div class="form-group m-2">
             <label asp-for="Name"></label>
             <input asp-for="Name" class="form-control" />
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>
 
-        <div class="form-group">
+        <div class="form-group m-2">
             <label asp-for="OfficeType"></label>
             <select asp-for="OfficeType" asp-items="@Html.GetEnumSelectList<OfficeType>()" data-live-search="true" class="selectpicker form-control">
             </select>
         </div>
 
-        <div class="form-group" id="currCity">
+        <div class="form-group m-2" id="currCity">
             <label asp-for="CityId"></label>
             <a onclick="addNewCity()" class="text-info">(Създаване на нов град)</a>
             <select asp-for="CityId" asp-items="citiesItems" data-live-search="true" class="selectpicker form-control">
@@ -45,41 +45,41 @@
         </div>
 
         <div id="addCity">
-            <div class="form-group">
+            <div class="form-group m-2">
                 <label asp-for="CityInputModel.Name" class="text-info"></label>
                 <a onclick="addNewCity()" class="text-secondary">(Избиране от вече създаден град)</a>
                 <input asp-for="CityInputModel.Name" class="form-control" />
                 <span asp-validation-for="CityInputModel.Name" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
+            <div class="form-group m-2">
                 <label asp-for="CityInputModel.Postcode" class="text-info"></label>
                 <input asp-for="CityInputModel.Postcode" class="form-control" />
                 <span asp-validation-for="CityInputModel.Postcode" class="text-danger"></span>
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group m-2">
             <label asp-for="Address"></label>
             <input asp-for="Address" class="form-control" />
             <span asp-validation-for="Address" class="text-danger"></span>
         </div>
 
-        <div id ="responsibleSortingCenter" class="form-group">
+        <div id ="responsibleSortingCenter" class="form-group m-2">
             <label asp-for="ResponsibleSortingCenter"></label>
             <select asp-for="ResponsibleSortingCenter" asp-items="sortingCentersItems" data-live-search="true" class="selectpicker form-control">
             </select>
             <span asp-validation-for="ResponsibleSortingCenter" class="text-danger"></span>
         </div>
 
-        <div class="form-group">
+        <div class="form-group m-2">
             <label asp-for="OwnerId"></label>
             <select asp-for="OwnerId" asp-items="allUsersItems" data-live-search="true" class="selectpicker form-control">
             </select>
             <span asp-validation-for="OwnerId" class="text-danger"></span>
         </div>
 
-        <button type="submit" class="btn btn-success col-md-8 offset-md-2 form-control">Добавяне</button>
+        <button type="submit" class="btn btn-success col-md-8 mt-3">Добавяне</button>
     </form>
 </div>
 
