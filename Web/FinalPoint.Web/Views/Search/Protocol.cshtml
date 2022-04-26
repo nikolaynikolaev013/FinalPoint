@@ -24,25 +24,10 @@
                         <div class="row">
                             <div class="p-0 pl-3 m-auto">
                                 Протокол за @(protocol.Type == ProtocolType.Loading ? "товарене" : "разтоварване") №: @protocol.Id
-                            </div>
-
-                            <div class="createdBy m-auto">
                                 Създал: @protocol.CreatedByEmployee.FullName
-                            </div>
-
-                            <div class="m-auto">
                                 Дата: @protocol.CreatedOn.ToString("dd/MM/yyyy")
-                            </div>
-
-                            <div class="m-auto">
                                 От: @protocol.OfficeFrom.PostCode
-                            </div>
-
-                            <div class="m-auto">
                                 Към: @protocol.OfficeTo.Name (@protocol.OfficeTo.PostCode)
-                            </div>
-
-                            <div class="mr-1 ml-auto">
                                 <i class="fas fa-@(protocol.IsClosed ? "check" : "times")"></i>
                             </div>
                         </div>

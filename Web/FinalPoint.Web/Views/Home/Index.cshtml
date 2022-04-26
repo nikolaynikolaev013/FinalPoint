@@ -15,13 +15,13 @@
             @if (Model.IsOwner)
             {
                 <div class="text-center mb-4">
-                    <form method="post" class="text-align-center">
+                    <form method="post" class="col-md-6 m-auto text-align-center">
                         <label asp-for="OfficeId"></label>
-                        <div>
+                        <div class="form-group d-flex">
                             <select id="officeSelect" asp-for="OfficeId" asp-items="allOffices" data-live-search="true" class="selectpicker form-control col-md-8">
                             </select>
 
-                            <button type="submit" id="delBtn" class="btn btn-primary col-md-3 form-control animate__animated animate__backInRight animate__faster">Напред ></button>
+                            <button type="submit" id="delBtn" class="btn btn-primary col-md-3 animate__animated animate__backInRight animate__faster">Напред ></button>
                         </div>
 
                         <span asp-validation-for="OfficeId" class="text-danger"></span>
@@ -36,7 +36,7 @@
                         <a asp-controller="AddDispose" asp-action="AddParcel">
                             <div class="card border-left-info shadow mb-3" style="width: 18rem;">
                                 <div class="card-body">
-                                    <h4 class="card-title text-secondary hover-underline-animation">Приемане на пратка</h4>
+                                    <h5 class="card-title text-secondary hover-underline-animation">Приемане на пратка</h5>
                                 </div>
                             </div>
                         </a>
@@ -46,7 +46,7 @@
                         <a asp-controller="AddDispose" asp-action="DisposeParcel">
                             <div class="card border-left-info shadow mb-3" style="width: 18rem;">
                                 <div class="card-body">
-                                    <h4 class="card-title text-secondary hover-underline-animation">Издаване на пратка</h4>
+                                    <h5 class="card-title text-secondary hover-underline-animation">Издаване на пратка</h5>
                                 </div>
                             </div>
                         </a>
@@ -58,7 +58,7 @@
                     <a asp-controller="Load">
                         <div class="card border-left-info shadow mb-3" style="width: 18rem;">
                             <div class="card-body">
-                                <h4 class="card-title text-secondary hover-underline-animation">Товарене</h4>
+                                <h5 class="card-title text-secondary hover-underline-animation">Товарене</h5>
                             </div>
                         </div>
                     </a>
@@ -68,7 +68,7 @@
                     <a asp-controller="Unload">
                         <div class="card border-left-info shadow mb-3" style="width: 18rem;">
                             <div class="card-body">
-                                <h4 class="card-title text-secondary hover-underline-animation">Разтоварване</h4>
+                                <h5 class="card-title text-secondary hover-underline-animation">Разтоварване</h5>
                             </div>
                         </div>
                     </a>
@@ -102,7 +102,7 @@
                     <a asp-controller="Search">
                         <div class="card border-left-info shadow mb-3" style="width: 18rem;">
                             <div class="card-body">
-                                <h4 class="card-title text-secondary hover-underline-animation">Търсене</h4>
+                                <h5 class="card-title text-secondary hover-underline-animation">Търсене</h5>
                             </div>
                         </div>
                     </a>
@@ -115,7 +115,7 @@
                         <a asp-controller="Administration">
                             <div class="card border-left-info shadow mb-3" style="width: 18rem;">
                                 <div class="card-body">
-                                    <h4 class="card-title text-secondary hover-underline-animation">Администрация</h4>
+                                    <h5 class="card-title text-secondary hover-underline-animation">Администрация</h5>
                                 </div>
                             </div>
                         </a>

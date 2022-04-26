@@ -77,13 +77,17 @@ namespace FinalPoint.Web.Business.Services
 
         public IEnumerable<KeyValuePair<string, string>> GetAllThemesAsKeyValuePair()
         {
+            var currentTheme = this.GetOfficeTheme() ?? string.Empty;
+
             return this.themesRep
                 .AllAsNoTracking()
                 .Select(x => new
                  {
                      x.Name,
                      x.Id,
-                 }).ToList()
+                 })
+                .OrderByDescending(x => x.Name == currentTheme)
+                .ToList()
                  .Select(x => new KeyValuePair<string, string>(x.Id.ToString(), x.Name));
         }
 

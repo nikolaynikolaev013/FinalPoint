@@ -12,11 +12,11 @@
     @if (!Model.IsClosed)
     {
         <div class="row">
-            <div id="protocolMainResponseMessage" class="alert alert-@Model.TypeOfMessage alert-dismissible fade show col-md-12 animate__animated" role="alert">
-                <div id="message">
+            <div id="protocolMainResponseMessage" class="alert alert-@Model.TypeOfMessage alert-dismissible fade show col-md-12 animate__animated row" role="alert">
+                <div id="message" class="col-md-11">
                     @Model.Message
                 </div>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <button type="button" class="close btn col-md-1" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -44,13 +44,13 @@
 
         @if (!Model.IsClosed)
         {
-            <input type="button" id="hideBtn" onclick="toggleConfirmation('hideBtn', 'confirmPanel')" class="col-md-4 btn btn-success form-control animate__animated animate__backInRight animate__faster" value="Приключи протокола" />
+            <input type="button" id="hideBtn" onclick="toggleConfirmation('hideBtn', 'confirmPanel')" class="col-md-4 btn btn-success animate__animated animate__backInRight animate__faster" value="Приключи протокола" />
 
             <span id="confirmPanel" class="confirmDelete col-md-4">
                 <div class=" p-1 m-1 animate__animated animate__backInRight animate__faster">
                     <span class="col-md-3">Сигурни ли сте? </span>
-                    <button type="submit" onclick="closeProtocol(@Model.Id)" class="col-md-2 btn btn-danger form-control">Да</button>
-                    <button type="button" onclick="toggleConfirmation('hideBtn', 'confirmPanel')" class="col-md-2 btn btn-success form-control">Не</button>
+                    <button type="submit" onclick="closeProtocol(@Model.Id)" class="col-md-2 btn btn-danger">Да</button>
+                    <button type="button" onclick="toggleConfirmation('hideBtn', 'confirmPanel')" class="col-md-2 btn btn-success">Не</button>
                 </div>
             </span>
         }
