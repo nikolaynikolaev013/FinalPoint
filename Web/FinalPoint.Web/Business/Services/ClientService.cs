@@ -14,14 +14,11 @@
     public class ClientService : IClientService
     {
         private readonly IDeletableEntityRepository<Client> clientRep;
-        private readonly IMapper mapper;
 
         public ClientService(
-            IDeletableEntityRepository<Client> clientRep,
-            IMapper mapper)
+            IDeletableEntityRepository<Client> clientRep)
         {
             this.clientRep = clientRep;
-            this.mapper = mapper;
         }
 
         public async Task<Client> CreateAsync(Client input)
@@ -66,7 +63,11 @@
                 return new Result() { Success = false };
             }
 
-            existingClient = this.mapper.Map<Client>(input);
+            existingClient.FirstName = input.FirstName;
+            existingClient.LastName = input.LastName;
+            existingClient.PhoneNumber = input.PhoneNumber;
+            existingClient.EmailAddress = input.EmailAddress;
+            existingClient.Address = input.Address;
 
             await this.clientRep.SaveChangesAsync();
             return new Result() { Success = true };

@@ -1,20 +1,23 @@
-﻿using System.IO;
-using System.Reflection;
-using System.Threading.Tasks;
-using FinalPoint.Common;
-using FinalPoint.Web.Business.Interfaces;
-using FinalPoint.Web.ViewModels.DTOs;
-using FinalPoint.Web.ViewModels.DTOs.Email;
-using MailKit.Net.Smtp;
-using MailKit.Security;
-using Microsoft.Extensions.Options;
-using MimeKit;
-using RazorEngineCore;
-
-namespace FinalPoint.Web.Business.Services
+﻿namespace FinalPoint.Web.Business.Services
 {
+    using System.IO;
+    using System.Reflection;
+    using System.Threading.Tasks;
+
+    using FinalPoint.Common;
+    using FinalPoint.Web.Business.Interfaces;
+    using FinalPoint.Web.ViewModels.DTOs;
+    using FinalPoint.Web.ViewModels.DTOs.Email;
+    using MailKit.Net.Smtp;
+    using MailKit.Security;
+    using Microsoft.Extensions.Options;
+    using MimeKit;
+    using RazorEngineCore;
+
     public class EmailService : IEmailService
     {
+        private const string BaseEmailTemplatePath = "/wwwroot/EmailTemplates/index.html";
+
         private readonly MailSettings mailSettings;
         private readonly IParcelService parcelService;
         private readonly IClientService clientService;
@@ -55,12 +58,12 @@ namespace FinalPoint.Web.Business.Services
             var parcel = this.parcelService.GetParcelById(parcelId);
             var parcelFinalPrice = parcel.CashOnDeliveryPrice + (double)parcel.DeliveryPrice;
             var priceMainText = string.Format(MailConstants.PriceMainText, parcel.DeliveryPrice, parcelFinalPrice);
-            string templateRaw = File.ReadAllText(this.buildDir + "/wwwroot/EmailTemplates/index.html");
+            string templateRaw = File.ReadAllText(this.buildDir + BaseEmailTemplatePath);
 
             var subject = string.Empty;
             var body = string.Empty;
 
-            subject = $"Вашата пратка беше приета в офис {parcel.SendingOffice.Name}";
+            subject = $"{string.Format(MailConstants.NewParcelSenderSubject, parcel.SendingOffice.Name)}";
             body = $"{string.Format(MailConstants.NewParcelSenderMainText, parcel.SendingOffice.Name, parcel.ReceivingOffice.Name)} </br></br>{priceMainText}";
 
             await this.SendParcelUpdateEmailToCustomer(
@@ -69,7 +72,7 @@ namespace FinalPoint.Web.Business.Services
                 body,
                 templateRaw);
 
-            subject = $"Пратка за Вас беше приета в офис {parcel.SendingOffice.Name}";
+            subject = $"{string.Format(MailConstants.NewParcelRecipentSubject, parcel.SendingOffice.Name)}";
             body = $"{string.Format(MailConstants.NewParcelRecipentMainText, parcel.SendingOffice.Name, parcel.ReceivingOffice.Name)} </br></br>{priceMainText}";
 
             await this.SendParcelUpdateEmailToCustomer(
@@ -86,12 +89,12 @@ namespace FinalPoint.Web.Business.Services
             var parcel = this.parcelService.GetParcelById(parcelId);
             var parcelFinalPrice = parcel.CashOnDeliveryPrice + (double)parcel.DeliveryPrice;
             var priceMainText = string.Format(MailConstants.PriceMainText, parcel.DeliveryPrice, parcelFinalPrice);
-            string templateRaw = File.ReadAllText(this.buildDir + "/wwwroot/EmailTemplates/index.html");
+            string templateRaw = File.ReadAllText(this.buildDir + BaseEmailTemplatePath);
 
             var subject = string.Empty;
             var body = string.Empty;
 
-            subject = $"Пратката Ви е приета в импортният офис.";
+            subject = $"{MailConstants.UpdateParcelSenderSubject}";
             body = $"{string.Format(MailConstants.UpdateParcelSenderMainText, parcel.ReceivingOffice.Name)} </br></br>{priceMainText}";
 
             await this.SendParcelUpdateEmailToCustomer(
@@ -100,7 +103,7 @@ namespace FinalPoint.Web.Business.Services
                 body,
                 templateRaw);
 
-            subject = $"Пратката Ви е приета в офис {parcel.SendingOffice.Name}";
+            subject = $"{string.Format(MailConstants.UpdateParcelRecipentMainText, parcel.CurrentOffice.Name)}";
             body = $"{string.Format(MailConstants.UpdateParcelRecipentMainText, parcel.ReceivingOffice.Name)} </br></br>{priceMainText}";
 
             await this.SendParcelUpdateEmailToCustomer(
@@ -115,7 +118,7 @@ namespace FinalPoint.Web.Business.Services
         public async Task<bool> SendDisposedParcelEmails(int parcelId)
         {
             var parcel = this.parcelService.GetParcelWithDeletedById(parcelId);
-            string templateRaw = File.ReadAllText(this.buildDir + "/wwwroot/EmailTemplates/index.html");
+            string templateRaw = File.ReadAllText(this.buildDir + BaseEmailTemplatePath);
 
             var subjectAndBody = string.Empty;
 
