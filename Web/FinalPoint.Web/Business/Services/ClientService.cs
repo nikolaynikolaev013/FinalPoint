@@ -3,13 +3,13 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
     using AutoMapper;
     using FinalPoint.Common;
     using FinalPoint.Data.Common.Repositories;
     using FinalPoint.Data.Models;
     using FinalPoint.Web.Business.Interfaces;
     using FinalPoint.Web.ViewModels;
-    using FinalPoint.Web.ViewModels.AddDispose;
 
     public class ClientService : IClientService
     {
@@ -66,11 +66,12 @@
                 return new Result() { Success = false };
             }
 
-            existingClient.FirstName = input.FirstName;
-            existingClient.LastName = input.LastName;
-            existingClient.PhoneNumber = input.PhoneNumber;
-            existingClient.EmailAddress = input.EmailAddress;
-            existingClient.Address = input.Address;
+            existingClient = this.mapper.Map<Client>(input);
+            //existingClient.FirstName = input.FirstName;
+            //existingClient.LastName = input.LastName;
+            //existingClient.PhoneNumber = input.PhoneNumber;
+            //existingClient.EmailAddress = input.EmailAddress;
+            //existingClient.Address = input.Address;
 
             await this.clientRep.SaveChangesAsync();
             return new Result() { Success = true };
