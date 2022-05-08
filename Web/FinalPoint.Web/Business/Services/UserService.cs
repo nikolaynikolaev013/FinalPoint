@@ -4,7 +4,7 @@
     using System.Linq;
     using System.Security.Claims;
     using System.Threading.Tasks;
-
+    using FinalPoint.Common;
     using FinalPoint.Data.Common.Repositories;
     using FinalPoint.Data.Models;
     using FinalPoint.Web.Business.Interfaces;
@@ -64,8 +64,8 @@
             var user = this.GetUserByPersonalId(personalId);
 
             if (user != null
-                && user.WorkOffice.Name.ToLower() == "виртуален"
-                && !await this.userManager.IsInRoleAsync(user, "Owner"))
+                && user.WorkOffice.PostCode == int.Parse(GlobalConstants.VirtualSortingCenterPostcode)
+                && !await this.userManager.IsInRoleAsync(user, GlobalConstants.OwnerRoleName))
             {
                 user.WorkOfficeId = newWorkOfficeId;
                 await this.usersRep.SaveChangesAsync();
@@ -140,6 +140,7 @@
                 this.usersRep.Delete(userToDelete);
                 await this.usersRep.SaveChangesAsync();
             }
+
             return userToDelete;
         }
     }

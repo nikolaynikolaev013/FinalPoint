@@ -49,7 +49,6 @@ namespace FinalPoint.Web.Business.Services
                 return false;
             }
 
-
             return this.httpFacade.AddToHttpContext(SessionKeys.ThemeName, themeName);
         }
 
@@ -100,4 +99,3 @@ namespace FinalPoint.Web.Business.Services
 
     }
 }
-

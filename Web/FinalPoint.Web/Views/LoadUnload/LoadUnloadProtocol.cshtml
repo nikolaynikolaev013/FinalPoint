@@ -65,94 +65,15 @@
     }
 
 
-    <div id="parcelsTable">
+    <div id="parcelsTable" data-protocolId="@Model.Id">
         <partial name="_ParcelsTableShowPartialView" model="Model.ParcelTableShowViewData" />
     </div>
 
 </div>
 
 @section Scripts{
-    <script>
-        function closeProtocol(protocolId){
-            $.ajax({
-                method: "Put",
-                url: "api/Protocol/" + @Model.Id,
-                success: function (res) {
-                    if (res) {
-                        $("#protocolMainResponseMessage #message").text("Протокол №" + @Model.Id + " беше приключен успешно!");
-                        $("#protocolMainResponseMessage").addClass("alert-success");
-                        $("#protocolMainResponseMessage").removeClass("alert-warning");
-                        $("#parcelInsert").hide();
-                        $("#hideBtn").hide();
-                        $("#confirmPanel").hide();
-                        $("#responseMessage")?.hide();
-                        $(".importIdIcon").hide();
-                        }
-                    }
-                });
-        }
 
-        $("#submitBtn").click(function () {
-            let parcelId = $("#parcelIdInput").val();
-            let isCheck = $('input[type=radio][name=addRemoveRadioBtns]:checked').attr('id') == "check" ? true : false;
-
-            $.ajax({
-                method: "GET",
-                url: "/CheckedParcelResult/" + parcelId + "/" + @Model.Id + "/" + isCheck,
-                success: function (res) {
-                    $("#responseMessage").html(res);
-
-                    $.ajax({
-                        method: "GET",
-                        url: "/ReloadParcelsTable/" + @Model.Id,
-                        success: function (res) {
-                            $("#parcelsTable").html(res);
-
-
-                            $.ajax({
-                            method: "GET",
-                                url: "api/Protocol/" + @Model.Id,
-                            success: function (res) {
-                                $("#numberOfCheckedParcels").html(res);
-                                let inputFieldEl = document.querySelector("#parcelIdInput");
-                                inputFieldEl.value = "";
-                                inputFieldEl.focus();
-                            }
-                        });
-                        }
-                    });
-                }
-            });
-        });
-
-        $('input[type=radio][name=addRemoveRadioBtns]').change(function () {
-            if (this.id == 'remove') {
-                $("#submitBtn").text("Премахване");
-            }
-            else if (this.id == 'check') {
-                $("#submitBtn").text("Добавяне");
-            }
-        });
-
-        $(document).keypress(function (event) {
-            let keycode = (event.keyCode ? event.keyCode : event.which);
-            if (keycode == '13') {
-                $("#submitBtn").click();
-            }
-        });
-
-
-        @*initial load*@
-        $("#confirmPanel").hide();
-
-        $.ajax({
-            method: "GET",
-            url: "api/Protocol/" + @Model.Id,
-            success: function (res) {
-                $("#numberOfCheckedParcels").html(res);
-            }
-        });
-    </script>
+    <script src="~/js/LoadUnload/LoadUnloadProtocolMain.js"></script>
 
     <script src="~/js/ToggleConfirmationPanel.js"></script>
 }

@@ -393,7 +393,6 @@
                     .Include(x => x.Parcel)
                     .ThenInclude(x => x.Recipent)
 
-
                     .Include(x => x.Protocol)
                     .ThenInclude(x => x.OfficeFrom)
 
@@ -413,7 +412,6 @@
 
                         .Include(x => x.Parcel)
                         .ThenInclude(x => x.Recipent)
-
 
                         .Include(x => x.Protocol)
                         .ThenInclude(x => x.OfficeFrom)

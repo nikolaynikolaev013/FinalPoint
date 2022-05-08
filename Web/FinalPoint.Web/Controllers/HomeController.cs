@@ -35,7 +35,7 @@
 
         public IActionResult Index()
         {
-            var model = this.PopulateIndexViewModel();
+            var model = this.LoadIndexViewModel();
             return this.View(model);
         }
 
@@ -52,7 +52,7 @@
                 }
             }
 
-            input = this.PopulateIndexViewModel();
+            input = this.LoadIndexViewModel();
             return this.View(input);
         }
 
@@ -72,7 +72,7 @@
                 new ErrorViewModel { RequestId = Activity.Current?.Id ?? this.HttpContext.TraceIdentifier });
         }
 
-        private HomeIndexInputModel PopulateIndexViewModel()
+        private HomeIndexInputModel LoadIndexViewModel()
         {
             var model = new HomeIndexInputModel();
             var user = this.userService.GetUserById(this.User.FindFirstValue(ClaimTypes.NameIdentifier));

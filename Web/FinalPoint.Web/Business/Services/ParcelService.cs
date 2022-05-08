@@ -113,9 +113,11 @@
                 .Include(x => x.SendingEmployee)
                 .Include(x => x.SendingOffice)
                 .ThenInclude(x => x.City)
+
                 .Include(x => x.Sender)
                 .Include(x => x.ReceivingOffice)
                 .ThenInclude(x => x.City)
+
                 .Include(x => x.Recipent)
                 .Where(x => (parcelId != 0 ? x.Id == parcelId : true)
                             && (firstName != "0" ? x.Recipent.FirstName == firstName : true)
@@ -138,9 +140,11 @@
                 .Include(x => x.SendingEmployee)
                 .Include(x => x.SendingOffice)
                 .ThenInclude(x => x.City)
+
                 .Include(x => x.Sender)
                 .Include(x => x.ReceivingOffice)
                 .ThenInclude(x => x.City)
+
                 .Include(x => x.Recipent)
                 .Where(x => x.Id == parcelId)
                 .AsEnumerable()
@@ -300,7 +304,7 @@
                                                 .Protocol
                                                 .OfficeToId == currentOfficeId
 
-                                            // if the parceels' last current office is the responsible sorting center of the receiving office
+                                            // if the parcels' last current office is the responsible sorting center of the receiving office
                                             && x.Protocols
                                                 .Where(p => p.Protocol.IsClosed == true)
                                                 .OrderByDescending(x => x.CreatedOn)
@@ -358,10 +362,13 @@
                 .AllAsNoTrackingWithDeleted()
                 .Include(x => x.ReceivingOffice)
                 .ThenInclude(x => x.City)
+
                 .Include(x => x.SendingOffice)
                 .ThenInclude(x => x.City)
+
                 .Include(x => x.CurrentOffice)
                 .ThenInclude(x => x.City)
+
                 .Where(x => x.Id == parcelId)
                 .FirstOrDefault();
         }

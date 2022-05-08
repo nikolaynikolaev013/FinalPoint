@@ -33,7 +33,7 @@
             this.officeService = officeService;
             this.cityService = cityService;
             this.userService = userService;
-            this.themeService = themeService; 
+            this.themeService = themeService;
             this.mapper = mapper;
         }
 
@@ -46,7 +46,7 @@
         {
             FireEmployeeInputModel model = new FireEmployeeInputModel();
 
-            this.FillUpAvailableEmployeesToDelete(model);
+            this.LoadAvailableEmployeesToDelete(model);
 
             return this.View(model);
         }
@@ -63,7 +63,7 @@
                 }
             }
 
-            this.FillUpAvailableEmployeesToDelete(input);
+            this.LoadAvailableEmployeesToDelete(input);
 
             return this.View(input);
         }
@@ -138,7 +138,7 @@
 
             if (vm == null)
             {
-                vm = new Result() { Success = false, Message = "За съжаление имахме проблем. Моля опитайте да излезете и да влезете отново в акаунта си и опитайте отново." };
+                vm = new Result() { Success = false, Message = GlobalErrorMessages.WeHadAProblemPleaseLogInAgain };
             }
 
             return this.RedirectToAction("Index", vm);
@@ -151,7 +151,6 @@
                     .GetAllThemesAsKeyValuePair()
                     .ToList();
 
-            
             return model;
         }
 
@@ -162,7 +161,7 @@
             input.AllUsers = this.userService.GetAllUsersAsKeyValuePair();
         }
 
-        private void FillUpAvailableEmployeesToDelete(FireEmployeeInputModel input)
+        private void LoadAvailableEmployeesToDelete(FireEmployeeInputModel input)
         {
             var currUserId = this.User
                             .FindFirst(ClaimTypes.NameIdentifier)

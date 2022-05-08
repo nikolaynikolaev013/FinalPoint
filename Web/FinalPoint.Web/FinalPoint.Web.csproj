@@ -57,12 +57,16 @@
     <Folder Include="wwwroot\js\Search\" />
     <Folder Include="Business\" />
     <Folder Include="Business\Interfaces\" />
+    <Folder Include="wwwroot\js\Administration\" />
+    <Folder Include="wwwroot\js\LoadUnload\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="Views\Shared\CheckedParcelSuccessBlock.cshtml" />
     <Content Remove="Views\Shared\_ParcelSearchInputPartialView.cshtml" />
     <Content Remove="appsettings.json" />
     <Content Remove="appsettings.Development.json" />
+    <Content Remove="wwwroot\js\Administration\" />
+    <Content Remove="wwwroot\js\LoadUnload\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Areas\Identity\IdentityHostingStartup.cs" />

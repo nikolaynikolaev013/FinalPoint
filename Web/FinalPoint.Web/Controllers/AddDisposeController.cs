@@ -46,7 +46,7 @@ namespace FinalPoint.Web.Controllers
         public IActionResult AddParcel()
         {
             AddParcelInputModel model = new AddParcelInputModel();
-            this.FillUpAddParcelInputModel(model);
+            this.LoadAddParcelInputModel(model);
 
             return this.View(model);
         }
@@ -73,7 +73,7 @@ namespace FinalPoint.Web.Controllers
                 input = new AddParcelInputModel();
             }
 
-            this.FillUpAddParcelInputModel(input);
+            this.LoadAddParcelInputModel(input);
             return this.View(input);
         }
 
@@ -149,7 +149,7 @@ namespace FinalPoint.Web.Controllers
             return await this.clientService.EditClientInfo(clientModel);
         }
 
-        private void FillUpAddParcelInputModel(AddParcelInputModel input)
+        private void LoadAddParcelInputModel(AddParcelInputModel input)
         {
             var currUser = this.userService.GetUserById(this.User.FindFirst(ClaimTypes.NameIdentifier).Value);
             var allClients = this.clientService.GetAllClientsAsKeyValuePairs();
