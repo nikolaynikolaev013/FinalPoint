@@ -67,11 +67,6 @@
             }
 
             existingClient = this.mapper.Map<Client>(input);
-            //existingClient.FirstName = input.FirstName;
-            //existingClient.LastName = input.LastName;
-            //existingClient.PhoneNumber = input.PhoneNumber;
-            //existingClient.EmailAddress = input.EmailAddress;
-            //existingClient.Address = input.Address;
 
             await this.clientRep.SaveChangesAsync();
             return new Result() { Success = true };

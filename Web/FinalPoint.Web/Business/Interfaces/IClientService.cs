@@ -8,12 +8,12 @@
 
     public interface IClientService
     {
-        IEnumerable<KeyValuePair<string, string>> GetAllClientsAsKeyValuePairs();
-
-        public Client GetClientById(int id);
-
         public Task<Client> CreateAsync(Client input);
 
         public Task<Result> EditClientInfo(Client input);
+
+        public Client GetClientById(int id);
+
+        IEnumerable<KeyValuePair<string, string>> GetAllClientsAsKeyValuePairs();
     }
 }
