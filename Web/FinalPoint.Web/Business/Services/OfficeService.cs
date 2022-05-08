@@ -4,6 +4,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using AutoMapper;
+    using FinalPoint.Common;
     using FinalPoint.Data.Common.Repositories;
     using FinalPoint.Data.Models;
     using FinalPoint.Data.Models.Enums;
@@ -132,7 +133,7 @@
         {
             return this.officeRep
                 .AllAsNoTracking()
-                .Where(x => x.Name.ToLower() == "виртуален")
+                .Where(x => x.PostCode == int.Parse(GlobalConstants.VirtualSortingCenterPostcode))
                 .FirstOrDefault();
         }
 
@@ -171,11 +172,13 @@
             {
                 if (office.OfficeType == OfficeType.Office)
                 {
-                    result.Add($"Офис: {office.City.Name} {office.Name} ({office.PostCode}) - обслужващо РЦ: {office.ResponsibleSortingCenter.Name} ({office.ResponsibleSortingCenter.PostCode}) - собственик: {office.Owner?.FullName} ({office.Owner?.PersonalId})");
+                    result
+                        .Add($"Офис: {office.City.Name} {office.Name} ({office.PostCode}) - обслужващо РЦ: {office.ResponsibleSortingCenter.Name} ({office.ResponsibleSortingCenter.PostCode}) - собственик: {office.Owner?.FullName} ({office.Owner?.PersonalId})");
                 }
                 else
                 {
-                    result.Add($"Разпределителен център: {office.Name} ({office.PostCode}) - собственик: {office.Owner?.FullName} ({office.Owner?.PersonalId})");
+                    result
+                        .Add($"Разпределителен център: {office.Name} ({office.PostCode}) - собственик: {office.Owner?.FullName} ({office.Owner?.PersonalId})");
                 }
             }
 
@@ -192,7 +195,9 @@
                        x.Name,
                        x.PostCode,
                        City = x.City.Name,
-                   }).ToList().Select(x => new KeyValuePair<string, string>(x.Id.ToString(), $"{x.City} - {x.Name} - {x.PostCode}"));
+                   })
+                   .ToList()
+                   .Select(x => new KeyValuePair<string, string>(x.Id.ToString(), $"{x.City} - {x.Name} - {x.PostCode}"));
         }
 
         public IEnumerable<KeyValuePair<string, string>> GeAllOfficesAndSortingCentersWithoutCurrOneAsKeyValuePairs(int officeIdToSkip)
@@ -209,7 +214,9 @@
                           x.Name,
                           x.PostCode,
                           City = x.City.Name,
-                      }).ToList().Select(x => new KeyValuePair<string, string>(x.Id.ToString(), $"{x.City} - {x.Name} - {x.PostCode}"));
+                      })
+                      .ToList()
+                      .Select(x => new KeyValuePair<string, string>(x.Id.ToString(), $"{x.City} - {x.Name} - {x.PostCode}"));
         }
 
         public IEnumerable<KeyValuePair<string, string>> GetLoadUnloadOffices(Office currentOffice)
@@ -227,7 +234,9 @@
                           x.Name,
                           x.PostCode,
                           City = x.City.Name,
-                      }).ToList().Select(x => new KeyValuePair<string, string>(x.Id.ToString(), $"{x.City} - {x.Name} - {x.PostCode}"));
+                      })
+                      .ToList()
+                      .Select(x => new KeyValuePair<string, string>(x.Id.ToString(), $"{x.City} - {x.Name} - {x.PostCode}"));
             }
             else
             {
@@ -243,7 +252,9 @@
                           x.Name,
                           x.PostCode,
                           City = x.City.Name,
-                      }).ToList().Select(x => new KeyValuePair<string, string>(x.Id.ToString(), $"{x.City} - {x.Name} - {x.PostCode}"));
+                      })
+                      .ToList()
+                      .Select(x => new KeyValuePair<string, string>(x.Id.ToString(), $"{x.City} - {x.Name} - {x.PostCode}"));
             }
         }
 
@@ -256,7 +267,9 @@
                 {
                     x.Id,
                     x.Name,
-                }).ToList().Select(x => new KeyValuePair<string, string>(x.Id.ToString(), x.Name));
+                })
+                .ToList()
+                .Select(x => new KeyValuePair<string, string>(x.Id.ToString(), x.Name));
         }
     }
 }
