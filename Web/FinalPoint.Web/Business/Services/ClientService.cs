@@ -3,25 +3,22 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
     using AutoMapper;
     using FinalPoint.Common;
     using FinalPoint.Data.Common.Repositories;
     using FinalPoint.Data.Models;
     using FinalPoint.Web.Business.Interfaces;
     using FinalPoint.Web.ViewModels;
-    using FinalPoint.Web.ViewModels.AddDispose;
 
     public class ClientService : IClientService
     {
         private readonly IDeletableEntityRepository<Client> clientRep;
-        private readonly IMapper mapper;
 
         public ClientService(
-            IDeletableEntityRepository<Client> clientRep,
-            IMapper mapper)
+            IDeletableEntityRepository<Client> clientRep)
         {
             this.clientRep = clientRep;
-            this.mapper = mapper;
         }
 
         public async Task<Client> CreateAsync(Client input)
