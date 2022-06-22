@@ -142,7 +142,7 @@
             {
                 if (parcel.Parcel.ReceivingOfficeId == parcel.Parcel.CurrentOfficeId)
                 {
-                    await this.mailService.SendUpdateParcelEmails(parcel.ParcelId);
+                    await this.mailService.SendUpdateParcelEmailsAsync(parcel.ParcelId);
                 }
             }
 
@@ -230,7 +230,7 @@
 
             if (protocol.Type == ProtocolType.Loading)
             {
-                if (!await this.parcelService.UpdateParcelCurrentOfficeByOfficePostcode(parcelId, virtualOffice.PostCode))
+                if (!await this.parcelService.UpdateParcelCurrentOfficeByOfficePostcodeAsync(parcelId, virtualOffice.PostCode))
                 {
                     return;
                 }
@@ -239,7 +239,7 @@
             {
                 var responsibleUser = this.userService.GetUserByPersonalId(resposnibleUserPersonalId);
 
-                if (!await this.parcelService.UpdateParcelCurrentOfficeByOfficeId(parcelId, responsibleUser.WorkOfficeId))
+                if (!await this.parcelService.UpdateParcelCurrentOfficeByOfficeIdAsync(parcelId, responsibleUser.WorkOfficeId))
                 {
                     return;
                 }
@@ -316,14 +316,14 @@
             {
                 var responsibleUser = this.userService.GetUserByPersonalId(resposnibleUserPersonalId);
 
-                if (!await this.parcelService.UpdateParcelCurrentOfficeByOfficeId(parcelId, responsibleUser.WorkOfficeId))
+                if (!await this.parcelService.UpdateParcelCurrentOfficeByOfficeIdAsync(parcelId, responsibleUser.WorkOfficeId))
                 {
                     return;
                 }
             }
             else
             {
-                if (!await this.parcelService.UpdateParcelCurrentOfficeByOfficeId(parcelId, int.Parse(GlobalConstants.VirtualSortingCenterIdNumber)))
+                if (!await this.parcelService.UpdateParcelCurrentOfficeByOfficeIdAsync(parcelId, int.Parse(GlobalConstants.VirtualSortingCenterIdNumber)))
                 {
                     return;
                 }

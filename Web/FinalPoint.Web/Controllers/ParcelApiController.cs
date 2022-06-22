@@ -5,7 +5,7 @@
     using FinalPoint.Web.ViewModels.TrackParcel;
     using Microsoft.AspNetCore.Mvc;
 
-    public class ParcelApiController : Controller
+    public class ParcelApiController : BaseController
     {
         private readonly IParcelService parcelService;
         private readonly IUserService userService;
@@ -30,7 +30,7 @@
         {
             var user = this.userService.GetUserByClaimsPrincipal(this.User);
 
-            var model = new TrackParcelResultModel();
+            var model = new SearchParcelResultModel();
             model.Parcels = this.parcelService.SearchForParcels(parcelId, firstName, lastName, phoneNumber, this.User, isDispose);
 
             foreach (var parcel in model.Parcels)
@@ -49,11 +49,11 @@
         [Route("/[controller]/{parcelId}")]
         public async Task<IActionResult> DisposeParcel(int parcelId)
         {
-            var result = await this.parcelService.DisposeParcel(parcelId, this.User);
+            var result = await this.parcelService.DisposeParcelAsync(parcelId, this.User);
 
             if (result)
             {
-                result = await this.mailService.SendDisposedParcelEmails(parcelId);
+                result = await this.mailService.SendDisposedParcelEmailsAsync(parcelId);
             }
 
             return this.Ok(result);

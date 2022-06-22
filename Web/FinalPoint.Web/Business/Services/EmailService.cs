@@ -53,7 +53,7 @@
             smtp.Disconnect(true);
         }
 
-        public async Task<bool> SendNewParcelEmails(int parcelId)
+        public async Task<bool> SendNewParcelEmailsAsync(int parcelId)
         {
             var parcel = this.parcelService.GetParcelById(parcelId);
             var parcelFinalPrice = parcel.CashOnDeliveryPrice + (double)parcel.DeliveryPrice;
@@ -66,7 +66,7 @@
             subject = $"{string.Format(MailConstants.NewParcelSenderSubject, parcel.SendingOffice.Name)}";
             body = $"{string.Format(MailConstants.NewParcelSenderMainText, parcel.SendingOffice.Name, parcel.ReceivingOffice.Name)} </br></br>{priceMainText}";
 
-            await this.SendParcelUpdateEmailToCustomer(
+            await this.SendParcelUpdateEmailToCustomerAsync(
                 parcel.SenderId,
                 subject,
                 body,
@@ -75,7 +75,7 @@
             subject = $"{string.Format(MailConstants.NewParcelRecipentSubject, parcel.SendingOffice.Name)}";
             body = $"{string.Format(MailConstants.NewParcelRecipentMainText, parcel.SendingOffice.Name, parcel.ReceivingOffice.Name)} </br></br>{priceMainText}";
 
-            await this.SendParcelUpdateEmailToCustomer(
+            await this.SendParcelUpdateEmailToCustomerAsync(
                 parcel.RecipentId,
                 subject,
                 body,
@@ -84,7 +84,7 @@
             return true;
         }
 
-        public async Task<bool> SendUpdateParcelEmails(int parcelId)
+        public async Task<bool> SendUpdateParcelEmailsAsync(int parcelId)
         {
             var parcel = this.parcelService.GetParcelById(parcelId);
             var parcelFinalPrice = parcel.CashOnDeliveryPrice + (double)parcel.DeliveryPrice;
@@ -97,7 +97,7 @@
             subject = $"{MailConstants.UpdateParcelSenderSubject}";
             body = $"{string.Format(MailConstants.UpdateParcelSenderMainText, parcel.ReceivingOffice.Name)} </br></br>{priceMainText}";
 
-            await this.SendParcelUpdateEmailToCustomer(
+            await this.SendParcelUpdateEmailToCustomerAsync(
                 parcel.SenderId,
                 subject,
                 body,
@@ -106,7 +106,7 @@
             subject = $"{string.Format(MailConstants.UpdateParcelRecipentMainText, parcel.CurrentOffice.Name)}";
             body = $"{string.Format(MailConstants.UpdateParcelRecipentMainText, parcel.ReceivingOffice.Name)} </br></br>{priceMainText}";
 
-            await this.SendParcelUpdateEmailToCustomer(
+            await this.SendParcelUpdateEmailToCustomerAsync(
                 parcel.RecipentId,
                 subject,
                 body,
@@ -115,7 +115,7 @@
             return true;
         }
 
-        public async Task<bool> SendDisposedParcelEmails(int parcelId)
+        public async Task<bool> SendDisposedParcelEmailsAsync(int parcelId)
         {
             var parcel = this.parcelService.GetParcelWithDeletedById(parcelId);
             string templateRaw = File.ReadAllText(this.buildDir + BaseEmailTemplatePath);
@@ -124,7 +124,7 @@
 
             subjectAndBody = MailConstants.DisposeParcelSenderMainText;
 
-            await this.SendParcelUpdateEmailToCustomer(
+            await this.SendParcelUpdateEmailToCustomerAsync(
                 parcel.SenderId,
                 subjectAndBody,
                 subjectAndBody,
@@ -132,7 +132,7 @@
 
             subjectAndBody = MailConstants.DisposeParcelRecipentMainText;
 
-            await this.SendParcelUpdateEmailToCustomer(
+            await this.SendParcelUpdateEmailToCustomerAsync(
                 parcel.RecipentId,
                 subjectAndBody,
                 subjectAndBody,
@@ -141,7 +141,7 @@
             return true;
         }
 
-        private async Task<bool> SendParcelUpdateEmailToCustomer(
+        private async Task<bool> SendParcelUpdateEmailToCustomerAsync(
             int clientId,
             string subject,
             string message,

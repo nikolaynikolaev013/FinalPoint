@@ -8,10 +8,10 @@
     {
         Task SendEmailAsync(MailRequestDto mailRequest);
 
-        Task<bool> SendNewParcelEmails(int parcelId);
+        Task<bool> SendNewParcelEmailsAsync(int parcelId);
 
-        Task<bool> SendUpdateParcelEmails(int parcelId);
+        Task<bool> SendUpdateParcelEmailsAsync(int parcelId);
 
-        Task<bool> SendDisposedParcelEmails(int parcelId);
+        Task<bool> SendDisposedParcelEmailsAsync(int parcelId);
     }
 }

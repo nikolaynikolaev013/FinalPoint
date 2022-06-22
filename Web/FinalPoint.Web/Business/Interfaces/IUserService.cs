@@ -14,7 +14,7 @@
 
         ICollection<int> GetAllPersonalIds();
 
-        Task<ApplicationUser> RemoveUser(int userPersonalId);
+        Task<ApplicationUser> RemoveUserAsync(int userPersonalId);
 
         ICollection<string> GetAllUsers();
 
@@ -24,10 +24,10 @@
 
         ApplicationUser GetUserByClaimsPrincipal(ClaimsPrincipal user);
 
-        Task SetUserNewWorkOfficeByUserPersonalId(int personalId, int newWorkOfficeId);
+        Task SetUserNewWorkOfficeByUserPersonalIdAsync(int personalId, int newWorkOfficeId);
 
         int GetUserOfficeByClaimsPrincipal(ClaimsPrincipal user);
 
-        Task<bool> ChangeUserWorkOffice(string userId, int newWorkOfficeId);
+        Task<bool> SetUserNewWorkOfficeByUserIdAsync(string userId, int newWorkOfficeId);
     }
 }

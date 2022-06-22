@@ -95,7 +95,7 @@
                 if (result.Succeeded)
                 {
                     this.httpFacade.AddToHttpContext(SessionKeys.PersonalId, Input.PersonalId);
-                    this.themeService.UpdateTheme();
+                    this.themeService.UpdateThemeInHttpContext();
 
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);

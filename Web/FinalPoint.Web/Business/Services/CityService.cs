@@ -27,7 +27,7 @@
             return newCity.Id;
         }
 
-        public async Task<bool> DeleteIfNoOfficeAssociatedToIt(int cityId, int officeOffsetId)
+        public async Task<bool> DeleteIfNoOfficeAssociatedToItAsync(int cityId, int officeOffsetId)
         {
             var city = this.citiesRep
                 .All()

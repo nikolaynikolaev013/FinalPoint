@@ -12,8 +12,6 @@ namespace FinalPoint.Web.ViewModels.Administration
 			this.AvailableThemes = new List<KeyValuePair<string, string>>();
 		}
 
-		//public ICollection<AdministrationThemeDto> AvailableThemes { get; set; }
-
 		public ICollection<KeyValuePair<string, string>> AvailableThemes { get; set; }
 
 		[Display(Name = "Моля изберете тема: ")]

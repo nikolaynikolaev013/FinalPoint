@@ -24,7 +24,7 @@ namespace FinalPoint.Web.Business.Services
             this.httpFacade = httpFacade;
         }
 
-        public bool UpdateTheme()
+        public bool UpdateThemeInHttpContext()
         {
             var personalId = this.httpFacade.GetFromHttpContext(SessionKeys.PersonalId);
 

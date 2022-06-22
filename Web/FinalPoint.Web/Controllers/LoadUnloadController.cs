@@ -12,7 +12,7 @@ namespace FinalPoint.Web.Controllers
     using FinalPoint.Web.ViewModels.ViewComponents;
     using Microsoft.AspNetCore.Mvc;
 
-    public class LoadUnloadController : Controller
+    public class LoadUnloadController : BaseController
     {
         private readonly IOfficeService officeService;
         private readonly IProtocolService protocolService;
@@ -45,7 +45,7 @@ namespace FinalPoint.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> LoadProtocol(int id)
         {
-            var protocolInput = await this.protocolService.LoadOldProtocol(new ViewModels.DTOs.NewProtocolCreateOrOpenDataInputDto()
+            var protocolInput = await this.protocolService.LoadOldProtocolAsync(new ViewModels.DTOs.NewProtocolCreateOrOpenDataInputDto()
             {
                 User = this.User,
                 Id = id,
@@ -98,11 +98,11 @@ namespace FinalPoint.Web.Controllers
 
             if (isCheck)
             {
-                model = await this.protocolService.TryAddParcelInProtocol(parcelId, protocolId, responsibleUserPersonalId);
+                model = await this.protocolService.TryAddParcelInProtocolAsync(parcelId, protocolId, responsibleUserPersonalId);
             }
             else
             {
-                model = await this.protocolService.TryRemoveParcelFromProtocol(parcelId, protocolId, responsibleUserPersonalId);
+                model = await this.protocolService.TryRemoveParcelFromProtocolAsync(parcelId, protocolId, responsibleUserPersonalId);
             }
 
             return this.PartialView("_CheckResponsePartialView", model);
@@ -124,7 +124,7 @@ namespace FinalPoint.Web.Controllers
             var protocol = this.protocolService.GetProtocolWithOfficesById(protocolId);
             var user = this.userService.GetUserByClaimsPrincipal(this.User);
 
-            await this.protocolService.LoadNewProtocolParcels(user, protocol.Type, protocol.Id, protocol.OfficeFromId, protocol.OfficeToId, true);
+            await this.protocolService.LoadNewProtocolParcelsAsync(user, protocol.Type, protocol.Id, protocol.OfficeFromId, protocol.OfficeToId, true);
             model.Protocol = this.protocolService.GetProtocolWithOfficesById(protocolId);
             model.Parcels = this.protocolService.GetAllProtocolParcels(protocolId, withDisposed);
 
@@ -148,7 +148,7 @@ namespace FinalPoint.Web.Controllers
 
         private async Task<LoadUnloadProtocolViewModel> LoadLoadUnoadProtocolViewModel(LoadUnloadIndexViewModel input, ProtocolType protocolType)
         {
-            var protocolInput = await this.protocolService.CheckOrCreateProtocol(new ViewModels.DTOs.NewProtocolCreateOrOpenDataInputDto()
+            var protocolInput = await this.protocolService.CheckOrCreateProtocolAsync(new ViewModels.DTOs.NewProtocolCreateOrOpenDataInputDto()
             {
                 Type = protocolType,
                 User = this.User,

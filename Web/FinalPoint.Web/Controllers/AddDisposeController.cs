@@ -15,7 +15,7 @@ namespace FinalPoint.Web.Controllers
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
-    public class AddDisposeController : Controller
+    public class AddDisposeController : BaseController
     {
         private readonly IOfficeService officeService;
         private readonly IClientService clientService;
@@ -66,7 +66,7 @@ namespace FinalPoint.Web.Controllers
 
                 var newParcel = await this.parcelService.CreateAsync(input);
 
-                await this.mailService.SendNewParcelEmails(newParcel.Id);
+                await this.mailService.SendNewParcelEmailsAsync(newParcel.Id);
 
                 this.ViewBag.isSuccess = true;
                 this.ModelState.Clear();
@@ -146,7 +146,7 @@ namespace FinalPoint.Web.Controllers
         public async Task<Result> EditClientDetails(ClientDetailsDto clientDetails)
         {
             var clientModel = this.mapper.Map<Client>(clientDetails);
-            return await this.clientService.EditClientInfo(clientModel);
+            return await this.clientService.EditClientInfoAsync(clientModel);
         }
 
         private void LoadAddParcelInputModel(AddParcelInputModel input)
@@ -157,7 +157,7 @@ namespace FinalPoint.Web.Controllers
             input.SenderInputModel.AllClients = allClients;
             input.RecipentInputModel.AllClients = allClients;
 
-            input.AllOffices = this.officeService.GeAllOfficesAndSortingCentersWithoutCurrOneAsKeyValuePairs(0);
+            input.AllOffices = this.officeService.GetAllOfficesAndSortingCentersWithoutCurrOneAsKeyValuePairs(0);
             input.CurrOfficeAsString = this.officeService.GetOfficeAsStringById(currUser.WorkOfficeId);
         }
 

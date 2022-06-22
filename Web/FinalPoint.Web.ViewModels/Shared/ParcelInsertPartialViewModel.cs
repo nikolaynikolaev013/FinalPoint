@@ -8,7 +8,5 @@ namespace FinalPoint.Web.ViewModels.Shared
         }
 
         public string ButtonText { get; set; }
-
-        public string Controller { get; set; }
     }
 }

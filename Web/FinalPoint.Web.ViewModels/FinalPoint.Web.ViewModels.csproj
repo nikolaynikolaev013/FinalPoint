@@ -27,12 +27,10 @@
   <ItemGroup>
     <Folder Include="LoadUnload\" />
     <Folder Include="DTOs\" />
-    <Folder Include="GroupUngroup\" />
     <Folder Include="Shared\" />
     <Folder Include="AddDispose\" />
     <Folder Include="ViewComponents\" />
     <Folder Include="CustomAttributes\" />
-    <Folder Include="TrackParcel\" />
     <Folder Include="Home\" />
     <Folder Include="DTOs\Email\" />
     <Folder Include="DTOs\AddDisposeParcel\" />

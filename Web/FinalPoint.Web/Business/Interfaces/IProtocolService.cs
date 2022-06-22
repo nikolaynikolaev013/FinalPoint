@@ -11,13 +11,13 @@
 
     public interface IProtocolService
     {
-        Task<NewOrOpenProtocolViewModel> CheckOrCreateProtocol(NewProtocolCreateOrOpenDataInputDto input);
+        Task<NewOrOpenProtocolViewModel> CheckOrCreateProtocolAsync(NewProtocolCreateOrOpenDataInputDto input);
 
-        Task<NewOrOpenProtocolViewModel> LoadOldProtocol(NewProtocolCreateOrOpenDataInputDto input);
+        Task<NewOrOpenProtocolViewModel> LoadOldProtocolAsync(NewProtocolCreateOrOpenDataInputDto input);
 
         Protocol GetProtocolWithOfficesById(int protocolId);
 
-        Task<bool> CloseProtocol(int protocolId, string basePath);
+        Task<bool> CloseProtocolAsync(int protocolId);
 
         Task LoadNewProtocolParcels(ApplicationUser user, ProtocolType protocolType, int protocolId, int officeFromId, int officeToId, bool withDisposed);
 

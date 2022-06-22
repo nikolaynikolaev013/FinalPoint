@@ -44,7 +44,7 @@
             return newClient;
         }
 
-        public async Task<Result> EditClientInfo(Client input)
+        public async Task<Result> EditClientInfoAsync(Client input)
         {
             if (string.IsNullOrEmpty(input.LastName)
                 || string.IsNullOrEmpty(input.FirstName)
