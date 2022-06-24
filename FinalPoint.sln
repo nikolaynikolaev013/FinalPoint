@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{ACBE44C4-E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinalPoint.Data.Models", "Data\FinalPoint.Data.Models\FinalPoint.Data.Models.csproj", "{E9FDB52F-52DC-48B2-86E1-0176377BB53F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{516E002B-9E6E-4456-B7F6-EAA353966DE6}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mapping", "Mapping", "{516E002B-9E6E-4456-B7F6-EAA353966DE6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{7A731632-6714-44E2-A9E4-069EBA9E666C}"
 EndProject
