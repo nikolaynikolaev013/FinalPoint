@@ -59,7 +59,7 @@
                    .Select(x => new KeyValuePair<string, string>(x.PersonalId.ToString(), x.FullName + " - " + x.PersonalId.ToString()));
         }
 
-        public async Task SetUserNewWorkOfficeByUserPersonalId(int personalId, int newWorkOfficeId)
+        public async Task SetUserNewWorkOfficeByUserPersonalIdAsync(int personalId, int newWorkOfficeId)
         {
             var user = this.GetUserByPersonalId(personalId);
 
@@ -72,7 +72,7 @@
             }
         }
 
-        public async Task<bool> ChangeUserWorkOffice(string userId, int newWorkOfficeId)
+        public async Task<bool> SetUserNewWorkOfficeByUserIdAsync(string userId, int newWorkOfficeId)
         {
             var user = this.GetUserById(userId);
 
@@ -131,7 +131,7 @@
                 .FirstOrDefault();
         }
 
-        public async Task<ApplicationUser> RemoveUser(int userPersonalId)
+        public async Task<ApplicationUser> RemoveUserAsync(int userPersonalId)
         {
             var userToDelete = this.GetUserByPersonalId(userPersonalId);
 

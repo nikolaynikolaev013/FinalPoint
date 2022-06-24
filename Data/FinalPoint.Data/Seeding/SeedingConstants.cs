@@ -130,7 +130,7 @@ namespace FinalPoint.Data.Seeding
                     new ApplicationUser()
                         {
                             FirstName = "Никола",
-                            MiddleName = "Гоергий",
+                            MiddleName = "Георгий",
                             LastName = "Николов",
                             Email = "Nikola.Nikolov@gmail.com",
                             UserName = "90081",
@@ -221,6 +221,21 @@ namespace FinalPoint.Data.Seeding
                         Address = "ж.к. Изгрев, 33",
                         PhoneNumber = "0898782938",
                     },
+                };
+            }
+        }
+
+        public static string[] Themes
+        {
+            get
+            {
+                return new string[]
+                {
+                    "Default",
+                    "Cyborg",
+                    "Journal",
+                    "Simplex",
+                    "Yeti",
                 };
             }
         }

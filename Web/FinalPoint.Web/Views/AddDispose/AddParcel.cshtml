@@ -44,7 +44,7 @@
                                     <label asp-for="Width"></label>
                                 </div>
                                 <div class="row">
-                                    <input asp-for="Width" type="number" step="any" onchange="calculatePrice()" class="form-control" />
+                                    <input asp-for="Width" min="0.1" max="30.0" step="any" onchange="calculatePrice()" class="form-control" />
                                     <span asp-validation-for="Width" class="text-danger"></span>
                                 </div>
                             </div>
@@ -54,7 +54,7 @@
                                     <label asp-for="Height"></label>
                                 </div>
                                 <div class="row">
-                                    <input asp-for="Height" type="number" step="any" onchange="calculatePrice()" class="form-control" />
+                                    <input asp-for="Height" min="0.1" max="30.0" step="any" onchange="calculatePrice()" class="form-control" />
                                     <span asp-validation-for="Height" class="text-danger"></span>
                                 </div>
                             </div>
@@ -64,7 +64,7 @@
                                     <label asp-for="Length"></label>
                                 </div>
                                 <div class="row">
-                                    <input asp-for="Length" type="number" step="any" onchange="calculatePrice()" class="form-control" />
+                                    <input asp-for="Length" min="0.1" max="30.0" step="any" onchange="calculatePrice()" class="form-control" />
                                     <span asp-validation-for="Length" class="text-danger"></span>
                                 </div>
                             </div>

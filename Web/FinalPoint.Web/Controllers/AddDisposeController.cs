@@ -103,31 +103,31 @@ namespace FinalPoint.Web.Controllers
 
             if (chargeType == ParcelChargeType.Dimensions)
             {
-                finalPrice += volumeWeight * 0.4m;
+                finalPrice += volumeWeight * 0.1m;
             }
             else
             {
-                finalPrice += weight * 0.4m;
+                finalPrice += weight * 0.1m;
             }
 
             if (hasCashOnDelivery && cashOnDeliveryPrice > 0)
             {
-                finalPrice += cashOnDeliveryPrice / 20.0m;
+                finalPrice += cashOnDeliveryPrice / 95.0m;
             }
 
             if (isFragile)
             {
-                finalPrice *= 1.05m;
+                finalPrice *= 1.02m;
             }
 
             if (dontPaletize)
             {
-                finalPrice *= 1.10m;
+                finalPrice *= 1.04m;
             }
 
             if (numOfParts > 1)
             {
-                finalPrice += finalPrice * numOfParts * 0.05m;
+                finalPrice += finalPrice * numOfParts * 0.03m;
             }
 
             return finalPrice;
@@ -175,10 +175,14 @@ namespace FinalPoint.Web.Controllers
 
         private (decimal, ParcelChargeType) CalculateDeliveryPrice(AddParcelInputModel input)
         {
+            var heightAsDecimal = decimal.Parse(input.Height.Replace('.', ','));
+            var lengthAsDecimal = decimal.Parse(input.Length.Replace('.', ','));
+            var widthAsDecimal = decimal.Parse(input.Width.Replace('.', ','));
+
             var finalPrice = this.CalculateDeliveryPrice(
-                (decimal)input.Height,
-                (decimal)input.Length,
-                (decimal)input.Width,
+                heightAsDecimal,
+                lengthAsDecimal,
+                widthAsDecimal,
                 (decimal)input.Weight,
                 input.HasCashOnDelivery,
                 input.IsFragile,
@@ -186,7 +190,7 @@ namespace FinalPoint.Web.Controllers
                 input.CashOnDeliveryPrice,
                 input.NumberOfParts);
 
-            var volume = input.Height * input.Length * input.Width;
+            var volume = heightAsDecimal * lengthAsDecimal * widthAsDecimal;
 
             return (finalPrice, this.DecideChargeType((decimal)volume, (decimal)input.Weight));
         }

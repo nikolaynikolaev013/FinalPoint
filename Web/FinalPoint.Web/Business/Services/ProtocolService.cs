@@ -43,7 +43,7 @@
             this.mapper = mapper;
         }
 
-        public async Task<NewOrOpenProtocolViewModel> CheckOrCreateProtocol(NewProtocolCreateOrOpenDataInputDto input)
+        public async Task<NewOrOpenProtocolViewModel> CheckOrCreateProtocolAsync(NewProtocolCreateOrOpenDataInputDto input)
         {
             var currUser = this.userService
                         .GetUserByClaimsPrincipal(input.User);
@@ -72,14 +72,14 @@
                 viewModel.TypeOfMessage = "warning animate__jello";
             }
 
-            await this.LoadNewProtocolParcels(currUser, input.Type, openProtocol.Id, openProtocol.OfficeFromId, openProtocol.OfficeToId, false);
+            await this.LoadNewProtocolParcelsAsync(currUser, input.Type, openProtocol.Id, openProtocol.OfficeFromId, openProtocol.OfficeToId, false);
 
             viewModel.Protocol = openProtocol;
             viewModel.TranslatedType = translatedType;
             return viewModel;
         }
 
-        public async Task<NewOrOpenProtocolViewModel> LoadOldProtocol(NewProtocolCreateOrOpenDataInputDto input)
+        public async Task<NewOrOpenProtocolViewModel> LoadOldProtocolAsync(NewProtocolCreateOrOpenDataInputDto input)
         {
             var currUser = this.userService
                         .GetUserByClaimsPrincipal(input.User);
@@ -95,7 +95,7 @@
                 throw new ArgumentException("Invalid protocolId");
             }
 
-            await this.LoadNewProtocolParcels(currUser, openProtocol.Type, openProtocol.Id, openProtocol.OfficeFromId, openProtocol.OfficeToId, true);
+            await this.LoadNewProtocolParcelsAsync(currUser, openProtocol.Type, openProtocol.Id, openProtocol.OfficeFromId, openProtocol.OfficeToId, true);
 
             viewModel.Protocol = openProtocol;
             viewModel.TranslatedType = translatedType;
@@ -112,7 +112,7 @@
                         .FirstOrDefault();
         }
 
-        public async Task<bool> CloseProtocol(int protocolId, string basePath)
+        public async Task<bool> CloseProtocolAsync(int protocolId)
         {
             var protocol = this.protocolRep
                         .All()
@@ -122,7 +122,7 @@
             {
                 protocol.IsClosed = true;
                 await this.protocolRep.SaveChangesAsync();
-                await this.SendUpdateEmailToClients(protocolId, basePath);
+                await this.SendUpdateEmailToClientsAsync(protocolId);
 
                 return true;
             }
@@ -130,7 +130,7 @@
             return false;
         }
 
-        public async Task<bool> SendUpdateEmailToClients(int protocolId, string baseUrl)
+        public async Task<bool> SendUpdateEmailToClientsAsync(int protocolId)
         {
             var parcels = this.protocolParcelRep
                 .AllAsNoTracking()
@@ -149,7 +149,7 @@
             return true;
         }
 
-        public async Task LoadNewProtocolParcels(ApplicationUser user, ProtocolType protocolType, int protocolId, int officeFromId, int officeToId, bool withDisposed)
+        public async Task LoadNewProtocolParcelsAsync(ApplicationUser user, ProtocolType protocolType, int protocolId, int officeFromId, int officeToId, bool withDisposed)
         {
             var parcels = this.parcelService.GetAllParcelsFromTo(protocolType, user.WorkOfficeId, officeFromId, officeToId, withDisposed);
 
@@ -170,7 +170,7 @@
             await this.protocolParcelRep.SaveChangesAsync();
         }
 
-        public async Task<CheckParcelResponseModel> TryAddParcelInProtocol(int parcelId, int protocolId, int responsibleUserPersonalId)
+        public async Task<CheckParcelResponseModel> TryAddParcelInProtocolAsync(int parcelId, int protocolId, int responsibleUserPersonalId)
         {
             var responseModel = new CheckParcelResponseModel();
             var proposedProtocolParcels = this.GetProtocolParcelIds(protocolId);
@@ -194,7 +194,7 @@
                         responseModel.StatusClass = "success";
                         responseModel.AnimationClass = "bounceIn";
                         responseModel.Status = ParcelStatus.Checked;
-                        await this.AddParcelToProtocol(parcelId, protocolId, responsibleUserPersonalId, ParcelStatus.Checked);
+                        await this.AddParcelToProtocolAsync(parcelId, protocolId, responsibleUserPersonalId, ParcelStatus.Checked);
                     }
                 }
                 else
@@ -202,7 +202,7 @@
                     responseModel.StatusClass = "warning";
                     responseModel.AnimationClass = "fadeInDownBig";
                     responseModel.Status = ParcelStatus.Added;
-                    await this.AddParcelToProtocol(parcelId, protocolId, responsibleUserPersonalId, ParcelStatus.Added);
+                    await this.AddParcelToProtocolAsync(parcelId, protocolId, responsibleUserPersonalId, ParcelStatus.Added);
                 }
             }
             else
@@ -218,7 +218,7 @@
             return responseModel;
         }
 
-        public async Task AddParcelToProtocol(int parcelId, int protocolId, int resposnibleUserPersonalId, ParcelStatus status)
+        public async Task AddParcelToProtocolAsync(int parcelId, int protocolId, int resposnibleUserPersonalId, ParcelStatus status)
         {
             var protocolParcelObj = this.protocolParcelRep
                             .All()
@@ -267,7 +267,7 @@
             await this.protocolParcelRep.SaveChangesAsync();
         }
 
-        public async Task<CheckParcelResponseModel> TryRemoveParcelFromProtocol(int parcelId, int protocolId, int responsibleUserPersonalId)
+        public async Task<CheckParcelResponseModel> TryRemoveParcelFromProtocolAsync(int parcelId, int protocolId, int responsibleUserPersonalId)
         {
             var responseModel = new CheckParcelResponseModel();
 
@@ -280,7 +280,7 @@
                     responseModel.StatusClass = "warning";
                     responseModel.AnimationClass = "fadeIn";
                     responseModel.Status = ParcelStatus.Unchecked;
-                    await this.RemoveParcelFromProtocol(parcelId, protocolId, responsibleUserPersonalId);
+                    await this.RemoveParcelFromProtocolAsync(parcelId, protocolId, responsibleUserPersonalId);
                 }
                 else
                 {
@@ -308,7 +308,7 @@
             return responseModel;
         }
 
-        public async Task RemoveParcelFromProtocol(int parcelId, int protocolId, int resposnibleUserPersonalId)
+        public async Task RemoveParcelFromProtocolAsync(int parcelId, int protocolId, int resposnibleUserPersonalId)
         {
             var protocol = this.GetProtocolWithOfficesById(protocolId);
 

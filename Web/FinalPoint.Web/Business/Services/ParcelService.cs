@@ -42,8 +42,8 @@
         {
             Parcel newParcel = this.mapper.Map<Parcel>(input);
 
-            newParcel.SenderId = await this.AddClient(input.SenderInputModel);
-            newParcel.RecipentId = await this.AddClient(input.RecipentInputModel);
+            newParcel.SenderId = await this.AddClientAsync(input.SenderInputModel);
+            newParcel.RecipentId = await this.AddClientAsync(input.RecipentInputModel);
 
             await this.parcelRep.AddAsync(newParcel);
             await this.parcelRep.SaveChangesAsync();
@@ -51,7 +51,7 @@
             return newParcel;
         }
 
-        public async Task<bool> DisposeParcel(int parcelId, ClaimsPrincipal user)
+        public async Task<bool> DisposeParcelAsync(int parcelId, ClaimsPrincipal user)
         {
             var employee = this.userService.GetUserByClaimsPrincipal(user);
             var parcel = this.parcelRep
@@ -73,7 +73,7 @@
             return false;
         }
 
-        public async Task<bool> UpdateParcelCurrentOfficeByOfficeId(int parcelId, int newCurrentOfficeId)
+        public async Task<bool> UpdateParcelCurrentOfficeByOfficeIdAsync(int parcelId, int newCurrentOfficeId)
         {
             var parcel = this.GetParcelById(parcelId);
             var newCurrentOffice = this.officeService.GetOfficeById(newCurrentOfficeId);
@@ -88,7 +88,7 @@
             return false;
         }
 
-        public async Task<bool> UpdateParcelCurrentOfficeByOfficePostcode(int parcelId, int newCurrentOfficePostcode)
+        public async Task<bool> UpdateParcelCurrentOfficeByOfficePostcodeAsync(int parcelId, int newCurrentOfficePostcode)
         {
             var parcel = this.GetParcelById(parcelId);
             var newCurrentOffice = this.officeService.GetOfficeByPostcode(newCurrentOfficePostcode);
@@ -373,7 +373,7 @@
                 .FirstOrDefault();
         }
 
-        private async Task<int> AddClient(AddClientInputModel input)
+        private async Task<int> AddClientAsync(AddClientInputModel input)
         {
             if (!string.IsNullOrEmpty(input.FirstName) &&
                 !string.IsNullOrEmpty(input.LastName) &&

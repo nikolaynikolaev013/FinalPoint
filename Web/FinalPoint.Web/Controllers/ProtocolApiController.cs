@@ -27,7 +27,7 @@
         [IgnoreAntiforgeryToken]
         public async Task<bool> CloseProtocol(int protocolId)
         {
-            return await this.protocolService.CloseProtocolAsync(protocolId, null);
+            return await this.protocolService.CloseProtocolAsync(protocolId);
         }
     }
 }

@@ -16,30 +16,24 @@
             this.SenderInputModel = new AddClientInputModel(ClientType.Подател);
             this.RecipentInputModel = new AddClientInputModel(ClientType.Получател);
             this.Weight = 1;
-            this.Width = 0.20;
-            this.Height = 0.10;
-            this.Length = 0.20;
+            this.Width = "0.20";
+            this.Height = "0.10";
+            this.Length = "0.20";
             this.NumberOfParts = 1;
         }
 
-        [CustomRequired]
         [Display(Name = "Описание", Prompt = "Описание на пратката")]
         public string Description { get; set; }
 
-        [CustomRequired]
         [Display(Name = "Ширина")]
-        [Range(0, 30)]
-        public double Width { get; set; }
+        public string Width { get; set; }
 
-        [CustomRequired]
         [Display(Name = "Височина")]
-        [Range(0, 30)]
-        public double Height { get; set; }
+        public string Height { get; set; }
 
         [CustomRequired]
         [Display(Name = "Дължина")]
-        [Range(0, 30)]
-        public double Length { get; set; }
+        public string Length { get; set; }
 
         [CustomRequired]
         [Display(Name = "Тегло")]
@@ -91,9 +85,9 @@
         {
             configuration.CreateMap<AddParcelInputModel, Parcel>()
                 .ForMember(x => x.Description, x => x.MapFrom(y => y.Description))
-                .ForMember(x => x.Width, x => x.MapFrom(y => y.Width))
-                .ForMember(x => x.Height, x => x.MapFrom(y => y.Height))
-                .ForMember(x => x.Length, x => x.MapFrom(y => y.Length))
+                .ForMember(x => x.Width, x => x.MapFrom(y => decimal.Parse(y.Width.Replace(".", ","))))
+                .ForMember(x => x.Height, x => x.MapFrom(y => decimal.Parse(y.Height.Replace(".", ","))))
+                .ForMember(x => x.Length, x => x.MapFrom(y => decimal.Parse(y.Length.Replace(".", ","))))
                 .ForMember(x => x.Weight, x => x.MapFrom(y => y.Weight))
                 .ForMember(x => x.NumberOfParts, x => x.MapFrom(y => y.NumberOfParts))
                 .ForMember(x => x.HasCashOnDelivery, x => x.MapFrom(y => y.HasCashOnDelivery))

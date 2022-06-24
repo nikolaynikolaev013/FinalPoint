@@ -3,7 +3,7 @@
 function closeProtocol(protocolId) {
     $.ajax({
         method: "Put",
-        url: "api/Protocol/" + protocolId,
+        url: "api/ProtocolApi/" + protocolId,
     success: function (res) {
         if (res) {
             $("#protocolMainResponseMessage #message").text("Протокол №" + protocolId + " беше приключен успешно!");
@@ -38,7 +38,7 @@ $("#submitBtn").click(function () {
 
                     $.ajax({
                         method: "GET",
-                        url: "api/Protocol/" + protocolId,
+                        url: "api/ProtocolApi/" + protocolId,
                     success: function (res) {
                         $("#numberOfCheckedParcels").html(res);
                         let inputFieldEl = document.querySelector("#parcelIdInput");
@@ -74,7 +74,7 @@ $("#confirmPanel").hide();
 
 $.ajax({
     method: "GET",
-    url: "api/Protocol/" + protocolId,
+    url: "api/ProtocolApi/" + protocolId,
 success: function (res) {
     $("#numberOfCheckedParcels").html(res);
 }

@@ -63,7 +63,7 @@
             if (newOffice.Owner != null && newOffice.Owner.Id != null)
             {
                 await this.userService
-                        .SetUserNewWorkOfficeByUserPersonalId(newOffice.Owner.PersonalId, newOffice.Id);
+                        .SetUserNewWorkOfficeByUserPersonalIdAsync(newOffice.Owner.PersonalId, newOffice.Id);
             }
 
             return newOffice;
@@ -81,7 +81,7 @@
 
             foreach (var employee in officeEmployees.Employees)
             {
-                await this.userService.RemoveUser(employee.PersonalId);
+                await this.userService.RemoveUserAsync(employee.PersonalId);
             }
 
             this.officeRep.Delete(officeToDelete);
@@ -105,7 +105,7 @@
             office.Theme = theme;
             await this.officeRep.SaveChangesAsync();
 
-            var isThemeChanged = this.themeService.UpdateTheme();
+            var isThemeChanged = this.themeService.UpdateThemeInHttpContext();
             return isThemeChanged;
         }
 
