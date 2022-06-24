@@ -161,7 +161,7 @@
             // Arrange
 
             // Act
-            var result = officeService.GeAllOfficesAndSortingCentersAsKeyValuePairs();
+            var result = officeService.GetAllOfficesAndSortingCentersAsKeyValuePairs();
             var expectedResult = new List<KeyValuePair<string, string>>();
 
             foreach (var office in this.fakeData.Offices)
