@@ -20,7 +20,6 @@ namespace FinalPoint.Data
             command.Connection = this.Conn;
             SqlDataReader reader = command.ExecuteReader();
             return reader;
-
         }
 
         private void OpenConnection()

@@ -4,7 +4,7 @@
     using System.Linq;
     using System.Security.Claims;
     using System.Threading.Tasks;
-
+    using FinalPoint.Common;
     using FinalPoint.Data.Common.Repositories;
     using FinalPoint.Data.Models;
     using FinalPoint.Web.Business.Interfaces;
@@ -59,20 +59,20 @@
                    .Select(x => new KeyValuePair<string, string>(x.PersonalId.ToString(), x.FullName + " - " + x.PersonalId.ToString()));
         }
 
-        public async Task SetUserNewWorkOfficeByUserPersonalId(int personalId, int newWorkOfficeId)
+        public async Task SetUserNewWorkOfficeByUserPersonalIdAsync(int personalId, int newWorkOfficeId)
         {
             var user = this.GetUserByPersonalId(personalId);
 
             if (user != null
-                && user.WorkOffice.Name.ToLower() == "виртуален"
-                && !await this.userManager.IsInRoleAsync(user, "Owner"))
+                && user.WorkOffice.PostCode == int.Parse(GlobalConstants.VirtualSortingCenterPostcode)
+                && !await this.userManager.IsInRoleAsync(user, GlobalConstants.OwnerRoleName))
             {
                 user.WorkOfficeId = newWorkOfficeId;
                 await this.usersRep.SaveChangesAsync();
             }
         }
 
-        public async Task<bool> ChangeUserWorkOffice(string userId, int newWorkOfficeId)
+        public async Task<bool> SetUserNewWorkOfficeByUserIdAsync(string userId, int newWorkOfficeId)
         {
             var user = this.GetUserById(userId);
 
@@ -131,7 +131,7 @@
                 .FirstOrDefault();
         }
 
-        public async Task<ApplicationUser> RemoveUser(int userPersonalId)
+        public async Task<ApplicationUser> RemoveUserAsync(int userPersonalId)
         {
             var userToDelete = this.GetUserByPersonalId(userPersonalId);
 
@@ -140,6 +140,7 @@
                 this.usersRep.Delete(userToDelete);
                 await this.usersRep.SaveChangesAsync();
             }
+
             return userToDelete;
         }
     }

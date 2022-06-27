@@ -10,7 +10,7 @@
     {
         public Task<Client> CreateAsync(Client input);
 
-        public Task<Result> EditClientInfo(Client input);
+        public Task<Result> EditClientInfoAsync(Client input);
 
         public Client GetClientById(int id);
 

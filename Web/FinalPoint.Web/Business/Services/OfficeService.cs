@@ -4,6 +4,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using AutoMapper;
+    using FinalPoint.Common;
     using FinalPoint.Data.Common.Repositories;
     using FinalPoint.Data.Models;
     using FinalPoint.Data.Models.Enums;
@@ -62,13 +63,13 @@
             if (newOffice.Owner != null && newOffice.Owner.Id != null)
             {
                 await this.userService
-                        .SetUserNewWorkOfficeByUserPersonalId(newOffice.Owner.PersonalId, newOffice.Id);
+                        .SetUserNewWorkOfficeByUserPersonalIdAsync(newOffice.Owner.PersonalId, newOffice.Id);
             }
 
             return newOffice;
         }
 
-        public async Task<Office> Remove(int officeId)
+        public async Task<Office> RemoveAsync(int officeId)
         {
             var officeToDelete = this.GetOfficeById(officeId);
 
@@ -80,17 +81,17 @@
 
             foreach (var employee in officeEmployees.Employees)
             {
-                await this.userService.RemoveUser(employee.PersonalId);
+                await this.userService.RemoveUserAsync(employee.PersonalId);
             }
 
             this.officeRep.Delete(officeToDelete);
             await this.officeRep.SaveChangesAsync();
-            await this.cityService.DeleteIfNoOfficeAssociatedToIt(officeToDelete.CityId, officeId);
+            await this.cityService.DeleteIfNoOfficeAssociatedToItAsync(officeToDelete.CityId, officeId);
 
             return officeToDelete;
         }
 
-        public async Task<bool> ChangeOfficeTheme(int officeId, int themeId)
+        public async Task<bool> ChangeOfficeThemeAsync(int officeId, int themeId)
         {
             var theme = this.themeService.GetThemeById(themeId);
             var office = this.GetOfficeById(officeId);
@@ -104,7 +105,7 @@
             office.Theme = theme;
             await this.officeRep.SaveChangesAsync();
 
-            var isThemeChanged = this.themeService.UpdateTheme();
+            var isThemeChanged = this.themeService.UpdateThemeInHttpContext();
             return isThemeChanged;
         }
 
@@ -115,6 +116,11 @@
                         .Where(x => x.Id == officeId)
                         .Select(x => new { cityName = x.City.Name,x.Name, x.PostCode })
                         .FirstOrDefault();
+
+            if (office == null)
+            {
+                return string.Empty;
+            }
 
             return $"{office.cityName} - {office.Name} - {office.PostCode}";
         }
@@ -132,7 +138,7 @@
         {
             return this.officeRep
                 .AllAsNoTracking()
-                .Where(x => x.Name.ToLower() == "виртуален")
+                .Where(x => x.PostCode == int.Parse(GlobalConstants.VirtualSortingCenterPostcode))
                 .FirstOrDefault();
         }
 
@@ -153,7 +159,7 @@
                     .ToHashSet();
         }
 
-        public HashSet<string> GetAllOfficesWithoutVirtual()
+        public HashSet<string> GetAllOfficesAsStringWithoutVirtual()
         {
             var virtualOffice = this.GetVirtualOffice();
 
@@ -171,18 +177,20 @@
             {
                 if (office.OfficeType == OfficeType.Office)
                 {
-                    result.Add($"Офис: {office.City.Name} {office.Name} ({office.PostCode}) - обслужващо РЦ: {office.ResponsibleSortingCenter.Name} ({office.ResponsibleSortingCenter.PostCode}) - собственик: {office.Owner?.FullName} ({office.Owner?.PersonalId})");
+                    result
+                        .Add($"Офис: {office.City.Name} {office.Name} ({office.PostCode}) - обслужващо РЦ: {office.ResponsibleSortingCenter.Name} ({office.ResponsibleSortingCenter.PostCode}) - собственик: {office.Owner?.FullName} ({office.Owner?.PersonalId})");
                 }
                 else
                 {
-                    result.Add($"Разпределителен център: {office.Name} ({office.PostCode}) - собственик: {office.Owner?.FullName} ({office.Owner?.PersonalId})");
+                    result
+                        .Add($"Разпределителен център: {office.Name} ({office.PostCode}) - собственик: {office.Owner?.FullName} ({office.Owner?.PersonalId})");
                 }
             }
 
             return result;
         }
 
-        public IEnumerable<KeyValuePair<string, string>> GeAllOfficesAndSortingCentersAsKeyValuePairs()
+        public IEnumerable<KeyValuePair<string, string>> GetAllOfficesAndSortingCentersAsKeyValuePairs()
         {
             return this.officeRep
                    .AllAsNoTracking()
@@ -192,10 +200,12 @@
                        x.Name,
                        x.PostCode,
                        City = x.City.Name,
-                   }).ToList().Select(x => new KeyValuePair<string, string>(x.Id.ToString(), $"{x.City} - {x.Name} - {x.PostCode}"));
+                   })
+                   .ToList()
+                   .Select(x => new KeyValuePair<string, string>(x.Id.ToString(), $"{x.City} - {x.Name} - {x.PostCode}"));
         }
 
-        public IEnumerable<KeyValuePair<string, string>> GeAllOfficesAndSortingCentersWithoutCurrOneAsKeyValuePairs(int officeIdToSkip)
+        public IEnumerable<KeyValuePair<string, string>> GetAllOfficesAndSortingCentersWithoutCurrOneAsKeyValuePairs(int officeIdToSkip)
         {
             var virtualOffice = this.GetVirtualOffice();
 
@@ -209,7 +219,9 @@
                           x.Name,
                           x.PostCode,
                           City = x.City.Name,
-                      }).ToList().Select(x => new KeyValuePair<string, string>(x.Id.ToString(), $"{x.City} - {x.Name} - {x.PostCode}"));
+                      })
+                      .ToList()
+                      .Select(x => new KeyValuePair<string, string>(x.Id.ToString(), $"{x.City} - {x.Name} - {x.PostCode}"));
         }
 
         public IEnumerable<KeyValuePair<string, string>> GetLoadUnloadOffices(Office currentOffice)
@@ -227,13 +239,15 @@
                           x.Name,
                           x.PostCode,
                           City = x.City.Name,
-                      }).ToList().Select(x => new KeyValuePair<string, string>(x.Id.ToString(), $"{x.City} - {x.Name} - {x.PostCode}"));
+                      })
+                      .ToList()
+                      .Select(x => new KeyValuePair<string, string>(x.Id.ToString(), $"{x.City} - {x.Name} - {x.PostCode}"));
             }
             else
             {
                 return this.officeRep
                       .AllAsNoTracking()
-                      .Where(x=>
+                      .Where(x =>
                       (x.ResponsibleSortingCenterId == currentOffice.Id || x.OfficeType == OfficeType.SortingCenter)
                       && x != virtualOffice
                       && x.Id != currentOffice.Id)
@@ -243,7 +257,9 @@
                           x.Name,
                           x.PostCode,
                           City = x.City.Name,
-                      }).ToList().Select(x => new KeyValuePair<string, string>(x.Id.ToString(), $"{x.City} - {x.Name} - {x.PostCode}"));
+                      })
+                      .ToList()
+                      .Select(x => new KeyValuePair<string, string>(x.Id.ToString(), $"{x.City} - {x.Name} - {x.PostCode}"));
             }
         }
 
@@ -256,7 +272,9 @@
                 {
                     x.Id,
                     x.Name,
-                }).ToList().Select(x => new KeyValuePair<string, string>(x.Id.ToString(), x.Name));
+                })
+                .ToList()
+                .Select(x => new KeyValuePair<string, string>(x.Id.ToString(), x.Name));
         }
     }
 }

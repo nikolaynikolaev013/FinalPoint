@@ -6,7 +6,7 @@ namespace FinalPoint.Web.Business.Interfaces
 {
 	public interface IThemeService
 	{
-		bool UpdateTheme();
+		bool UpdateThemeInHttpContext();
 
 		string GetOfficeTheme();
 

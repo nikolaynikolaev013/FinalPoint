@@ -15,7 +15,7 @@
     using Microsoft.AspNetCore.Mvc;
 
     [Authorize(Roles = GlobalConstants.AdministratorRoleName + ", " + GlobalConstants.OwnerRoleName + ", " + GlobalConstants.OfficeOwnerRoleName)]
-    public class AdministrationController : Controller
+    public class AdministrationController : BaseController
     {
         private readonly IOfficeService officeService;
         private readonly ICityService cityService;
@@ -33,7 +33,7 @@
             this.officeService = officeService;
             this.cityService = cityService;
             this.userService = userService;
-            this.themeService = themeService; 
+            this.themeService = themeService;
             this.mapper = mapper;
         }
 
@@ -46,7 +46,7 @@
         {
             FireEmployeeInputModel model = new FireEmployeeInputModel();
 
-            this.FillUpAvailableEmployeesToDelete(model);
+            this.LoadAvailableEmployeesToDelete(model);
 
             return this.View(model);
         }
@@ -56,14 +56,14 @@
         {
             if (this.ModelState.IsValid)
             {
-                var removedUser = await this.userService.RemoveUser(input.EmployeeToFire);
+                var removedUser = await this.userService.RemoveUserAsync(input.EmployeeToFire);
                 if (removedUser != null)
                 {
                     input.ResultMessage = $"Служител - {removedUser.FirstName} {removedUser.MiddleName} {removedUser.LastName} - {removedUser.PersonalId} - беше уволнен успешно.";
                 }
             }
 
-            this.FillUpAvailableEmployeesToDelete(input);
+            this.LoadAvailableEmployeesToDelete(input);
 
             return this.View(input);
         }
@@ -94,7 +94,7 @@
         public IActionResult RemoveOffice()
         {
             RemoveOfficeInputModel model = new RemoveOfficeInputModel();
-            model.AvailableOfficesToRemove = this.officeService.GeAllOfficesAndSortingCentersAsKeyValuePairs();
+            model.AvailableOfficesToRemove = this.officeService.GetAllOfficesAndSortingCentersAsKeyValuePairs();
             return this.View(model);
         }
 
@@ -103,11 +103,11 @@
         {
             if (this.ModelState.IsValid)
             {
-                var removedOffice = await this.officeService.Remove(input.OfficeToRemove);
+                var removedOffice = await this.officeService.RemoveAsync(input.OfficeToRemove);
                 input.ResultMessage = $"Офис - {removedOffice.Name} - {removedOffice.PostCode} - беше прекратен успешно.";
             }
 
-            input.AvailableOfficesToRemove = this.officeService.GeAllOfficesAndSortingCentersAsKeyValuePairs();
+            input.AvailableOfficesToRemove = this.officeService.GetAllOfficesAndSortingCentersAsKeyValuePairs();
 
             return this.View(input);
         }
@@ -128,7 +128,7 @@
             {
                 var officeId = this.userService.GetUserOfficeByClaimsPrincipal(this.User);
 
-                var result = await this.officeService.ChangeOfficeTheme(officeId, input.SelectedThemeId);
+                var result = await this.officeService.ChangeOfficeThemeAsync(officeId, input.SelectedThemeId);
 
                 if (result)
                 {
@@ -138,7 +138,7 @@
 
             if (vm == null)
             {
-                vm = new Result() { Success = false, Message = "За съжаление имахме проблем. Моля опитайте да излезете и да влезете отново в акаунта си и опитайте отново." };
+                vm = new Result() { Success = false, Message = GlobalErrorMessages.WeHadAProblemPleaseLogInAgain };
             }
 
             return this.RedirectToAction("Index", vm);
@@ -151,7 +151,6 @@
                     .GetAllThemesAsKeyValuePair()
                     .ToList();
 
-            
             return model;
         }
 
@@ -162,7 +161,7 @@
             input.AllUsers = this.userService.GetAllUsersAsKeyValuePair();
         }
 
-        private void FillUpAvailableEmployeesToDelete(FireEmployeeInputModel input)
+        private void LoadAvailableEmployeesToDelete(FireEmployeeInputModel input)
         {
             var currUserId = this.User
                             .FindFirst(ClaimTypes.NameIdentifier)

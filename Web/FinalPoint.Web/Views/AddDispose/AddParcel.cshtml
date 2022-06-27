@@ -3,9 +3,9 @@
 @model AddParcelInputModel
 @inject UserManager<ApplicationUser> UserManager
 @{
-        ViewData["Title"] = "Приемане на пратка";
+    ViewData["Title"] = "Приемане на пратка";
 
-        ViewData["Breadcrumb"] = new List<KeyValuePair<string, string>>() {
+    ViewData["Breadcrumb"] = new List<KeyValuePair<string, string>>() {
         new KeyValuePair<string, string>("Начало", "/"),
         };
     var allOffices = Model.AllOffices?.Select(x => new SelectListItem(x.Value, x.Key));
@@ -27,11 +27,9 @@
     <div class="row">
         <div class="col-md-6">
             <div class="card shadow mb-4">
-                <!-- Card Header -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     <h6 class="m-0 font-weight-bold text-info">Информация за пратката</h6>
                 </div>
-                <!-- Card Body -->
                 <div class="card-body">
                     <div class="form-group">
                         <label asp-for="Description"></label>
@@ -46,7 +44,7 @@
                                     <label asp-for="Width"></label>
                                 </div>
                                 <div class="row">
-                                    <input asp-for="Width" type="number" step="any" onchange="calculatePrice()" class="form-control" />
+                                    <input asp-for="Width" min="0.1" max="30.0" step="any" onchange="calculatePrice()" class="form-control" />
                                     <span asp-validation-for="Width" class="text-danger"></span>
                                 </div>
                             </div>
@@ -56,7 +54,7 @@
                                     <label asp-for="Height"></label>
                                 </div>
                                 <div class="row">
-                                    <input asp-for="Height" type="number" step="any" onchange="calculatePrice()" class="form-control" />
+                                    <input asp-for="Height" min="0.1" max="30.0" step="any" onchange="calculatePrice()" class="form-control" />
                                     <span asp-validation-for="Height" class="text-danger"></span>
                                 </div>
                             </div>
@@ -66,7 +64,7 @@
                                     <label asp-for="Length"></label>
                                 </div>
                                 <div class="row">
-                                    <input asp-for="Length" type="number" step="any" onchange="calculatePrice()" class="form-control" />
+                                    <input asp-for="Length" min="0.1" max="30.0" step="any" onchange="calculatePrice()" class="form-control" />
                                     <span asp-validation-for="Length" class="text-danger"></span>
                                 </div>
                             </div>
@@ -133,7 +131,6 @@
         <div class="col-md-6">
 
             <div class="card shadow mb-4">
-                <!-- Card Header -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     <h6 class="m-0 font-weight-bold text-info">Подател и получател</h6>
                 </div>
@@ -147,8 +144,6 @@
                     </div>
                 </div>
 
-
-                <!-- Card Body -->
                 <div class="card-body" id="currClient10">
                     <div class="form-group">
                         <label asp-for="SenderInputModel.ClientId">@Model.SenderInputModel.Type</label>
@@ -267,7 +262,6 @@
                     </div>
                 </div>
 
-
                 <div class="card-body pt-0">
                     <div class="form-group">
                         <label asp-for="ReceivingOfficeId"></label>
@@ -287,163 +281,6 @@
 </form>
 
 @section Scripts {
-    <script>
-        let isFragileCheckBox = document.querySelector("#IsFragile");
-        let dontPaletizeCheckBox = document.querySelector("#DontPaletize");
-        let cashOnDeliveryCheckBox = document.querySelector("#HasCashOnDelivery");
-        let cashOnDeliveryPriceEl = document.querySelector("#cashOnDeliveryPriceBlock")
-        let cashOnDeliveryPriceInput = document.querySelector("#CashOnDeliveryPrice");
 
-        let widthEl = document.querySelector("#Width");
-        let heightEl = document.querySelector("#Height");
-        let lengthEl = document.querySelector("#Length");
-
-        let weightEl = document.querySelector("#Weight");
-        let numOfPartsEl = document.querySelector("#NumberOfParts");
-
-        let deliveryPriceEl = document.querySelector("#deliveryPrice");
-        let fullPriceEl = document.querySelector("#fullPrice");
-
-        cashOnDeliveryCheckBox.addEventListener("click", () => {
-
-            if (cashOnDeliveryCheckBox.checked) {
-                cashOnDeliveryPriceEl.hidden = false;
-            }
-            else {
-                cashOnDeliveryPriceEl.hidden = true;
-                cashOnDeliveryPriceInput.textContent = 0.0;
-            }
-
-            calculatePrice();
-
-        })
-
-
-        function calculatePrice() {
-            let widthValue = widthEl.value == 0 ? 1.0 : widthEl.value;
-            let heightValue = heightEl.value == 0 ? 1.0 : heightEl.value;
-            let lengthValue = lengthEl.value == 0 ? 1.0 : lengthEl.value;
-            let weightValue = weightEl.Value == 0 ? 1.0 : weightEl.value;
-            let numberOfParts = numOfPartsEl.value;
-
-            let volumeWeight = (widthValue * heightValue * lengthValue);
-
-            let cashOnDeliveryValue = cashOnDeliveryPriceInput.value;
-            let finalPrice = 0;
-
-            $.ajax({
-                method: "GET",
-                url: `/AddDispose/CalculateDeliveryPrice?height=${heightValue}&length=${lengthValue}&width=${widthValue}&weight=${weightValue}&hasCashOnDelivery=${cashOnDeliveryCheckBox.checked}&isFragile=${isFragileCheckBox.checked}&dontPaletize=${dontPaletizeCheckBox.checked}&cashOnDeliveryPrice=${cashOnDeliveryValue}&numOfParts=${numberOfParts}`,
-                success: function (res) {
-                    finalPrice = res;
-                    deliveryPriceEl.textContent = finalPrice.toFixed(2);
-                    fullPriceEl.textContent = (finalPrice + Number(cashOnDeliveryValue)).toFixed(2);
-                }
-            });
-
-            if (numberOfParts <= 0) {
-                numOfPartsEl.value = 1;
-            }
-            if (weightEl.value < 0.1) {
-                weightEl.value = 1;
-            }
-        }
-
-        calculatePrice();
-
-        function addNewClient(type, isEdit = false) {
-            let currClient = document.querySelector("#currClient" + type.toString());
-            let addClient = document.querySelector("#addClient" + type.toString());
-            let addClientFields = document.querySelector("#addClient" + type.toString() + " .addClientFields");
-            let addClientEditPanel = document.querySelector("#addClient" + type.toString() + " .addClientEditPanel");
-            let errorField = addClientFields.querySelector(".errorField");
-
-            if (!currClient.hidden) {
-                currClient.hidden = true;
-                addClientFields.hidden = false;
-                addClient.hidden = false;
-
-                if (isEdit) {
-                    let idField = addClientFields.querySelector(".id");
-                    let firstNameField = addClientFields.querySelector(".firstName");
-                    let lastNameField = addClientFields.querySelector(".lastName");
-                    let phoneNumberField = addClientFields.querySelector(".phoneNumber");
-                    let emailField = addClientFields.querySelector(".email");
-                    let addressField = addClientFields.querySelector(".address");
-                    let id = currClient.querySelector("select").value;
-
-                    $.ajax({
-                        method: "GET",
-                        url: `/AddDispose/GetClientDetailsById?id=` + id,
-                        success: function (clientDetails) {
-                            firstNameField.value = clientDetails.firstName;
-                            lastNameField.value = clientDetails.lastName;
-                            phoneNumberField.value = clientDetails.phoneNumber;
-                            emailField.value = clientDetails.email;
-                            addressField.value = clientDetails.address;
-                            idField.value = clientDetails.id
-                        }
-                    });
-                    addClientEditPanel.hidden = false;
-                }
-            } else {
-                currClient.hidden = false;
-                addClientFields.hidden = true;
-                addClient.hidden = true;
-                addClientEditPanel.hidden = true;
-                errorField.hidden = true;
-            }
-
-
-        }
-
-        function saveClientData(type)
-        {
-            let addClientFields = document.querySelector("#addClient" + type.toString() + " .addClientFields");
-
-            let idField = addClientFields.querySelector(".id");
-            let firstNameField = addClientFields.querySelector(".firstName");
-            let lastNameField = addClientFields.querySelector(".lastName");
-            let phoneNumberField = addClientFields.querySelector(".phoneNumber");
-            let emailField = addClientFields.querySelector(".email");
-            let addressField = addClientFields.querySelector(".address");
-
-            $.ajax({
-                method: "POST",
-                url: `/AddDispose/EditClientDetails`,
-                data: {
-                    id: idField.value,
-                    firstName: firstNameField.value,
-                    lastName: lastNameField.value,
-                    phoneNumber: phoneNumberField.value,
-                    email: emailField.value,
-                    address: addressField.value,
-                },
-                success: function (res) {
-
-                    if (res.success) {
-                        let currClient = document.querySelector("#currClient" + type.toString());
-                        let selectedItem = currClient.querySelector(".filter-option-inner-inner");
-                        let selectItemsInDropdown = document.querySelectorAll('option[value="' + idField.value + '"]');
-
-                        let newSelectItemValue = `${firstNameField.value} ${lastNameField.value} - ${phoneNumberField.value}`;
-
-                        for (const dropdownItem of selectItemsInDropdown) {
-                            dropdownItem.textContent = newSelectItemValue;
-                        }
-
-                        selectedItem.textContent = newSelectItemValue;
-
-                        addNewClient(type);
-                    } else {
-                        let errorField = addClientFields.querySelector(".errorField");
-                        errorField.hidden = false;
-                        errorField.textContent  = res.message;
-
-                    }
-                }
-            });
-        }
-
-    </script>
+    <script src="~/js/AddDispose/AddDisposeMain.js"></script>
 }

@@ -3,7 +3,7 @@
     using FinalPoint.Web.Business.Interfaces;
     using Microsoft.AspNetCore.Mvc;
 
-    public class SearchController : Controller
+    public class SearchController : BaseController
     {
         private readonly IProtocolService protocolService;
         private readonly IUserService userService;

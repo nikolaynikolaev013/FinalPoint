@@ -91,7 +91,6 @@
 
             // Application services
             services.AddTransient<IEmailSender, NullMessageSender>();
-            services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<IOfficeService, OfficeService>();
             services.AddTransient<ICityService, CityService>();
             services.AddTransient<IUserService, UserService>();
@@ -158,7 +157,7 @@
                                     "Load", "Load", new { controller = "LoadUnload", action = "Load" });
 
                         endpoints.MapControllerRoute(
-                                    "Load", "Protocol/{protocolId?}", new { controller = "LoadUnload", action = "LoadProtocol" });
+                                    "Load", "ProtocolApi/{protocolId?}", new { controller = "LoadUnload", action = "LoadProtocol" });
 
                         endpoints.MapControllerRoute(
                             "Unload", "Unload/{protocolId?}", new { controller = "LoadUnload", action = "Unload" });

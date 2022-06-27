@@ -12,7 +12,7 @@ namespace FinalPoint.Web.Controllers
     using FinalPoint.Web.ViewModels.ViewComponents;
     using Microsoft.AspNetCore.Mvc;
 
-    public class LoadUnloadController : Controller
+    public class LoadUnloadController : BaseController
     {
         private readonly IOfficeService officeService;
         private readonly IProtocolService protocolService;
@@ -30,14 +30,14 @@ namespace FinalPoint.Web.Controllers
 
         public IActionResult Load()
         {
-            LoadUnloadIndexViewModel model = this.LoadInitialLoadUnloadData(ProtocolType.Loading);
+            LoadUnloadIndexViewModel model = this.LoadLoadUnloadViewModel(ProtocolType.Loading);
             return this.View("LoadUnload", model);
         }
 
         [HttpPost]
         public async Task<IActionResult> Load(LoadUnloadIndexViewModel input)
         {
-            LoadUnloadProtocolViewModel model = await this.LoadInitialLoadUnoadProtocolData(input, ProtocolType.Loading);
+            LoadUnloadProtocolViewModel model = await this.LoadLoadUnoadProtocolViewModel(input, ProtocolType.Loading);
 
             return this.View("LoadUnloadProtocol", model);
         }
@@ -45,7 +45,7 @@ namespace FinalPoint.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> LoadProtocol(int id)
         {
-            var protocolInput = await this.protocolService.LoadOldProtocol(new ViewModels.DTOs.NewProtocolCreateOrOpenDataInputDto()
+            var protocolInput = await this.protocolService.LoadOldProtocolAsync(new ViewModels.DTOs.NewProtocolCreateOrOpenDataInputDto()
             {
                 User = this.User,
                 Id = id,
@@ -73,7 +73,7 @@ namespace FinalPoint.Web.Controllers
 
         public IActionResult Unload()
         {
-            LoadUnloadIndexViewModel model = this.LoadInitialLoadUnloadData(ProtocolType.Unloading);
+            LoadUnloadIndexViewModel model = this.LoadLoadUnloadViewModel(ProtocolType.Unloading);
 
             return this.View("LoadUnload", model);
         }
@@ -81,7 +81,7 @@ namespace FinalPoint.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Unload(LoadUnloadIndexViewModel input)
         {
-            LoadUnloadProtocolViewModel model = await this.LoadInitialLoadUnoadProtocolData(input, ProtocolType.Unloading);
+            LoadUnloadProtocolViewModel model = await this.LoadLoadUnoadProtocolViewModel(input, ProtocolType.Unloading);
 
             return this.View("LoadUnloadProtocol", model);
         }
@@ -98,11 +98,11 @@ namespace FinalPoint.Web.Controllers
 
             if (isCheck)
             {
-                model = await this.protocolService.TryAddParcelInProtocol(parcelId, protocolId, responsibleUserPersonalId);
+                model = await this.protocolService.TryAddParcelInProtocolAsync(parcelId, protocolId, responsibleUserPersonalId);
             }
             else
             {
-                model = await this.protocolService.TryRemoveParcelFromProtocol(parcelId, protocolId, responsibleUserPersonalId);
+                model = await this.protocolService.TryRemoveParcelFromProtocolAsync(parcelId, protocolId, responsibleUserPersonalId);
             }
 
             return this.PartialView("_CheckResponsePartialView", model);
@@ -124,7 +124,7 @@ namespace FinalPoint.Web.Controllers
             var protocol = this.protocolService.GetProtocolWithOfficesById(protocolId);
             var user = this.userService.GetUserByClaimsPrincipal(this.User);
 
-            await this.protocolService.LoadNewProtocolParcels(user, protocol.Type, protocol.Id, protocol.OfficeFromId, protocol.OfficeToId, true);
+            await this.protocolService.LoadNewProtocolParcelsAsync(user, protocol.Type, protocol.Id, protocol.OfficeFromId, protocol.OfficeToId, true);
             model.Protocol = this.protocolService.GetProtocolWithOfficesById(protocolId);
             model.Parcels = this.protocolService.GetAllProtocolParcels(protocolId, withDisposed);
 
@@ -136,7 +136,7 @@ namespace FinalPoint.Web.Controllers
             return model;
         }
 
-        private LoadUnloadIndexViewModel LoadInitialLoadUnloadData(ProtocolType protocolType)
+        private LoadUnloadIndexViewModel LoadLoadUnloadViewModel(ProtocolType protocolType)
         {
             LoadUnloadIndexViewModel model = new LoadUnloadIndexViewModel();
             model.Type = protocolType;
@@ -146,9 +146,9 @@ namespace FinalPoint.Web.Controllers
             return model;
         }
 
-        private async Task<LoadUnloadProtocolViewModel> LoadInitialLoadUnoadProtocolData(LoadUnloadIndexViewModel input, ProtocolType protocolType)
+        private async Task<LoadUnloadProtocolViewModel> LoadLoadUnoadProtocolViewModel(LoadUnloadIndexViewModel input, ProtocolType protocolType)
         {
-            var protocolInput = await this.protocolService.CheckOrCreateProtocol(new ViewModels.DTOs.NewProtocolCreateOrOpenDataInputDto()
+            var protocolInput = await this.protocolService.CheckOrCreateProtocolAsync(new ViewModels.DTOs.NewProtocolCreateOrOpenDataInputDto()
             {
                 Type = protocolType,
                 User = this.User,

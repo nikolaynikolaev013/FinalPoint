@@ -9,7 +9,7 @@
     {
         Task<int> CreateAsync(AddCityInputModel model);
 
-        Task<bool> DeleteIfNoOfficeAssociatedToIt(int cityId, int officeOffsetId);
+        Task<bool> DeleteIfNoOfficeAssociatedToItAsync(int cityId, int officeOffsetId);
 
         IEnumerable<KeyValuePair<string, string>> GetAllCitiesAsKeyValuePairs();
     }

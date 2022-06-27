@@ -2,7 +2,7 @@
 @using FinalPoint.Web.Business.Interfaces
 @inject IThemeService themeService
     @{
-        string theme = this.themeService.GetOfficeTheme().ToLower();
+        string theme = this.themeService.GetOfficeTheme()?.ToLower();
 
          if (theme == null)
          {
@@ -65,7 +65,7 @@
 
         <footer class="border-top footer text-muted">
             <div class="container">
-                &copy; 2021 - FinalPoint
+                &copy; 2022 - FinalPoint
             </div>
         </footer>
         <partial name="_ValidationScriptsPartial" />

@@ -57,7 +57,7 @@
             // Arrange
 
             // Act
-            var removedOffice = await officeService.Remove(this.fakeData.Offices[0].Id);
+            var removedOffice = await officeService.RemoveAsync(this.fakeData.Offices[0].Id);
 
             // Assert
             Assert.True(removedOffice.IsDeleted);
@@ -161,7 +161,7 @@
             // Arrange
 
             // Act
-            var result = officeService.GeAllOfficesAndSortingCentersAsKeyValuePairs();
+            var result = officeService.GetAllOfficesAndSortingCentersAsKeyValuePairs();
             var expectedResult = new List<KeyValuePair<string, string>>();
 
             foreach (var office in this.fakeData.Offices)
@@ -180,7 +180,7 @@
             var officeToSkip = this.fakeData.Offices[2];
 
             // Act
-            var result = officeService.GeAllOfficesAndSortingCentersWithoutCurrOneAsKeyValuePairs(officeToSkip.Id);
+            var result = officeService.GetAllOfficesAndSortingCentersWithoutCurrOneAsKeyValuePairs(officeToSkip.Id);
             var expectedResult = new List<KeyValuePair<string, string>>();
 
             foreach (var office in this.fakeData.Offices.Where(x => x.Id != officeToSkip.Id && x.Name.ToLower() != "виртуален"))

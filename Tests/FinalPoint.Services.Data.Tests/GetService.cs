@@ -14,9 +14,9 @@
 
         public static CityService City(ApplicationDbContext db) => new CityService(new EfDeletableEntityRepository<City>(db));
 
-        public static OfficeService Office(ApplicationDbContext db) => new OfficeService(new EfDeletableEntityRepository<Office>(db), City(db), User(db), null);
+        public static OfficeService Office(ApplicationDbContext db) => new OfficeService(new EfDeletableEntityRepository<Office>(db), City(db), User(db), null, null);
 
-        public static ClientService Client(ApplicationDbContext db) => new ClientService(new EfDeletableEntityRepository<Client>(db), null);
+        public static ClientService Client(ApplicationDbContext db) => new ClientService(new EfDeletableEntityRepository<Client>(db));
 
         public static ApplicationDbContext CreateDb(FakeData fakeData)
         {

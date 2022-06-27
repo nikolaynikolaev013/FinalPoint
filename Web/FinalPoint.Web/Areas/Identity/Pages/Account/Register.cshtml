@@ -12,7 +12,7 @@
         new KeyValuePair<string, string>("Администрация", "/Administration"),
         };
 
-    var allOffices = OfficeServices.GeAllOfficesAndSortingCentersAsKeyValuePairs().Select(x => new SelectListItem(x.Value, x.Key));
+    var allOffices = OfficeServices.GetAllOfficesAndSortingCentersAsKeyValuePairs().Select(x => new SelectListItem(x.Value, x.Key));
     var allRoles = UserRoleService.GetAllUserRolesAsKeyValuePairs()?.Select(x => new SelectListItem(x.Value, x.Key));
 }
 

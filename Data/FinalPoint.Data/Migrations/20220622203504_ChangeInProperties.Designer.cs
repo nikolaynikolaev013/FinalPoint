@@ -4,6 +4,7 @@ using FinalPoint.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinalPoint.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220622203504_ChangeInProperties")]
+    partial class ChangeInProperties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -423,7 +425,10 @@ namespace FinalPoint.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("CreatedByEmployeeId")
+                    b.Property<int>("CreatedByEmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedByEmployeeId1")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedOn")
@@ -452,7 +457,7 @@ namespace FinalPoint.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedByEmployeeId");
+                    b.HasIndex("CreatedByEmployeeId1");
 
                     b.HasIndex("IsDeleted");
 
@@ -489,7 +494,10 @@ namespace FinalPoint.Data.Migrations
                     b.Property<int>("ProtocolId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ResponsibleUserId")
+                    b.Property<int>("ResponsibleUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ResponsibleUserId1")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Status")
@@ -506,9 +514,42 @@ namespace FinalPoint.Data.Migrations
 
                     b.HasIndex("ProtocolId");
 
-                    b.HasIndex("ResponsibleUserId");
+                    b.HasIndex("ResponsibleUserId1");
 
                     b.ToTable("ProtocolParcels");
+                });
+
+            modelBuilder.Entity("FinalPoint.Data.Models.Setting", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.ToTable("Settings");
                 });
 
             modelBuilder.Entity("FinalPoint.Data.Models.Theme", b =>
@@ -753,7 +794,7 @@ namespace FinalPoint.Data.Migrations
                 {
                     b.HasOne("FinalPoint.Data.Models.ApplicationUser", "CreatedByEmployee")
                         .WithMany()
-                        .HasForeignKey("CreatedByEmployeeId");
+                        .HasForeignKey("CreatedByEmployeeId1");
 
                     b.HasOne("FinalPoint.Data.Models.Office", "OfficeFrom")
                         .WithMany("ProtocolsFrom")
@@ -790,7 +831,7 @@ namespace FinalPoint.Data.Migrations
 
                     b.HasOne("FinalPoint.Data.Models.ApplicationUser", "ResponsibleUser")
                         .WithMany("ResponsibleForProtocolRecords")
-                        .HasForeignKey("ResponsibleUserId");
+                        .HasForeignKey("ResponsibleUserId1");
 
                     b.Navigation("Parcel");
 

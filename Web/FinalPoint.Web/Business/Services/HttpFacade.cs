@@ -1,10 +1,11 @@
-﻿using System;
-using FinalPoint.Web.Business.Interfaces;
-using Microsoft.AspNetCore.Http;
-
-namespace FinalPoint.Web.Business.Services
+﻿namespace FinalPoint.Web.Business.Services
 {
-	public class HttpFacade : IHttpFacade
+    using System;
+
+    using FinalPoint.Web.Business.Interfaces;
+    using Microsoft.AspNetCore.Http;
+
+    public class HttpFacade : IHttpFacade
 	{
         private readonly IHttpContextAccessor httpContext;
 
@@ -26,4 +27,3 @@ namespace FinalPoint.Web.Business.Services
 		}
 	}
 }
-

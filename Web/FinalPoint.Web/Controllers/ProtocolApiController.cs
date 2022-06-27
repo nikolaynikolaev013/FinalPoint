@@ -6,11 +6,11 @@
 
     [Route("api/[controller]/{protocolId}")]
     [ApiController]
-    public class ProtocolController : Controller
+    public class ProtocolApiController : BaseController
     {
         private readonly IProtocolService protocolService;
 
-        public ProtocolController(
+        public ProtocolApiController(
             IProtocolService protocolService)
         {
             this.protocolService = protocolService;
@@ -27,7 +27,7 @@
         [IgnoreAntiforgeryToken]
         public async Task<bool> CloseProtocol(int protocolId)
         {
-            return await this.protocolService.CloseProtocol(protocolId, null);
+            return await this.protocolService.CloseProtocolAsync(protocolId);
         }
     }
 }

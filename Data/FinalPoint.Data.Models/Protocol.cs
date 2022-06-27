@@ -14,8 +14,8 @@
             this.IsClosed = false;
         }
 
-        [ForeignKey(nameof(ApplicationUser))]
-        public int CreatedByEmployeeId { get; set; }
+        [ForeignKey(nameof(CreatedByEmployee))]
+        public string CreatedByEmployeeId { get; set; }
 
         public virtual ApplicationUser CreatedByEmployee { get; set; }
 

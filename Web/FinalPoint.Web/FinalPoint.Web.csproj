@@ -37,7 +37,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Data\FinalPoint.Data\FinalPoint.Data.csproj" />
     <ProjectReference Include="..\..\Services\FinalPoint.Services.Data\FinalPoint.Services.Data.csproj" />
     <ProjectReference Include="..\..\Services\FinalPoint.Services.Mapping\FinalPoint.Services.Mapping.csproj" />
     <ProjectReference Include="..\..\Services\FinalPoint.Services.Messaging\FinalPoint.Services.Messaging.csproj" />
@@ -45,6 +44,9 @@
     <ProjectReference Include="..\FinalPoint.Web.Infrastructure\FinalPoint.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\FinalPoint.Web.ViewModels\FinalPoint.Web.ViewModels.csproj" />
     <ProjectReference Include="..\..\FinalPoint.Common\FinalPoint.Common.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Data\FinalPoint.Data\FinalPoint.Data.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
   </ItemGroup>
@@ -57,12 +59,16 @@
     <Folder Include="wwwroot\js\Search\" />
     <Folder Include="Business\" />
     <Folder Include="Business\Interfaces\" />
+    <Folder Include="wwwroot\js\Administration\" />
+    <Folder Include="wwwroot\js\LoadUnload\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="Views\Shared\CheckedParcelSuccessBlock.cshtml" />
     <Content Remove="Views\Shared\_ParcelSearchInputPartialView.cshtml" />
     <Content Remove="appsettings.json" />
     <Content Remove="appsettings.Development.json" />
+    <Content Remove="wwwroot\js\Administration\" />
+    <Content Remove="wwwroot\js\LoadUnload\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Areas\Identity\IdentityHostingStartup.cs" />

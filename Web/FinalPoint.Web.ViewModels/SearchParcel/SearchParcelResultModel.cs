@@ -5,9 +5,9 @@ using FinalPoint.Web.ViewModels.Shared;
 
 namespace FinalPoint.Web.ViewModels.TrackParcel
 {
-    public class TrackParcelResultModel
+    public class SearchParcelResultModel
     {
-        public TrackParcelResultModel()
+        public SearchParcelResultModel()
         {
             this.Parcels = new HashSet<SingleParcelSearchShowPartialViewModel>();
         }

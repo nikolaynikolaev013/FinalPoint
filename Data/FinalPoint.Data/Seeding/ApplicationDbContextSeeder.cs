@@ -28,13 +28,13 @@
             var seeders = new List<ISeeder>
                           {
                               new RolesSeeder(),
-                              new SettingsSeeder(),
                               new ClientsSeeder(),
                               new CitiesSeeder(),
                               new SortingCentersSeeder(),
                               new OfficesSeeder(),
                               new UsersSeeder(),
                               new OfficeOwnersSeeder(),
+                              new ThemesSeeder(),
                           };
 
             foreach (var seeder in seeders)

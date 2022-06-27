@@ -9,9 +9,9 @@
     {
         Task<Office> CreateAsync(AddOfficeInputModel model);
 
-        Task<Office> Remove(int officePostcodeToSkip);
+        Task<Office> RemoveAsync(int officePostcodeToSkip);
 
-        Task<bool> ChangeOfficeTheme(int officeId, int themeId);
+        Task<bool> ChangeOfficeThemeAsync(int officeId, int themeId);
 
         Office GetOfficeById(int officeId);
 
@@ -19,17 +19,17 @@
 
         HashSet<int> GetAllOfficeIdsInRangeOfSortingCenterId(int sortingCenterId);
 
-        HashSet<string> GetAllOfficesWithoutVirtual();
+        HashSet<string> GetAllOfficesAsStringWithoutVirtual();
 
         string GetOfficeAsStringById(int officeId);
 
         Office GetVirtualOffice();
 
-        IEnumerable<KeyValuePair<string, string>> GeAllOfficesAndSortingCentersWithoutCurrOneAsKeyValuePairs(int officetoSkip);
+        IEnumerable<KeyValuePair<string, string>> GetAllOfficesAndSortingCentersWithoutCurrOneAsKeyValuePairs(int officetoSkip);
 
         IEnumerable<KeyValuePair<string, string>> GetLoadUnloadOffices(Office currentOffice);
 
-        IEnumerable<KeyValuePair<string, string>> GeAllOfficesAndSortingCentersAsKeyValuePairs();
+        IEnumerable<KeyValuePair<string, string>> GetAllOfficesAndSortingCentersAsKeyValuePairs();
 
         IEnumerable<KeyValuePair<string, string>> GetAllSortingCentersAsKeyValuePairs();
 

@@ -35,7 +35,7 @@
 
         public IActionResult Index()
         {
-            var model = this.PopulateIndexViewModel();
+            var model = this.LoadIndexViewModel();
             return this.View(model);
         }
 
@@ -44,15 +44,15 @@
         {
             if (this.ModelState.IsValid)
             {
-                var result = await this.userService.ChangeUserWorkOffice(this.User.FindFirstValue(ClaimTypes.NameIdentifier), input.OfficeId);
+                var result = await this.userService.SetUserNewWorkOfficeByUserIdAsync(this.User.FindFirstValue(ClaimTypes.NameIdentifier), input.OfficeId);
 
                 if (result)
                 {
-                    this.themeService.UpdateTheme();
+                    this.themeService.UpdateThemeInHttpContext();
                 }
             }
 
-            input = this.PopulateIndexViewModel();
+            input = this.LoadIndexViewModel();
             return this.View(input);
         }
 
@@ -61,18 +61,11 @@
         {
             var model = new LoginUsersAndOfficesShowViewModel();
             model.Users = this.userService.GetAllUsers();
-            model.Offices = this.officeService.GetAllOfficesWithoutVirtual();
+            model.Offices = this.officeService.GetAllOfficesAsStringWithoutVirtual();
             return this.View(model);
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return this.View(
-                new ErrorViewModel { RequestId = Activity.Current?.Id ?? this.HttpContext.TraceIdentifier });
-        }
-
-        private HomeIndexInputModel PopulateIndexViewModel()
+        private HomeIndexInputModel LoadIndexViewModel()
         {
             var model = new HomeIndexInputModel();
             var user = this.userService.GetUserById(this.User.FindFirstValue(ClaimTypes.NameIdentifier));
@@ -82,7 +75,7 @@
             model.FullName = this.userManager.GetUserAsync(this.User)?.Result?.FullName;
             model.CurrentWorkOfficeId = user.WorkOfficeId;
             model.IsFromVirtualOffice = user.WorkOfficeId == this.officeService.GetVirtualOffice().Id;
-            model.AvailableOffices = this.officeService.GeAllOfficesAndSortingCentersAsKeyValuePairs().OrderByDescending(x => x.Key == user.WorkOfficeId.ToString());
+            model.AvailableOffices = this.officeService.GetAllOfficesAndSortingCentersAsKeyValuePairs().OrderByDescending(x => x.Key == user.WorkOfficeId.ToString());
 
             return model;
         }

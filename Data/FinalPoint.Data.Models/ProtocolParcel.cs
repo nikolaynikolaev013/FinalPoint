@@ -24,8 +24,8 @@
 
         public ParcelStatus Status { get; set; }
 
-        [ForeignKey(nameof(ApplicationUser))]
-        public int ResponsibleUserId { get; set; }
+        [ForeignKey(nameof(ResponsibleUser))]
+        public string ResponsibleUserId { get; set; }
 
         public virtual ApplicationUser ResponsibleUser { get; set; }
 
