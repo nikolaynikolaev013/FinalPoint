@@ -126,9 +126,10 @@
 
                             && (isDispose == true ? (x.ReceivingOfficeId == employee.WorkOfficeId) : true))
 
+                .OrderByDescending(x => x.CurrentOfficeId == employee.WorkOfficeId)
+                .ThenByDescending(x => x.CreatedOn)
                 .AsEnumerable()
                 .Select(x => this.mapper.Map<Parcel, SingleParcelSearchShowPartialViewModel>(x))
-                .OrderByDescending(x => x.CurrentOfficeId == x.ReceivingOfficeId)
                 .ToList();
         }
 
