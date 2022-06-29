@@ -94,7 +94,7 @@
         public IActionResult RemoveOffice()
         {
             RemoveOfficeInputModel model = new RemoveOfficeInputModel();
-            model.AvailableOfficesToRemove = this.officeService.GetAllOfficesAndSortingCentersAsKeyValuePairs();
+            model.AvailableOfficesToRemove = this.officeService.GetOnlyAllOfficesAsKeyValueParis();
             return this.View(model);
         }
 
@@ -107,7 +107,7 @@
                 input.ResultMessage = $"Офис - {removedOffice.Name} - {removedOffice.PostCode} - беше прекратен успешно.";
             }
 
-            input.AvailableOfficesToRemove = this.officeService.GetAllOfficesAndSortingCentersAsKeyValuePairs();
+            input.AvailableOfficesToRemove = this.officeService.GetOnlyAllOfficesAsKeyValueParis();
 
             return this.View(input);
         }

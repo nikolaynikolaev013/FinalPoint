@@ -70,6 +70,7 @@ namespace FinalPoint.Web.Controllers
 
                 this.ViewBag.isSuccess = true;
                 this.ModelState.Clear();
+
                 input = new AddParcelInputModel();
             }
 
@@ -99,36 +100,20 @@ namespace FinalPoint.Web.Controllers
 
             var volumeWeight = height * width * length;
 
-            ParcelChargeType chargeType = this.DecideChargeType(volumeWeight, weight);
+            //To decide if the charge is by dimensions or my weight
+            finalPrice += (volumeWeight > weight ? volumeWeight * 0.1m : weight * 0.1m);
 
-            if (chargeType == ParcelChargeType.Dimensions)
-            {
-                finalPrice += volumeWeight * 0.1m;
-            }
-            else
-            {
-                finalPrice += weight * 0.1m;
-            }
+            //if cash on delivery is selected
+            finalPrice += (hasCashOnDelivery && cashOnDeliveryPrice > 0 ? cashOnDeliveryPrice / 95.0m : 0);
 
-            if (hasCashOnDelivery && cashOnDeliveryPrice > 0)
-            {
-                finalPrice += cashOnDeliveryPrice / 95.0m;
-            }
+            //if IsFragile is selected
+            finalPrice *= (isFragile ? 1.02m : 1);
 
-            if (isFragile)
-            {
-                finalPrice *= 1.02m;
-            }
+            //if DontPaletize is selected
+            finalPrice *= (dontPaletize ? 1.04m : 1);
 
-            if (dontPaletize)
-            {
-                finalPrice *= 1.04m;
-            }
-
-            if (numOfParts > 1)
-            {
-                finalPrice += finalPrice * numOfParts * 0.03m;
-            }
+            //if there are more than 1 part
+            finalPrice += (numOfParts > 1 ? finalPrice * numOfParts * 0.03m : 0);
 
             return finalPrice;
         }
@@ -159,18 +144,6 @@ namespace FinalPoint.Web.Controllers
 
             input.AllOffices = this.officeService.GetAllOfficesAndSortingCentersWithoutCurrOneAsKeyValuePairs(0);
             input.CurrOfficeAsString = this.officeService.GetOfficeAsStringById(currUser.WorkOfficeId);
-        }
-
-        private ParcelChargeType DecideChargeType(decimal volumeWeight, decimal weight)
-        {
-            if (volumeWeight > weight)
-            {
-                return ParcelChargeType.Dimensions;
-            }
-            else
-            {
-                return ParcelChargeType.Weight;
-            }
         }
 
         private (decimal, ParcelChargeType) CalculateDeliveryPrice(AddParcelInputModel input)

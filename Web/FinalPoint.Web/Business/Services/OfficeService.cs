@@ -205,6 +205,21 @@
                    .Select(x => new KeyValuePair<string, string>(x.Id.ToString(), $"{x.City} - {x.Name} - {x.PostCode}"));
         }
 
+        public IEnumerable<KeyValuePair<string, string>> GetOnlyAllOfficesAsKeyValueParis()
+        {
+            return this.officeRep
+                   .AllAsNoTracking()
+                   .Where(x => x.OfficeType == OfficeType.Office)
+                   .Select(x => new
+                   {
+                       x.Id,
+                       x.Name,
+                       x.PostCode,
+                       City = x.City.Name,
+                   })
+                   .ToList()
+                   .Select(x => new KeyValuePair<string, string>(x.Id.ToString(), $"{x.City} - {x.Name} - {x.PostCode}"));
+        }
         public IEnumerable<KeyValuePair<string, string>> GetAllOfficesAndSortingCentersWithoutCurrOneAsKeyValuePairs(int officeIdToSkip)
         {
             var virtualOffice = this.GetVirtualOffice();
