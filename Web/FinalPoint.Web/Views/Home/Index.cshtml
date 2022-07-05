@@ -29,7 +29,7 @@
                 </div>
             }
 
-            @if (!Model.IsOwner || !Model.IsFromVirtualOffice)
+            @if (Model.ShowOfficeModules)
             {
                 <div class="row offset-md-2">
                     <div class="col-md-5">
@@ -86,8 +86,7 @@
                     </a>
                 </div>
 
-                @if (Model.IsOwner
-                 || Model.IsAdministrator)
+                @if (Model.ShowAdministratorModule)
                 {
                     <div class="col-md-5">
                         <a asp-controller="Administration">

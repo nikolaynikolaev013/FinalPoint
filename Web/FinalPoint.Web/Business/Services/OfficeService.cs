@@ -220,6 +220,7 @@
                    .ToList()
                    .Select(x => new KeyValuePair<string, string>(x.Id.ToString(), $"{x.City} - {x.Name} - {x.PostCode}"));
         }
+
         public IEnumerable<KeyValuePair<string, string>> GetAllOfficesAndSortingCentersWithoutCurrOneAsKeyValuePairs(int officeIdToSkip)
         {
             var virtualOffice = this.GetVirtualOffice();

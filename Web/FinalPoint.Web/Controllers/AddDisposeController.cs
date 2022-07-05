@@ -11,6 +11,7 @@ namespace FinalPoint.Web.Controllers
     using FinalPoint.Web.Business.Interfaces;
     using FinalPoint.Web.ViewModels;
     using FinalPoint.Web.ViewModels.AddDispose;
+    using FinalPoint.Web.ViewModels.DTOs;
     using FinalPoint.Web.ViewModels.DTOs.AddDisposeParcel;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
@@ -85,35 +86,26 @@ namespace FinalPoint.Web.Controllers
 
         [HttpGet]
         [IgnoreAntiforgeryToken]
-        public decimal CalculateDeliveryPrice(
-            decimal height,
-            decimal length,
-            decimal width,
-            decimal weight,
-            bool hasCashOnDelivery,
-            bool isFragile,
-            bool dontPaletize,
-            decimal cashOnDeliveryPrice,
-            int numOfParts)
+        public decimal CalculateDeliveryPrice(CalculateDeliveryPriceDto input)
         {
             var finalPrice = 5.20m;
 
-            var volumeWeight = height * width * length;
+            var volumeWeight = input.Height * input.Width * input.Length;
 
-            //To decide if the charge is by dimensions or my weight
-            finalPrice += (volumeWeight > weight ? volumeWeight * 0.1m : weight * 0.1m);
+            // To decide if the charge is by dimensions or my weight
+            finalPrice += (this.DecideChargeType(volumeWeight, input.Weight) == ParcelChargeType.Dimensions ? volumeWeight * 0.1m : input.Weight * 0.1m);
 
-            //if cash on delivery is selected
-            finalPrice += (hasCashOnDelivery && cashOnDeliveryPrice > 0 ? cashOnDeliveryPrice / 95.0m : 0);
+            // if cash on delivery is selected
+            finalPrice += (input.HasCashOnDelivery && input.CashOnDeliveryPrice > 0 ? input.CashOnDeliveryPrice / 95.0m : 0);
 
-            //if IsFragile is selected
-            finalPrice *= (isFragile ? 1.02m : 1);
+            // if IsFragile is selected
+            finalPrice *= (input.IsFragile ? 1.02m : 1);
 
-            //if DontPaletize is selected
-            finalPrice *= (dontPaletize ? 1.04m : 1);
+            // if DontPaletize is selected
+            finalPrice *= (input.DontPaletize ? 1.04m : 1);
 
-            //if there are more than 1 part
-            finalPrice += (numOfParts > 1 ? finalPrice * numOfParts * 0.03m : 0);
+            // if there are more than 1 part
+            finalPrice += (input.NumberOfParts > 1 ? finalPrice * input.NumberOfParts * 0.03m : 0);
 
             return finalPrice;
         }
@@ -152,20 +144,28 @@ namespace FinalPoint.Web.Controllers
             var lengthAsDecimal = decimal.Parse(input.Length.Replace('.', ','));
             var widthAsDecimal = decimal.Parse(input.Width.Replace('.', ','));
 
-            var finalPrice = this.CalculateDeliveryPrice(
-                heightAsDecimal,
-                lengthAsDecimal,
-                widthAsDecimal,
-                (decimal)input.Weight,
-                input.HasCashOnDelivery,
-                input.IsFragile,
-                input.DontPaletize,
-                input.CashOnDeliveryPrice,
-                input.NumberOfParts);
+            var calculatePriceDto = this.mapper.Map<CalculateDeliveryPriceDto>(input);
+            calculatePriceDto.Height = heightAsDecimal;
+            calculatePriceDto.Length = lengthAsDecimal;
+            calculatePriceDto.Width = widthAsDecimal;
+
+            var finalPrice = this.CalculateDeliveryPrice(calculatePriceDto);
 
             var volume = heightAsDecimal * lengthAsDecimal * widthAsDecimal;
 
-            return (finalPrice, this.DecideChargeType((decimal)volume, (decimal)input.Weight));
+            return (finalPrice, this.DecideChargeType(volume, (decimal)input.Weight));
+        }
+
+        private ParcelChargeType DecideChargeType(decimal volumeWeight, decimal weight)
+        {
+            if (volumeWeight > weight / 2)
+            {
+                return ParcelChargeType.Dimensions;
+            }
+            else
+            {
+                return ParcelChargeType.Weight;
+            }
         }
     }
 }
