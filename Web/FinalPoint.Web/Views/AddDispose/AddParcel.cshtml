@@ -33,7 +33,7 @@
                 <div class="card-body">
                     <div class="form-group">
                         <label asp-for="Description"></label>
-                        <textarea asp-for="Description" class="form-control" rows="5" formnovalidate /></textarea>
+                        <textarea asp-for="Description" class="form-control" rows="5" formnovalidate></textarea>
                         <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
 
@@ -74,7 +74,7 @@
                     <div>
                         <div class="form-group d-flex col-md-6 p-0">
                             <label asp-for="Weight" class="col-md-3 p-0 pt-2"></label>
-                            <input asp-for="Weight" type="number" step="any" onchange="calculatePrice()" class="form-control col-xs-2" />
+                            <input asp-for="Weight" step="any" onchange="calculatePrice()" class="form-control col-xs-2" />
                             <div class="col-md-3 p-0 pt-2 pl-1"> кг.</div>
                         </div>
                         <span asp-validation-for="Weight" class="text-danger"></span>
@@ -97,7 +97,7 @@
                     <div id="cashOnDeliveryPriceBlock" class="form-group" hidden>
                         <div class="form-group d-flex col-md-10">
                             <label asp-for="CashOnDeliveryPrice" class="col-md-6"></label>
-                            <input asp-for="CashOnDeliveryPrice" type="number" step="any" onchange="calculatePrice()" class="form-control col-xs-2" />
+                            <input asp-for="CashOnDeliveryPrice" min="0.1" step="any" onchange="calculatePrice()" class="form-control col-xs-2" />
                             <span asp-validation-for="CashOnDeliveryPrice" class="text-danger"></span>
                             <span class="col-md-3 p-0 pt-2 pl-1">лв.</span>
                         </div>

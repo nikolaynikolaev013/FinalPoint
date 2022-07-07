@@ -32,12 +32,12 @@ namespace FinalPoint.Web.ViewModels.DTOs
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<AddParcelInputModel, CalculateDeliveryPriceDto>()
-                .ForMember(x => x.Weight, x => x.MapFrom(y => (decimal)y.Weight))
-                .ForMember(x => x.HasCashOnDelivery, x => x.MapFrom(y => HasCashOnDelivery))
-                .ForMember(x => x.IsFragile, x => x.MapFrom(y => IsFragile))
-                .ForMember(x => x.DontPaletize, x => x.MapFrom(y => DontPaletize))
-                .ForMember(x => x.CashOnDeliveryPrice, x => x.MapFrom(y => CashOnDeliveryPrice))
-                .ForMember(x => x.NumberOfParts, x => x.MapFrom(y => NumberOfParts))
+                .ForMember(x => x.Weight, x => x.MapFrom(y => y.Weight))
+                .ForMember(x => x.HasCashOnDelivery, x => x.MapFrom(y => y.HasCashOnDelivery))
+                .ForMember(x => x.IsFragile, x => x.MapFrom(y => y.IsFragile))
+                .ForMember(x => x.DontPaletize, x => x.MapFrom(y => y.DontPaletize))
+                .ForMember(x => x.CashOnDeliveryPrice, x => x.MapFrom(y => y.CashOnDeliveryPrice))
+                .ForMember(x => x.NumberOfParts, x => x.MapFrom(y => y.NumberOfParts))
                 .ForAllOtherMembers(x => x.Ignore());
         }
     }

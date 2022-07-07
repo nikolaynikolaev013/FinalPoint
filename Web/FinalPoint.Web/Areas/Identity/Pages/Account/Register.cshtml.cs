@@ -82,7 +82,7 @@
             public string Role { get; set; }
 
             [CustomRequired]
-            [StringLength(100, ErrorMessage = "Паролата трябва да е с дължина между {2} и {1} символа.", MinimumLength = 6)]
+            [StringLength(100, ErrorMessage = "Паролата трябва да е с дължина между {2} и {1} символа и една главна буква.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Парола")]
             public string Password { get; set; }
@@ -108,9 +108,13 @@
             {
                 var user = new ApplicationUser { UserName = Input.PersonalId.ToString(), Email = Input.Email, FirstName = Input.FirstName, MiddleName = Input.MiddleName, LastName = Input.LastName, DateOfBirth = Input.DateOfBirth, PersonalId = Input.PersonalId, WorkOfficeId = Input.OfficeId };
 
-                var result = await _userManager.CreateAsync(user, this.Input.Password);
+                var result = await this._userManager.CreateAsync(user, this.Input.Password);
+                var roleResult = new IdentityResult();
 
-                var roleResult = await this._userManager.AddToRoleAsync(user, this.Input.Role);
+                if (result.Succeeded)
+                {
+                    roleResult = await this._userManager.AddToRoleAsync(user, this.Input.Role);
+                }
 
                 if (result.Succeeded && roleResult.Succeeded)
                 {

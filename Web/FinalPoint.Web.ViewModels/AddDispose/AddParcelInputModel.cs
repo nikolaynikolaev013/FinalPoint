@@ -15,10 +15,12 @@
             this.AllOffices = new HashSet<KeyValuePair<string, string>>();
             this.SenderInputModel = new AddClientInputModel(ClientType.Подател);
             this.RecipentInputModel = new AddClientInputModel(ClientType.Получател);
-            this.Weight = 1;
+            this.Weight = "1";
             this.Width = "0.20";
             this.Height = "0.10";
             this.Length = "0.20";
+            this.Weight = "1";
+            this.CashOnDeliveryPrice = "0";
             this.NumberOfParts = 1;
         }
 
@@ -37,8 +39,7 @@
 
         [CustomRequired]
         [Display(Name = "Тегло")]
-        [Range(0, int.MaxValue)]
-        public double Weight { get; set; }
+        public string Weight { get; set; }
 
         [CustomRequired]
         [Display(Name = "Части")]
@@ -50,7 +51,7 @@
         public bool HasCashOnDelivery { get; set; }
 
         [Display(Name = "Цена за наложен платеж:")]
-        public decimal CashOnDeliveryPrice { get; set; }
+        public string CashOnDeliveryPrice { get; set; }
 
         [CustomRequired]
         [Display(Name = "Чупливо ")]
@@ -88,10 +89,10 @@
                 .ForMember(x => x.Width, x => x.MapFrom(y => decimal.Parse(y.Width.Replace(".", ","))))
                 .ForMember(x => x.Height, x => x.MapFrom(y => decimal.Parse(y.Height.Replace(".", ","))))
                 .ForMember(x => x.Length, x => x.MapFrom(y => decimal.Parse(y.Length.Replace(".", ","))))
-                .ForMember(x => x.Weight, x => x.MapFrom(y => y.Weight))
+                .ForMember(x => x.Weight, x => x.MapFrom(y => decimal.Parse(y.Weight.Replace(".", ","))))
                 .ForMember(x => x.NumberOfParts, x => x.MapFrom(y => y.NumberOfParts))
                 .ForMember(x => x.HasCashOnDelivery, x => x.MapFrom(y => y.HasCashOnDelivery))
-                .ForMember(x => x.CashOnDeliveryPrice, x => x.MapFrom(y => y.CashOnDeliveryPrice))
+                .ForMember(x => x.CashOnDeliveryPrice, x => x.MapFrom(y => double.Parse(y.CashOnDeliveryPrice.Replace(".", ","))))
                 .ForMember(x => x.IsFragile, x => x.MapFrom(y => y.IsFragile))
                 .ForMember(x => x.DontPaletize, x => x.MapFrom(y => y.DontPaletize))
                 .ForMember(x => x.SendingEmployee, x => x.MapFrom(y => y.SendingEmployee))

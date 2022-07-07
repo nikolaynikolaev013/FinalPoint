@@ -240,6 +240,24 @@
                       .Select(x => new KeyValuePair<string, string>(x.Id.ToString(), $"{x.City} - {x.Name} - {x.PostCode}"));
         }
 
+        public IEnumerable<KeyValuePair<string, string>> GetAllOfficesAndSortingCentersWithoutTheVirtualAsKeyValuePairs()
+        {
+            var virtualOffice = this.GetVirtualOffice();
+
+            return this.officeRep
+                      .AllAsNoTracking()
+                      .Where(x => x != virtualOffice)
+                      .Select(x => new
+                      {
+                          x.Id,
+                          x.Name,
+                          x.PostCode,
+                          City = x.City.Name,
+                      })
+                      .ToList()
+                      .Select(x => new KeyValuePair<string, string>(x.Id.ToString(), $"{x.City} - {x.Name} - {x.PostCode}"));
+        }
+
         public IEnumerable<KeyValuePair<string, string>> GetLoadUnloadOffices(Office currentOffice)
         {
             var virtualOffice = this.GetVirtualOffice();

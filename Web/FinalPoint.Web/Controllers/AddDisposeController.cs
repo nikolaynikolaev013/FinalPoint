@@ -140,20 +140,24 @@ namespace FinalPoint.Web.Controllers
 
         private (decimal, ParcelChargeType) CalculateDeliveryPrice(AddParcelInputModel input)
         {
-            var heightAsDecimal = decimal.Parse(input.Height.Replace('.', ','));
-            var lengthAsDecimal = decimal.Parse(input.Length.Replace('.', ','));
-            var widthAsDecimal = decimal.Parse(input.Width.Replace('.', ','));
+            var heightAsDecimal = input.Height == null ? 1m : decimal.Parse(input.Height?.Replace('.', ','));
+            var lengthAsDecimal = input.Length == null ? 1m : decimal.Parse(input.Length?.Replace('.', ','));
+            var widthAsDecimal = input.Width == null ? 1m : decimal.Parse(input.Width?.Replace('.', ','));
+            var cashOnDeliverAsDecimal = input.CashOnDeliveryPrice == null ? 0 : decimal.Parse(input.CashOnDeliveryPrice?.Replace('.', ','));
+            var weightAsDecimal = input.Weight == null ? 1m : decimal.Parse(input.Weight?.Replace('.', ','));
 
             var calculatePriceDto = this.mapper.Map<CalculateDeliveryPriceDto>(input);
             calculatePriceDto.Height = heightAsDecimal;
             calculatePriceDto.Length = lengthAsDecimal;
             calculatePriceDto.Width = widthAsDecimal;
+            calculatePriceDto.CashOnDeliveryPrice = cashOnDeliverAsDecimal;
+            calculatePriceDto.Weight = weightAsDecimal;
 
             var finalPrice = this.CalculateDeliveryPrice(calculatePriceDto);
 
             var volume = heightAsDecimal * lengthAsDecimal * widthAsDecimal;
 
-            return (finalPrice, this.DecideChargeType(volume, (decimal)input.Weight));
+            return (finalPrice, this.DecideChargeType(volume, weightAsDecimal));
         }
 
         private ParcelChargeType DecideChargeType(decimal volumeWeight, decimal weight)
