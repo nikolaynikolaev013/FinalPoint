@@ -21,20 +21,17 @@
         private readonly ICityService cityService;
         private readonly IUserService userService;
         private readonly IThemeService themeService;
-        private readonly IMapper mapper;
 
         public AdministrationController(
             IOfficeService officeService,
             ICityService cityService,
             IUserService userService,
-            IThemeService themeService,
-            IMapper mapper)
+            IThemeService themeService)
         {
             this.officeService = officeService;
             this.cityService = cityService;
             this.userService = userService;
             this.themeService = themeService;
-            this.mapper = mapper;
         }
 
         public IActionResult Index(Result model)
@@ -46,7 +43,7 @@
         {
             FireEmployeeInputModel model = new FireEmployeeInputModel();
 
-            this.LoadAvailableEmployeesToDelete(model);
+            this.LoadFireEmployeeViewModel(model);
 
             return this.View(model);
         }
@@ -56,14 +53,16 @@
         {
             if (this.ModelState.IsValid)
             {
-                var removedUser = await this.userService.RemoveUserAsync(input.EmployeeToFire);
+                var removedUser = await this.userService
+                        .RemoveUserAsync(input.EmployeeToFire);
+
                 if (removedUser != null)
                 {
                     input.ResultMessage = $"Служител - {removedUser.FirstName} {removedUser.MiddleName} {removedUser.LastName} - {removedUser.PersonalId} - беше уволнен успешно.";
                 }
             }
 
-            this.LoadAvailableEmployeesToDelete(input);
+            this.LoadFireEmployeeViewModel(input);
 
             return this.View(input);
         }
@@ -71,7 +70,7 @@
         public IActionResult AddOffice()
         {
             AddOfficeInputModel model = new AddOfficeInputModel();
-            this.LoadAddOfficeData(model);
+            this.LoadAddOfficeViewModel(model);
             return this.View(model);
         }
 
@@ -87,14 +86,14 @@
                 return this.RedirectToAction("Index", result);
             }
 
-            this.LoadAddOfficeData(input);
+            this.LoadAddOfficeViewModel(input);
             return this.View(input);
         }
 
         public IActionResult RemoveOffice()
         {
             RemoveOfficeInputModel model = new RemoveOfficeInputModel();
-            model.AvailableOfficesToRemove = this.officeService.GetAllOfficesAndSortingCentersAsKeyValuePairs();
+            model.AvailableOfficesToRemove = this.officeService.GetOnlyAllOfficesAsKeyValueParis();
             return this.View(model);
         }
 
@@ -107,7 +106,7 @@
                 input.ResultMessage = $"Офис - {removedOffice.Name} - {removedOffice.PostCode} - беше прекратен успешно.";
             }
 
-            input.AvailableOfficesToRemove = this.officeService.GetAllOfficesAndSortingCentersAsKeyValuePairs();
+            input.AvailableOfficesToRemove = this.officeService.GetOnlyAllOfficesAsKeyValueParis();
 
             return this.View(input);
         }
@@ -154,14 +153,14 @@
             return model;
         }
 
-        private void LoadAddOfficeData(AddOfficeInputModel input)
+        private void LoadAddOfficeViewModel(AddOfficeInputModel input)
         {
             input.CitiesItems = this.cityService.GetAllCitiesAsKeyValuePairs();
             input.SortingCentersItems = this.officeService.GetAllSortingCentersAsKeyValuePairs();
             input.AllUsers = this.userService.GetAllUsersAsKeyValuePair();
         }
 
-        private void LoadAvailableEmployeesToDelete(FireEmployeeInputModel input)
+        private void LoadFireEmployeeViewModel(FireEmployeeInputModel input)
         {
             var currUserId = this.User
                             .FindFirst(ClaimTypes.NameIdentifier)

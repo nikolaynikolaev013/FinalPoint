@@ -11,6 +11,7 @@ namespace FinalPoint.Web.Controllers
     using FinalPoint.Web.Business.Interfaces;
     using FinalPoint.Web.ViewModels;
     using FinalPoint.Web.ViewModels.AddDispose;
+    using FinalPoint.Web.ViewModels.DTOs;
     using FinalPoint.Web.ViewModels.DTOs.AddDisposeParcel;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
@@ -70,6 +71,7 @@ namespace FinalPoint.Web.Controllers
 
                 this.ViewBag.isSuccess = true;
                 this.ModelState.Clear();
+
                 input = new AddParcelInputModel();
             }
 
@@ -84,51 +86,26 @@ namespace FinalPoint.Web.Controllers
 
         [HttpGet]
         [IgnoreAntiforgeryToken]
-        public decimal CalculateDeliveryPrice(
-            decimal height,
-            decimal length,
-            decimal width,
-            decimal weight,
-            bool hasCashOnDelivery,
-            bool isFragile,
-            bool dontPaletize,
-            decimal cashOnDeliveryPrice,
-            int numOfParts)
+        public decimal CalculateDeliveryPrice(CalculateDeliveryPriceDto input)
         {
             var finalPrice = 5.20m;
 
-            var volumeWeight = height * width * length;
+            var volumeWeight = input.Height * input.Width * input.Length;
 
-            ParcelChargeType chargeType = this.DecideChargeType(volumeWeight, weight);
+            // To decide if the charge is by dimensions or my weight
+            finalPrice += (this.DecideChargeType(volumeWeight, input.Weight) == ParcelChargeType.Dimensions ? volumeWeight * 0.1m : input.Weight * 0.1m);
 
-            if (chargeType == ParcelChargeType.Dimensions)
-            {
-                finalPrice += volumeWeight * 0.1m;
-            }
-            else
-            {
-                finalPrice += weight * 0.1m;
-            }
+            // if cash on delivery is selected
+            finalPrice += (input.HasCashOnDelivery && input.CashOnDeliveryPrice > 0 ? input.CashOnDeliveryPrice / 95.0m : 0);
 
-            if (hasCashOnDelivery && cashOnDeliveryPrice > 0)
-            {
-                finalPrice += cashOnDeliveryPrice / 95.0m;
-            }
+            // if IsFragile is selected
+            finalPrice *= (input.IsFragile ? 1.02m : 1);
 
-            if (isFragile)
-            {
-                finalPrice *= 1.02m;
-            }
+            // if DontPaletize is selected
+            finalPrice *= (input.DontPaletize ? 1.04m : 1);
 
-            if (dontPaletize)
-            {
-                finalPrice *= 1.04m;
-            }
-
-            if (numOfParts > 1)
-            {
-                finalPrice += finalPrice * numOfParts * 0.03m;
-            }
+            // if there are more than 1 part
+            finalPrice += (input.NumberOfParts > 1 ? finalPrice * input.NumberOfParts * 0.03m : 0);
 
             return finalPrice;
         }
@@ -161,9 +138,27 @@ namespace FinalPoint.Web.Controllers
             input.CurrOfficeAsString = this.officeService.GetOfficeAsStringById(currUser.WorkOfficeId);
         }
 
+        private (decimal, ParcelChargeType) CalculateDeliveryPrice(AddParcelInputModel input)
+        {
+            var heightAsDecimal = decimal.Parse(input.Height.Replace('.', ','));
+            var lengthAsDecimal = decimal.Parse(input.Length.Replace('.', ','));
+            var widthAsDecimal = decimal.Parse(input.Width.Replace('.', ','));
+
+            var calculatePriceDto = this.mapper.Map<CalculateDeliveryPriceDto>(input);
+            calculatePriceDto.Height = heightAsDecimal;
+            calculatePriceDto.Length = lengthAsDecimal;
+            calculatePriceDto.Width = widthAsDecimal;
+
+            var finalPrice = this.CalculateDeliveryPrice(calculatePriceDto);
+
+            var volume = heightAsDecimal * lengthAsDecimal * widthAsDecimal;
+
+            return (finalPrice, this.DecideChargeType(volume, (decimal)input.Weight));
+        }
+
         private ParcelChargeType DecideChargeType(decimal volumeWeight, decimal weight)
         {
-            if (volumeWeight > weight)
+            if (volumeWeight > weight / 2)
             {
                 return ParcelChargeType.Dimensions;
             }
@@ -171,28 +166,6 @@ namespace FinalPoint.Web.Controllers
             {
                 return ParcelChargeType.Weight;
             }
-        }
-
-        private (decimal, ParcelChargeType) CalculateDeliveryPrice(AddParcelInputModel input)
-        {
-            var heightAsDecimal = decimal.Parse(input.Height.Replace('.', ','));
-            var lengthAsDecimal = decimal.Parse(input.Length.Replace('.', ','));
-            var widthAsDecimal = decimal.Parse(input.Width.Replace('.', ','));
-
-            var finalPrice = this.CalculateDeliveryPrice(
-                heightAsDecimal,
-                lengthAsDecimal,
-                widthAsDecimal,
-                (decimal)input.Weight,
-                input.HasCashOnDelivery,
-                input.IsFragile,
-                input.DontPaletize,
-                input.CashOnDeliveryPrice,
-                input.NumberOfParts);
-
-            var volume = heightAsDecimal * lengthAsDecimal * widthAsDecimal;
-
-            return (finalPrice, this.DecideChargeType((decimal)volume, (decimal)input.Weight));
         }
     }
 }

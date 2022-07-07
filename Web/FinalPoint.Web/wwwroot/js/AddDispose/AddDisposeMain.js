@@ -41,15 +41,27 @@
             let cashOnDeliveryValue = cashOnDeliveryPriceInput.value;
             let finalPrice = 0;
 
-            $.ajax({
-        method: "GET",
-                url: `/AddDispose/CalculateDeliveryPrice?height=${heightValue}&length=${lengthValue}&width=${widthValue}&weight=${weightValue}&hasCashOnDelivery=${cashOnDeliveryCheckBox.checked}&isFragile=${isFragileCheckBox.checked}&dontPaletize=${dontPaletizeCheckBox.checked}&cashOnDeliveryPrice=${cashOnDeliveryValue}&numOfParts=${numberOfParts}`,
-                success: function (res) {
-        finalPrice = res;
+            let obj =
+            {
+                Height: heightValue,
+                Length: lengthValue,
+                Width: widthValue,
+                Weight: weightValue,
+                IsFragile: isFragileCheckBox.checked,
+                DontPaletize: dontPaletizeCheckBox.checked,
+                HasCashOnDelivery: cashOnDeliveryCheckBox.checked,
+                CashOnDeliveryPrice: cashOnDeliveryValue,
+                NumberOfParts: numberOfParts,
+            }
+
+            $.get('/AddDispose/CalculateDeliveryPrice',
+                obj,
+                function (data, status) {
+                    finalPrice = data;
                     deliveryPriceEl.textContent = finalPrice.toFixed(2);
                     fullPriceEl.textContent = (finalPrice + Number(cashOnDeliveryValue)).toFixed(2);
-                }
-            });
+                });
+
 
             if (numberOfParts <= 0) {
         numOfPartsEl.value = 1;
@@ -62,7 +74,7 @@
         calculatePrice();
 
         function addNewClient(type, isEdit = false) {
-        let currClient = document.querySelector("#currClient" + type.toString());
+            let currClient = document.querySelector("#currClient" + type.toString());
             let addClient = document.querySelector("#addClient" + type.toString());
             let addClientFields = document.querySelector("#addClient" + type.toString() + " .addClientFields");
             let addClientEditPanel = document.querySelector("#addClient" + type.toString() + " .addClientEditPanel");

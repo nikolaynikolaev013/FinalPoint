@@ -16,9 +16,9 @@ namespace FinalPoint.Web.ViewModels.Home
 
         public bool IsOwner { get; set; }
 
-        public bool IsAdministrator { get; set; }
+        public bool ShowOfficeModules { get; set; }
 
-        public bool IsFromVirtualOffice { get; set; }
+        public bool ShowAdministratorModule { get; set; }
 
         [CustomRequired]
         [Display(Name = "Моля изберете офиса, от името на който искате да работите.", Prompt = "Име на офис")]

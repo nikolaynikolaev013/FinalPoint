@@ -44,7 +44,8 @@
         {
             if (this.ModelState.IsValid)
             {
-                var result = await this.userService.SetUserNewWorkOfficeByUserIdAsync(this.User.FindFirstValue(ClaimTypes.NameIdentifier), input.OfficeId);
+                var result = await this.userService
+                    .SetUserNewWorkOfficeByUserIdAsync(this.User.FindFirstValue(ClaimTypes.NameIdentifier), input.OfficeId);
 
                 if (result)
                 {
@@ -70,11 +71,15 @@
             var model = new HomeIndexInputModel();
             var user = this.userService.GetUserById(this.User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-            model.IsOwner = this.User.IsInRole(GlobalConstants.OwnerRoleName);
-            model.IsAdministrator = this.User.IsInRole(GlobalConstants.AdministratorRoleName) || this.User.IsInRole(GlobalConstants.OfficeOwnerRoleName);
+            var isOwner = this.User.IsInRole(GlobalConstants.OwnerRoleName);
+            var isAdministrator = this.User.IsInRole(GlobalConstants.AdministratorRoleName) || this.User.IsInRole(GlobalConstants.OfficeOwnerRoleName);
+            var isFromVirtualOffice = user.WorkOfficeId == this.officeService.GetVirtualOffice().Id;
+
+            model.ShowOfficeModules = !isOwner || !isFromVirtualOffice;
+            model.ShowAdministratorModule = isOwner || isAdministrator;
+            model.IsOwner = isOwner;
             model.FullName = this.userManager.GetUserAsync(this.User)?.Result?.FullName;
             model.CurrentWorkOfficeId = user.WorkOfficeId;
-            model.IsFromVirtualOffice = user.WorkOfficeId == this.officeService.GetVirtualOffice().Id;
             model.AvailableOffices = this.officeService.GetAllOfficesAndSortingCentersAsKeyValuePairs().OrderByDescending(x => x.Key == user.WorkOfficeId.ToString());
 
             return model;

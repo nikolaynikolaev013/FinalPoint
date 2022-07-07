@@ -7,6 +7,7 @@ namespace FinalPoint.Web.Controllers
 
     using FinalPoint.Data.Models.Enums;
     using FinalPoint.Web.Business.Interfaces;
+    using FinalPoint.Web.ViewModels.DTOs;
     using FinalPoint.Web.ViewModels.LoadUnload;
     using FinalPoint.Web.ViewModels.Shared;
     using FinalPoint.Web.ViewModels.ViewComponents;
@@ -94,7 +95,7 @@ namespace FinalPoint.Web.Controllers
                                 .GetUserById(this.User.FindFirst(ClaimTypes.NameIdentifier).Value)
                                 .PersonalId;
 
-            CheckParcelResponseModel model = new CheckParcelResponseModel();
+            var model = new CheckParcelResponseModel();
 
             if (isCheck)
             {
@@ -148,7 +149,7 @@ namespace FinalPoint.Web.Controllers
 
         private async Task<LoadUnloadProtocolViewModel> LoadLoadUnoadProtocolViewModel(LoadUnloadIndexViewModel input, ProtocolType protocolType)
         {
-            var protocolInput = await this.protocolService.CheckOrCreateProtocolAsync(new ViewModels.DTOs.NewProtocolCreateOrOpenDataInputDto()
+            var protocolInput = await this.protocolService.CheckOrCreateProtocolAsync(new NewProtocolCreateOrOpenDataInputDto()
             {
                 Type = protocolType,
                 User = this.User,
