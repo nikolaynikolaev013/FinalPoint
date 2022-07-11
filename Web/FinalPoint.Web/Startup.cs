@@ -10,7 +10,6 @@
     using FinalPoint.Data.Repositories;
     using FinalPoint.Data.Seeding;
     using FinalPoint.Services.Mapping;
-    using FinalPoint.Services.Messaging;
     using FinalPoint.Web.Business.Interfaces;
     using FinalPoint.Web.Business.Services;
     using FinalPoint.Web.ViewModels;
@@ -90,7 +89,6 @@
             services.AddScoped<IDbQueryRunner, DbQueryRunner>();
 
             // Application services
-            services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<IOfficeService, OfficeService>();
             services.AddTransient<ICityService, CityService>();
             services.AddTransient<IUserService, UserService>();

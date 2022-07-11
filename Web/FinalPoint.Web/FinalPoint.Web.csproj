@@ -34,14 +34,14 @@
     </PackageReference>
     <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.1.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.1.0" />
+    <PackageReference Include="RazorEngine" Version="3.10.0" />
+    <PackageReference Include="MimeKit" Version="3.3.0" />
+    <PackageReference Include="MailKit" Version="3.3.0" />
+    <PackageReference Include="RazorEngineCore" Version="2022.1.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Services\FinalPoint.Services.Data\FinalPoint.Services.Data.csproj" />
     <ProjectReference Include="..\..\Services\FinalPoint.Services.Mapping\FinalPoint.Services.Mapping.csproj" />
-    <ProjectReference Include="..\..\Services\FinalPoint.Services.Messaging\FinalPoint.Services.Messaging.csproj" />
-    <ProjectReference Include="..\..\Services\FinalPoint.Services\FinalPoint.Services.csproj" />
-    <ProjectReference Include="..\FinalPoint.Web.Infrastructure\FinalPoint.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\FinalPoint.Web.ViewModels\FinalPoint.Web.ViewModels.csproj" />
     <ProjectReference Include="..\..\FinalPoint.Common\FinalPoint.Common.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
@@ -80,6 +80,10 @@
     <None Remove="Microsoft.CodeAnalysis.CSharp.Workspaces" />
     <None Remove="Business\" />
     <None Remove="Business\Interfaces\" />
+    <None Remove="RazorEngine" />
+    <None Remove="MimeKit" />
+    <None Remove="MailKit" />
+    <None Remove="RazorEngineCore" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="wwwroot\EmailTemplates\index.html">
